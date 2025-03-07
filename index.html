@@ -76,6 +76,20 @@
             width: 40px; 
             height: auto; 
         }
+        .add-card {
+            background: #333;
+            padding: 15px;
+            border-radius: 15px;
+            width: 50px;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .tag-folder .title img {
+            width: 20px; 
+            height: 100%; 
+            margin-right: 5px;
+        }
         .bookmark-item {
             display: flex;
             align-items: center; /* 垂直置中對齊 */
@@ -106,6 +120,9 @@
             <input type="text" placeholder="搜尋書籤、資料夾">
         </div>
         <div class="tag-container">
+            <div class="add-card">
+                <img src="img/add_button.png" alt="Add Button">
+                </div>
             <div class="tag-card">
                 <div class="title">書籤名稱</div>
                 <div class="tags">
@@ -120,8 +137,8 @@
                     <div class="tag">標籤2</div>
                 </div>
             </div>
-            <div class="tag-card">
-                <div class="title">我的書籤2</div>
+            <div class="tag-card tag-folder">
+                <div class="title"><img src="img/folder.png" alt="Folder Icon">我的書籤2</div>
                 <div class="tags">
                     <div class="tag">標籤1</div>
                     <div class="tag">標籤2</div>
