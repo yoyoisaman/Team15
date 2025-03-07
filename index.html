@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>標籤管理系統</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: #fff;
+            display: flex;
+        }
+        .sidebar {
+            width: 150px; /* 將寬度增加到 200px 以容納文字 */
+            background: #181818;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* 將對齊方式改為左對齊以適應文字 */
+            gap: 20px;
+            height: 100vh;
+        }
+
+        .sidebar div {
+            width: 100%; /* 讓 div 佔滿側邊欄寬度 */
+            height: auto; /* 自動調整高度 */
+            border-radius: 5px;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        .search-bar {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input {
+            background: none;
+            border: none;
+            color: white;
+            outline: none;
+            flex: 1;
+        }
+        .tag-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .tag-card {
+            background: #333;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+        }
+        .tag-card .title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .tag-card .tags {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .tag {
+            background: #555;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        img {
+            width: 40px; 
+            height: auto; 
+        }
+        .bookmark-item {
+            display: flex;
+            align-items: center; /* 垂直置中對齊 */
+            gap: 8px; /* 圖示與文字的間距 */
+            writing-mode: horizontal-tb; /* 確保文字為橫向 */
+            white-space: nowrap; /* 防止文字換行 */
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="bookmark-item">
+            <img src="img/folder.png" alt="Folder Icon">
+            <span>我的書籤</span>
+        </div>
+        <div class="bookmark-item">
+            <img src="img/folder.png" alt="Folder Icon">
+            <span>我的書籤</span>
+        </div>
+        <div class="bookmark-item">
+            <img src="img/folder.png" alt="Folder Icon">
+            <span>我的書籤</span>
+        </div>
+        <div></div>
+    </div>
+    <div class="main-content">
+        <div class="search-bar">
+            <input type="text" placeholder="搜尋書籤、資料夾">
+        </div>
+        <div class="tag-container">
+            <div class="tag-card">
+                <div class="title">書籤名稱</div>
+                <div class="tags">
+                    <div class="tag">標籤1</div>
+                    <div class="tag">標籤2</div>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="title">書籤名稱</div>
+                <div class="tags">
+                    <div class="tag">標籤1</div>
+                    <div class="tag">標籤2</div>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="title">我的書籤2</div>
+                <div class="tags">
+                    <div class="tag">標籤1</div>
+                    <div class="tag">標籤2</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
