@@ -32,12 +32,17 @@
             flex: 1;
             padding: 20px;
         }
+        nav {
+            display: flex;
+            gap: 10px;
+        }
         .search-bar {
             background: #333;
             padding: 10px;
             border-radius: 5px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
+            width: 40%;
         }
         .search-bar input {
             background: none;
@@ -45,6 +50,21 @@
             color: white;
             outline: none;
             flex: 1;
+        }
+        .view-option {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .view-option:hover {
+            background: #3f3f3f;
+        }
+        .view-option img {
+            width: 20px;
+            height: auto;
         }
         .tag-container {
             display: flex;
@@ -152,9 +172,13 @@
         <div></div>
     </div>
     <div class="main-content">
-        <div class="search-bar">
-            <input type="text" placeholder="搜尋書籤、資料夾">
-        </div>
+        <nav>
+            <div class="search-bar">
+                <input type="text" placeholder="搜尋書籤、資料夾">
+            </div>
+            <div class="view-option"><img src="img/sort.png" alt="Sort Icon">排序與檢視</div>
+            <div class="view-option"><img src="img/tag.png" alt="Tag Icon">篩選標籤</div>
+        </nav>
         <div class="tag-container">
             <div class="add-card">
                 <img src="img/add_button.png" alt="Add Button">
