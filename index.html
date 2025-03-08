@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>標籤管理系統</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -13,28 +15,23 @@
             display: flex;
         }
         .sidebar {
-            width: 150px; /* 將寬度增加到 200px 以容納文字 */
+            width: 150px;
             background: #181818;
             padding: 10px;
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* 將對齊方式改為左對齊以適應文字 */
+            align-items: flex-start;
             gap: 20px;
             height: 100vh;
         }
-
         .sidebar div {
-            width: 100%; /* 讓 div 佔滿側邊欄寬度 */
-            height: auto; /* 自動調整高度 */
+            width: 100%;
+            height: auto;
             border-radius: 5px;
         }
         .main-content {
             flex: 1;
             padding: 20px;
-        }
-        nav {
-            display: flex;
-            gap: 10px;
         }
         .search-bar {
             background: #333;
@@ -50,21 +47,6 @@
             color: white;
             outline: none;
             flex: 1;
-        }
-        .view-option {
-            background: #333;
-            padding: 10px;
-            border-radius: 5px;
-            display: inline-flex;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
-        .view-option:hover {
-            background: #3f3f3f;
-        }
-        .view-option img {
-            width: 20px;
-            height: auto;
         }
         .tag-container {
             display: flex;
@@ -98,39 +80,38 @@
             font-size: 12px;
         }
         img {
-            width: 40px; 
-            height: auto; 
+            width: 40px;
+            height: auto;
         }
         .add-card {
             background: #333;
             padding: 15px;
             border-radius: 15px;
             width: 50px;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transition: background-color 0.3s;
         }
         .add-card:hover {
             background: #3f3f3f;
         }
         .tag-folder .title img {
-            width: 20px; 
-            height: 100%; 
+            width: 20px;
+            height: 100%;
             margin-right: 5px;
         }
         .bookmark-item {
             display: flex;
-            align-items: center; /* 垂直置中對齊 */
-            gap: 8px; /* 圖示與文字的間距 */
-            writing-mode: horizontal-tb; /* 確保文字為橫向 */
-            white-space: nowrap; /* 防止文字換行 */
-            transition: background-color 0.3s; /* 添加過渡效果 */
+            align-items: center;
+            gap: 8px;
+            writing-mode: horizontal-tb;
+            white-space: nowrap;
+            transition: background-color 0.3s;
         }
         .bookmark-item:hover {
-            background-color: #333; /* 滑鼠移入時變更背景色 */
+            background-color: #333;
         }
-
         .hidden-setting {
             opacity: 0;
             transition: opacity 0.1s;
@@ -149,7 +130,6 @@
             width: 10%;
             height: auto;
         }
-
     </style>
 </head>
 <body>
@@ -172,39 +152,45 @@
         <div></div>
     </div>
     <div class="main-content">
-        <nav>
+        <nav class="d-flex gap-2">
             <div class="search-bar">
                 <input type="text" placeholder="搜尋書籤、資料夾">
             </div>
-            <div class="view-option"><img src="img/sort.png" alt="Sort Icon">排序與檢視</div>
-            <div class="view-option"><img src="img/tag.png" alt="Tag Icon">篩選標籤</div>
+            <div class="btn btn-secondary d-flex align-items-center gap-2">
+                <img src="img/sort.png" alt="Sort Icon">
+                <span>排序與檢視</span>
+            </div>
+            <div class="btn btn-secondary d-flex align-items-center gap-2">
+                <img src="img/tag.png" alt="Tag Icon">
+                <span>篩選標籤</span>
+            </div>
         </nav>
         <div class="tag-container">
             <div class="add-card">
                 <img src="img/add_button.png" alt="Add Button">
-                </div>
+            </div>
             <div class="tag-card">
                 <img class="hidden-setting" src="img/edit.png" alt="Settings Icon">
-                <div class="title">書籤名稱</div>
+                <div class="title"><img src="img/folder.png" alt="Folder Icon">書籤名稱</div>
                 <div class="tags">
-                    <div class="tag">標籤1</div>
-                    <div class="tag">標籤2</div>
+                    <span class="badge bg-secondary">標籤1</span>
+                    <span class="badge bg-secondary">標籤2</span>
                 </div>
             </div>
             <div class="tag-card">
                 <img class="hidden-setting" src="img/edit.png" alt="Settings Icon">
-                <div class="title">書籤名稱</div>
+                <div class="title"><img src="img/folder.png" alt="Folder Icon">書籤名稱</div>
                 <div class="tags">
-                    <div class="tag">標籤1</div>
-                    <div class="tag">標籤2</div>
+                    <span class="badge bg-secondary">標籤1</span>
+                    <span class="badge bg-secondary">標籤2</span>
                 </div>
             </div>
             <div class="tag-card tag-folder">
                 <img class="hidden-setting" src="img/edit.png" alt="Settings Icon">
                 <div class="title"><img src="img/folder.png" alt="Folder Icon">我的書籤2</div>
                 <div class="tags">
-                    <div class="tag">標籤1</div>
-                    <div class="tag">標籤2</div>
+                    <span class="badge bg-secondary">標籤1</span>
+                    <span class="badge bg-secondary">標籤2</span>
                 </div>
             </div>
         </div>
