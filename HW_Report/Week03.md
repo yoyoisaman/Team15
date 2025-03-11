@@ -18,19 +18,19 @@
 
 基於草稿內容，我們透過課堂所學 HTML 與 CSS 技術完成初版頁面（如圖 b），以下為各區域功能的詳細說明：
 
-- **區域 I：書籤陳列區**
+- **區域 I：書籤陳列區**：
   - 此為網頁的主要呈現區塊。
   - 點擊書籤後，將透過 HTML 的 **`href` 屬性** 連結至已儲存的網頁。
   - 點擊資料夾後，預期將以 **[Expanding Grid](https://chriscoyier.net/2023/04/11/expanding-grid-cards-with-view-transitions/)** 的方式展開資料夾內內容。由於此功能涉及 JavaScript，因此安排於下次作業完成。
 
-- **區域 II：功能區**
+- **區域 II：功能區**：
   - 此區域包含 **搜尋、排序與篩選、新增書籤** 三項功能。
   - 本次作業已完成上述功能的 UI 部分，後續將透過 JavaScript 實現互動功能：
     - 搜尋功能將使用 **[Select2](https://select2.org/)** 實作。
     - 排序與篩選、新增書籤功能則同樣以 Expanding Grid 的方式實現。
   - 由於這些互動功能依賴 JavaScript 生成元件，因此本次作業未提供展開後的細節畫面。
 
-- **區域 III：側邊捷徑區**
+- **區域 III：側邊捷徑區**：
   - 此處提供快速跳轉功能，點擊按鈕後跳轉至對應書籤資料夾。
   - 本次作業已完成 UI 設計，下次作業將透過 JavaScript 實作跳轉行為。
 
@@ -70,7 +70,7 @@ div:hover > .hidden-setting {
 ```
 
 ### 3. Bootstrap CSS 樣式、進階 CSS 樣式
-我們調整 Bootstrap 提供的 CSS 類別，打造符合專案風格的元件。同時我們也研究及應用了一些課堂上沒有介紹的 CSS 屬性，提升網站的視覺效果及使用體驗。
+我們基於 Bootstrap 內建 CSS 樣式，例如 `badge`、`bg-secondary`、`btn` 等類別，結合自定義的 CSS 屬性，打造符合專案風格的元件。同時，我們也研究及應用了一些課堂上沒有介紹的 CSS 屬性，例如 `crusor`，提升網站的視覺效果及使用體驗。
 
 ## 組員分工情形 - Team 15
 - 王凱右 - 25%：HTML+CSS、Bootstrap
