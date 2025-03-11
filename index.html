@@ -50,6 +50,7 @@
         }
         .tag-container {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-top: 20px;
         }
@@ -76,6 +77,7 @@
         .tag-card .title img {
             width: 40px;
             height: auto;
+            margin-right: 5px;
         }
         .tag {
             background: #555;
@@ -119,6 +121,18 @@
         .tag-card .hidden-setting img {
             width: 20px;
             height: auto;
+        }
+
+        /* 
+        just for UI example
+        TODO: remove this part
+        */
+        a:link {
+            color: white; 
+            text-decoration: none   
+        }
+        a:visited {
+            color: white; 
         }
     </style>
 </head>
@@ -164,10 +178,10 @@
                     <img src="img/empty_star.png" alt="Settings Icon">
                     <img src="img/edit.png" alt="Settings Icon">
                 </div>
-                <div class="title"><img src="img/folder.png" alt="Folder Icon">書籤名稱</div>
+                <a href="https://chatgpt.com/" target="_blank"><div class="title"><img src="UI_example_img/GPT.ico">ChatGPT</div></a>
                 <div class="tags">
-                    <span class="badge bg-secondary">標籤1</span>
-                    <span class="badge bg-secondary">標籤2</span>
+                    <span class="badge bg-secondary">AI</span>
+                    <span class="badge bg-secondary">tool</span>
                 </div>
             </div>
             <div class="tag-card">
@@ -175,21 +189,123 @@
                     <img src="img/empty_star.png" alt="Settings Icon">
                     <img src="img/edit.png" alt="Settings Icon">
                 </div>
-                <div class="title"><img src="img/folder.png" alt="Folder Icon">書籤名稱</div>
+                <a href="https://claude.ai/" target="_blank"><div class="title"><img src="UI_example_img\claude.png">Claude</div></a>
                 <div class="tags">
-                    <span class="badge bg-secondary">標籤1</span>
-                    <span class="badge bg-secondary">標籤2</span>
+                    <span class="badge bg-secondary">AI</span>
+                    <span class="badge bg-secondary">tool</span>
                 </div>
             </div>
-            <div class="tag-card tag-folder">
+            <div class="tag-card">
                 <div class="hidden-setting">
                     <img src="img/empty_star.png" alt="Settings Icon">
                     <img src="img/edit.png" alt="Settings Icon">
                 </div>
-                <div class="title"><img src="img/folder.png" alt="Folder Icon">我的書籤2</div>
+                <a href="https://www.gamer.com.tw/index2.php" target="_blank"><div class="title"><img src="UI_example_img\baha.svg">巴哈姆特</div></a>
                 <div class="tags">
-                    <span class="badge bg-secondary">標籤1</span>
-                    <span class="badge bg-secondary">標籤2</span>
+                    <span class="badge bg-secondary">game</span>
+                    <span class="badge bg-secondary">news</span>
+                    <span class="badge bg-secondary">community</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <a href="https://mail.google.com/" target="_blank"><div class="title"><img src="UI_example_img\gmail.ico">Gmail</div></a>
+                <div class="tags">
+                    <span class="badge bg-secondary">email</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <a href="https://outlook.office365.com/" target="_blank"><div class="title"><img src="UI_example_img\outlook.ico">Outlook</div></a>
+                <div class="tags">
+                    <span class="badge bg-secondary">email</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <a href="https://www.ntu.edu.tw/" target="_blank"><div class="title"><img src="UI_example_img\NTU.png">NTU</div></a>
+                <div class="tags">
+                    <span class="badge bg-secondary">學校</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <a href="https://www.youtube.com/" target="_blank"><div class="title"><img src="UI_example_img\YT.ico">YouTube</div></a>
+                <div class="tags">
+                    <span class="badge bg-secondary">影音</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <a href="https://www.netflix.com/tw/" target="_blank"><div class="title"><img src="UI_example_img\nficon2023.ico">Netflix</div></a>
+                <div class="tags">
+                    <span class="badge bg-secondary">影音</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <a href="https://www.ruten.com.tw/" target="_blank"><div class="title"><img src="UI_example_img\露天.ico">露天拍賣</div></a>
+                <div class="tags">
+                    <span class="badge bg-secondary">電商</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <a href="https://24h.pchome.com.tw/" target="_blank"><div class="title"><img src="UI_example_img\PChome.ico">PChome</div></a>
+                <div class="tags">
+                    <span class="badge bg-secondary">電商</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <a href="https://www.facebook.com/" target="_blank"><div class="title"><img src="UI_example_img\FB.ico">Facebook</div></a>
+                <div class="tags">
+                    <span class="badge bg-secondary">community</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <div class="title"><img src="img\folder.png">docker</div>
+                <div class="tags">
+                    <span class="badge bg-secondary">env</span>
+                    <span class="badge bg-secondary">tutorial</span>
+                </div>
+            </div>
+            <div class="tag-card">
+                <div class="hidden-setting">
+                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+                <div class="title"><img src="img\folder.png">linux</div>
+                <div class="tags">
+                    <span class="badge bg-secondary">env</span>
                 </div>
             </div>
         </div>
