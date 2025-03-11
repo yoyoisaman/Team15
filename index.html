@@ -10,44 +10,70 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="sidebar">
+    <div class="sidebar d-none d-lg-block">
         <div class="bookmark-item">
-            <a href="https://chatgpt.com/" target="_blank"><div class="title"><img src="UI_example_img/GPT.ico">ChatGPT</div></a>
-            <div class="hidden-setting">
-                <img src="img/full_star.png" alt="Settings Icon">
-                <img src="img/edit.png" alt="Settings Icon">
-            </div>
+            <a>
+                <div class="title"><img src="img/home.png"><span>Home</span></div>
+                <div class="hidden-setting">
+                    <img src="img/full_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+            </a>
         </div>
         <div class="bookmark-item">
-            <a href="https://mail.google.com/" target="_blank"><div class="title"><img src="UI_example_img\gmail.ico">Gmail</div></a>
-            <div class="hidden-setting">
-                <img src="img/full_star.png" alt="Settings Icon">
-                <img src="img/edit.png" alt="Settings Icon">
-            </div>
+            <a>
+                <div class="title"><img src="img/folder.png"><span>Linux</span></div>
+                <div class="hidden-setting">
+                    <img src="img/full_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+            </a>
         </div>
         <div class="bookmark-item">
-            <a href="https://outlook.office365.com/" target="_blank"><div class="title"><img src="UI_example_img\outlook.ico">Outlook</div></a>
-            <div class="hidden-setting">
-                <img src="img/full_star.png" alt="Settings Icon">
-                <img src="img/edit.png" alt="Settings Icon">
-            </div>   
+            <a>
+                <div class="title"><img src="img/folder.png"><span>Docker</span></div>
+                <div class="hidden-setting">
+                    <img src="img/full_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+            </a>
+        </div>
+        <div class="bookmark-item">
+            <a href="https://mail.google.com/" target="_blank">
+                <div class="title"><img src="UI_example_img/gmail.ico"><span>Gmail</span></div>
+                <div class="hidden-setting">
+                    <img src="img/full_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+            </a>
+        </div>
+        <div class="bookmark-item">
+            <a href="https://outlook.office365.com/" target="_blank">
+                <div class="title"><img src="UI_example_img/outlook.ico"><span>Outlook</span></div>
+                <div class="hidden-setting">
+                    <img src="img/full_star.png" alt="Settings Icon">
+                    <img src="img/edit.png" alt="Settings Icon">
+                </div>
+            </a>
         </div>
     </div>
     <div class="main-content">
-        <nav class="d-flex gap-2">
-            <div class="search-bar">
+        <nav class="d-flex flex-wrap gap-2">
+            <div class="search-bar flex-shrink-0 col-12 col-md-5 col-lg-4">
                 <input type="text" placeholder="搜尋書籤、資料夾">
             </div>
-            <div class="btn btn-secondary d-flex align-items-center gap-2">
-                <img src="img/sort.png" alt="Sort Icon">
-                <span>排序與檢視</span>
-            </div>
-            <div class="btn btn-secondary d-flex align-items-center gap-2">
-                <img src="img/tag.png" alt="Tag Icon">
-                <span>篩選標籤</span>
-            </div>
-            <div class="btn btn-secondary d-flex align-items-center gap-2 p-1">
-                <img src="img/add.png" alt="Add Button">
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <div class="btn btn-outline-secondary d-flex align-items-center">
+                    <img src="img/sort.png" alt="Sort Icon">
+                    <span>排序與檢視</span>
+                </div>
+                <div class="btn btn-outline-secondary d-flex align-items-center">
+                    <img src="img/tag.png" alt="Tag Icon">
+                    <span>篩選標籤</span>
+                </div>
+                <div class="btn btn-outline-secondary d-flex align-items-center">
+                    <img src="img/add.png" alt="Add Button">
+                </div>
             </div>
         </nav>
         <div class="tag-container">
@@ -81,7 +107,6 @@
                 <a href="https://www.gamer.com.tw/index2.php" target="_blank"><div class="title"><img src="UI_example_img\baha.svg">巴哈姆特</div></a>
                 <div class="tags">
                     <span class="badge bg-secondary">game</span>
-                    <span class="badge bg-secondary">news</span>
                     <span class="badge bg-secondary">community</span>
                 </div>
             </div>
@@ -170,7 +195,7 @@
                     <img src="img/empty_star.png" alt="Settings Icon">
                     <img src="img/edit.png" alt="Settings Icon">
                 </div>
-                <div class="title"><img src="img\folder.png">docker</div>
+                <div class="title"><img src="img\folder.png">Docker</div>
                 <div class="tags">
                     <span class="badge bg-secondary">env</span>
                     <span class="badge bg-secondary">tutorial</span>
