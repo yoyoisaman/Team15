@@ -15,7 +15,7 @@
             display: flex;
         }
         .sidebar {
-            width: 150px;
+            width: 190px;
             background: #181818;
             padding: 10px;
             display: flex;
@@ -108,8 +108,13 @@
             opacity: 1;
         }
         .bookmark-item .hidden-setting {
+            display: flex;
+            gap: 5px;
+            margin-right: auto;
+        }
+        .bookmark-item .hidden-setting img {
             width: 20px;
-            height: 20px;
+            height: auto;
         }
         .tag-card .hidden-setting {
             position: absolute;
@@ -139,21 +144,26 @@
 <body>
     <div class="sidebar">
         <div class="bookmark-item">
-            <img src="img/folder.png" alt="Folder Icon">
-            <span>我的書籤</span>
-            <img class="hidden-setting" src="img/edit.png" alt="Settings Icon">
+            <a href="https://chatgpt.com/" target="_blank"><div class="title"><img src="UI_example_img/GPT.ico">ChatGPT</div></a>
+            <div class="hidden-setting">
+                <img src="img/full_star.png" alt="Settings Icon">
+                <img src="img/edit.png" alt="Settings Icon">
+            </div>
         </div>
         <div class="bookmark-item">
-            <img src="img/folder.png" alt="Folder Icon">
-            <span>我的書籤</span>
-            <img class="hidden-setting" src="img/edit.png" alt="Settings Icon">
+            <a href="https://mail.google.com/" target="_blank"><div class="title"><img src="UI_example_img\gmail.ico">Gmail</div></a>
+            <div class="hidden-setting">
+                <img src="img/full_star.png" alt="Settings Icon">
+                <img src="img/edit.png" alt="Settings Icon">
+            </div>
         </div>
         <div class="bookmark-item">
-            <img src="img/folder.png" alt="Folder Icon">
-            <span>我的書籤</span>
-            <img class="hidden-setting" src="img/edit.png" alt="Settings Icon">
+            <a href="https://outlook.office365.com/" target="_blank"><div class="title"><img src="UI_example_img\outlook.ico">Outlook</div></a>
+            <div class="hidden-setting">
+                <img src="img/full_star.png" alt="Settings Icon">
+                <img src="img/edit.png" alt="Settings Icon">
+            </div>   
         </div>
-        <div></div>
     </div>
     <div class="main-content">
         <nav class="d-flex gap-2">
@@ -175,7 +185,7 @@
         <div class="tag-container">
             <div class="tag-card">
                 <div class="hidden-setting">
-                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/full_star.png" alt="Settings Icon">
                     <img src="img/edit.png" alt="Settings Icon">
                 </div>
                 <a href="https://chatgpt.com/" target="_blank"><div class="title"><img src="UI_example_img/GPT.ico">ChatGPT</div></a>
@@ -209,7 +219,7 @@
             </div>
             <div class="tag-card">
                 <div class="hidden-setting">
-                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/full_star.png" alt="Settings Icon">
                     <img src="img/edit.png" alt="Settings Icon">
                 </div>
                 <a href="https://mail.google.com/" target="_blank"><div class="title"><img src="UI_example_img\gmail.ico">Gmail</div></a>
@@ -219,7 +229,7 @@
             </div>
             <div class="tag-card">
                 <div class="hidden-setting">
-                    <img src="img/empty_star.png" alt="Settings Icon">
+                    <img src="img/full_star.png" alt="Settings Icon">
                     <img src="img/edit.png" alt="Settings Icon">
                 </div>
                 <a href="https://outlook.office365.com/" target="_blank"><div class="title"><img src="UI_example_img\outlook.ico">Outlook</div></a>
