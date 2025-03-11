@@ -34,18 +34,6 @@ body {
     align-items: center;
     /* width: 40%; */
 }
-@media (min-width: 768px) {
-    .search_bar {
-      flex-grow: 1;
-      max-width: 200px;
-    }
-}
-@media (max-width: 767.98px) {
-.search_bar {
-    flex-grow: 1;
-    width: 100%;
-}
-}
 
 .search-bar input {
     padding: 10px;
