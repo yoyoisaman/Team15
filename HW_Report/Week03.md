@@ -45,7 +45,7 @@
 
 ## 額外相關技術
 ### 1. Bootstrap - Responsive web design (RWD) 
-我們期望未來能做到跨裝置同步的功能，並讓網站良好的運行在手機、平板、電腦等不同裝置上。因此，我們採用 Bootstrap 框架，透過其提供的 **[Grid system](https://getbootstrap.com/docs/4.0/layout/grid/) 與 [Responsive Classes](https://www.geeksforgeeks.org/responsive-utility-classes-in-bootstrap/)**，打造可 **自適應不同螢幕尺寸** 的網站。
+我們期望未來能做到跨裝置同步的功能，並讓網站良好的運行在手機、平板、電腦等不同裝置上。因此，我們採用 Bootstrap 框架，透過其提供的 **[Grid system](https://getbootstrap.com/docs/4.0/layout/grid/) 與 [Responsive classes](https://www.geeksforgeeks.org/responsive-utility-classes-in-bootstrap/)**，打造可 **自適應不同螢幕尺寸** 的網站。
 
 舉例來說，在下方 HTML 中，我們使用 **`d-none` 與 `d-md-block` 類別**，設定側邊欄（區域 III）僅於平板與電腦上顯示，手機等較小螢幕裝置上則隱藏。
 ```html
