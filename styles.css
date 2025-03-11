@@ -133,6 +133,10 @@ div:hover > .hidden-setting {
     height: auto;
 }
 
+.bookmark-item .title img {
+    margin-right: 5px;
+}
+
 .tag-card .hidden-setting {
     position: absolute;
     top: 10px;
