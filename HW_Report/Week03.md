@@ -8,7 +8,7 @@
 
 ## 課內技術練習
 
-![img1](./report_imgs/Week03/img1.png)
+<!-- ![img1](./report_imgs/Week03/img1.png) -->
 
 ### 1. 網頁設計草稿
 
@@ -18,19 +18,19 @@
 
 基於草稿內容，我們透過課堂所學 HTML 與 CSS 技術完成初版頁面（如圖 b），以下為各區域功能的詳細說明：
 
-- **區域 I：書籤陳列區**：
+- **區域 I：書籤陳列區**
   - 此為網頁的主要呈現區塊。
   - 點擊書籤後，將透過 HTML 的 **`href` 屬性** 連結至已儲存的網頁。
   - 點擊資料夾後，預期將以 **[Expanding Grid](https://chriscoyier.net/2023/04/11/expanding-grid-cards-with-view-transitions/)** 的方式展開資料夾內內容。由於此功能涉及 JavaScript，因此安排於下次作業完成。
 
-- **區域 II：功能區**：
+- **區域 II：功能區**
   - 此區域包含 **搜尋、排序與篩選、新增書籤** 三項功能。
   - 本次作業已完成上述功能的 UI 部分，後續將透過 JavaScript 實現互動功能：
     - 搜尋功能將使用 **[Select2](https://select2.org/)** 實作。
     - 排序與篩選、新增書籤功能則同樣以 Expanding Grid 的方式實現。
   - 由於這些互動功能依賴 JavaScript 生成元件，因此本次作業未提供展開後的細節畫面。
 
-- **區域 III：側邊捷徑區**：
+- **區域 III：側邊捷徑區**
   - 此處提供快速跳轉功能，點擊按鈕後跳轉至對應書籤資料夾。
   - 本次作業已完成 UI 設計，下次作業將透過 JavaScript 實作跳轉行為。
 
@@ -41,7 +41,7 @@
 - 點擊按鈕或聚焦於搜尋框時呈現視覺回饋（圖 d, e）。
 - 利用 cursor 提示使用者可進行的特定操作（圖 f）。
 
-![img2](./report_imgs/Week03/img2.png)
+<!-- ![img2](./report_imgs/Week03/img2.png) -->
 
 ## 額外相關技術
 ### 1. Bootstrap - Responsive web design (RWD) 
