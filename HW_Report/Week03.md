@@ -8,7 +8,7 @@
 
 ## 課內技術練習
 
-<!-- ![img1](./report_imgs/Week03/img1.png) -->
+![img1](./report_imgs/Week03/img1.png)
 
 ### 1. 網頁設計草稿
 
@@ -16,7 +16,7 @@
 
 ### 2. HTML 與 CSS 實作
 
-基於草稿內容，我們透過課堂所學 HTML 與 CSS 技術完成初版頁面（如圖 b），以下為各區域功能的詳細說明：
+基於草稿內容，我們透過課堂所學 HTML 與 CSS 技術完成初版頁面（圖 b），以下為各區域功能的詳細說明：
 
 - **區域 I：書籤陳列區**：
   - 此為網頁的主要呈現區塊。
@@ -36,26 +36,30 @@
 
 ### 3. 使用者介面回饋設計
 
-我們透過 CSS 及 Bootstrap CSS 樣式（參考後方「額外相關技術-2」），增進使用者互動時的回饋感：
-- 書籤方塊 hover 時顯示編輯按鈕與顏色變化（圖 c）。
-- 點擊按鈕或聚焦於搜尋框時呈現視覺回饋（圖 d, e）。
-- 利用 cursor 提示使用者可進行的特定操作（圖 f）。
+我們透過 CSS 及 Bootstrap CSS 樣式（參考後方「額外相關技術-2」），增進使用者互動時的回饋感。呈現如下方動畫。
+- 書籤方塊 hover 時顯示編輯按鈕與顏色變化。
+- 點擊按鈕或聚焦於搜尋框時呈現視覺回饋。
+- 利用 cursor 提示使用者可進行的特定操作。
 
-<!-- ![img2](./report_imgs/Week03/img2.png) -->
+![img2](./report_imgs/Week03/img2.gif)
 
 ## 額外相關技術
 ### 1. Bootstrap - Responsive web design (RWD) 
 我們期望未來能做到跨裝置同步的功能，並讓網站良好的運行在手機、平板、電腦等不同裝置上。因此，我們採用 Bootstrap 框架，透過其提供的 **[Grid system](https://getbootstrap.com/docs/4.0/layout/grid/) 與 [Responsive classes](https://www.geeksforgeeks.org/responsive-utility-classes-in-bootstrap/)**，打造可 **自適應不同螢幕尺寸** 的網站。
 
-舉例來說，在下方 HTML 中，我們使用 **`d-none` 與 `d-md-block` 類別**，設定側邊欄（區域 III）僅於平板與電腦上顯示，手機等較小螢幕裝置上則隱藏。
+舉例來說，在下方 HTML 中，我們使用 **`d-none` 與 `d-lg-block` 類別**，設定側邊欄（區域 III）僅於電腦上顯示，手機等較小螢幕裝置上則隱藏。
 ```html
-<div class="sidebar d-none d-md-block">
+<div class="sidebar d-none d-lg-block">
 ```
 
-又或者，我們透過 **Grid System**，分別設定不同裝置上書籤方塊的寬度，使書籤即使在手機瀏覽時，也能維持足夠大的顯示區域，確保良好的使用體驗。
+又或者，我們透過 **Grid System**，分別設定不同裝置上搜尋欄的寬度，使其在手機上瀏覽時，仍能保持足夠大的顯示區域，確保良好的使用體驗。
 ```html
-<div class="col-12 col-sm-6 col-md-4 col-lg_custom">
+<div class="search-bar flex-shrink-0 col-12 col-md-5 col-lg-4">
 ```
+
+透過這種技術，我們的網站能適應不同大小的螢幕，例如 **圖 c 的電腦版介面**，以及 **圖 d 的手機版介面**。
+
+![img3](./report_imgs/Week03/img3.png)
 
 ### 2. CSS transitions 轉場效果
 我們利用 CSS3 的 `transition` 屬性實現平滑的轉場效果，例如以下程式碼實現 hover 時浮現編輯按鈕的效果：
@@ -64,7 +68,7 @@
     opacity: 0;
     transition: opacity 0.1s;
 }
-div:hover > .hidden-setting {
+.tag-card:hover > .hidden-setting {
     opacity: 1;
 }
 ```

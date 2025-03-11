@@ -81,7 +81,7 @@ body {
     background: #333;
     padding: 15px;
     border-radius: 10px;
-    width: 200px;
+    width: 180px;
     position: relative;
     transition: background-color 0.3s;
     cursor: pointer;
