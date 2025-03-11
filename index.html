@@ -87,19 +87,6 @@
             width: 40px;
             height: auto;
         }
-        .add-card {
-            background: #333;
-            padding: 15px;
-            border-radius: 15px;
-            width: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
-        .add-card:hover {
-            background: #3f3f3f;
-        }
         .bookmark-item {
             display: flex;
             align-items: center;
@@ -163,11 +150,11 @@
                 <img src="img/tag.png" alt="Tag Icon">
                 <span>篩選標籤</span>
             </div>
+            <div class="btn btn-secondary d-flex align-items-center gap-2 p-1">
+                <img src="img/add.png" alt="Add Button">
+            </div>
         </nav>
         <div class="tag-container">
-            <div class="add-card">
-                <img src="img/add_button.png" alt="Add Button">
-            </div>
             <div class="tag-card">
                 <img class="hidden-setting" src="img/edit.png" alt="Settings Icon">
                 <div class="title"><img src="img/folder.png" alt="Folder Icon">書籤名稱</div>
