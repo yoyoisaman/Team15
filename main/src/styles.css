@@ -6,6 +6,11 @@ body {
     display: flex;
 }
 
+.app-container {
+    display: flex;
+
+}
+
 .sidebar {
     width: 190px;
     background: #181818;
