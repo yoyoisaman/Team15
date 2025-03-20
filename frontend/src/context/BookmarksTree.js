@@ -32,11 +32,29 @@ class BookmarksTree {
     return Object.values(this.idToBookmark).filter(bookmark => bookmark.starred);
   }
 
+  // 對 node id 的 srarred 屬性取反，並通知 React 更新
+  toggleStarred(id) {
+    this.idToBookmark[id].starred = !this.idToBookmark[id].starred;
+    this.onUpdate();
+  }
+
   // 取得當前位置(currentNode)下的書籤，回傳 bookmark array
-  getCurrentBookmarks() {
+  getCurrentChildren() {
     return this.treeStructure[this.currentNode].children_id
       .map(id => this.idToBookmark[id]);
   }
+
+  // 取得當前位置(currentNode)的父節點，回傳 node id
+  getCurrentParent() {
+    return this.treeStructure[this.currentNode].parent_id;
+  }
+
+  // 移動到 node id，並通知 React 更新
+  moveToFolder(id) {
+    this.currentNode = id;
+    this.onUpdate();
+  }
+
 }
 
 export default BookmarksTree;

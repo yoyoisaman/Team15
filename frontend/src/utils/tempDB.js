@@ -89,7 +89,7 @@ export const treeStructure = {
     },
     10: {
       id: 10,
-      url: undefined,
+      url: "#",
       img: "folder.png",
       name: "Docker",
       tags: ["Docker"],
@@ -97,7 +97,7 @@ export const treeStructure = {
     },
     11: {
       id: 11,
-      url: undefined,
+      url: "#",
       img: "folder.png",
       name: "Linux",
       tags: ["Linux"],
