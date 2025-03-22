@@ -22,6 +22,7 @@ export const treeStructure = {
       name: "ChatGPT",
       tags: ["AI", "tool"],
       starred: true,
+      hidden: false,
     },
     2: {
       id: 2,
@@ -30,6 +31,7 @@ export const treeStructure = {
       name: "Claude",
       tags: ["AI", "tool"],
       starred: false,
+      hidden: false,
     },
     3: {
       id: 3,
@@ -38,6 +40,7 @@ export const treeStructure = {
       name: "巴哈姆特",
       tags: ["game", "community"],
       starred: false,
+      hidden: false,
     },
     4: {
       id: 4,
@@ -46,6 +49,7 @@ export const treeStructure = {
       name: "Gmail",
       tags: ["email"],
       starred: true,
+      hidden: false,
     },
     5: {
       id: 5,
@@ -54,6 +58,7 @@ export const treeStructure = {
       name: "Outlook",
       tags: ["email"],
       starred: true,
+      hidden: false,
     },
     6: {
       id: 6,
@@ -62,6 +67,7 @@ export const treeStructure = {
       name: "NTU",
       tags: ["學校"],
       starred: false,
+      hidden: false,
     },
     7: {
       id: 7,
@@ -70,6 +76,7 @@ export const treeStructure = {
       name: "YouTube",
       tags: ["影音"],
       starred: false,
+      hidden: false,
     },
     8: {
       id: 8,
@@ -78,6 +85,7 @@ export const treeStructure = {
       name: "Netflix",
       tags: ["影音"],
       starred: false,
+      hidden: false,
     },
     9: {
       id: 9,
@@ -86,6 +94,7 @@ export const treeStructure = {
       name: "露天拍賣",
       tags: ["電商"],
       starred: false,
+      hidden: false,
     },
     10: {
       id: 10,
@@ -94,6 +103,7 @@ export const treeStructure = {
       name: "Docker",
       tags: ["Docker"],
       starred: true,
+      hidden: false,
     },
     11: {
       id: 11,
@@ -102,6 +112,7 @@ export const treeStructure = {
       name: "Linux",
       tags: ["Linux"],
       starred: true,
+      hidden: false,
     },
   };
   

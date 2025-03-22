@@ -55,6 +55,30 @@ class BookmarksTree {
     this.onUpdate();
   }
 
+  // 插入一個書籤，並通知 React 更新
+  addBookmark({ name, url, tags, img = "folder.png" }) {
+    const id = Date.now(); // 使用當前時間戳作為唯一 ID
+    this.idToBookmark[id] = {
+      id,
+      name,
+      url,
+      tags,
+      img: img,
+      starred: false,
+      hidden: false,
+    };
+    this.treeStructure[this.currentNode].children_id.push(id);
+    this.onUpdate();
+  }
+
+  filterBookmarksByTags(tags) {
+    for (const id in this.idToBookmark) {
+      const bookmark = this.idToBookmark[id];
+      bookmark.hidden = !tags.some((tag) => bookmark.tags.includes(tag));
+    }
+    this.onUpdate();
+  }
+
 }
 
 export default BookmarksTree;
