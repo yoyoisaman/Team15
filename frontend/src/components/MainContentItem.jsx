@@ -9,7 +9,15 @@ const MainContentItem = ({ bookmark, onToggleStar }) => {
       e.preventDefault();
     }
   };
-
+  const isUrl = (str) => {
+    try {
+      new URL(str);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
+  const imgSrc = isUrl(bookmark.img) ? bookmark.img : imageMap[bookmark.img];
   return (
     <a
       href={bookmark.url}
@@ -30,7 +38,7 @@ const MainContentItem = ({ bookmark, onToggleStar }) => {
         <img src={imageMap["edit.png"]} alt="Edit Icon" />
       </div>
       <div className="title">
-        <img src={imageMap[bookmark.img]} alt={bookmark.name} />
+        <img src={imgSrc} alt={bookmark.name} />
         {bookmark.name}
       </div>
       <div className="tags">

@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
-import BookmarksContext from "../context/BookmarksContext";
-import "./AddBookModal/AddBookmarkModal.css";
+import BookmarksContext from "../../context/BookmarksContext";
+import "./TagFilterModal.css";
 
 const TagFilterModal = ({ onClose }) => {
   const { bookmarksTree } = useContext(BookmarksContext);

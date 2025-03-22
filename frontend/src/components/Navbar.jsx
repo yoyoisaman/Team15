@@ -1,18 +1,41 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import imageMap from "../utils/imageMap";
-import AddBookmarkModal from "./AddBookModal/AddBookmarkModal";
-import TagFilterModal from "./TagFilterModal";
+import AddBookmarkModal from "./AddBookmarkModal/AddBookmarkModal";
+import AddFolderModal from "./AddFolderModal/AddFolderModal";
+import TagFilterModal from "./TagFilterModal/TagFilterModal";
+import BookmarksContext from "../context/BookmarksContext";
+
 const Navbar = () => {
-  // 新增選單相關
-  const [showModal, setShowModal] = useState(false);
-  const handleAddButtonClick = () => {
-    setShowModal(true);
+  const { bookmarksTree } = useContext(BookmarksContext);
+
+  // 新增書籤相關
+  const [showBookmarkModal, setShowBookmarkModal] = useState(false);
+  const handleAddBookmarkButtonClick = () => {
+    setShowBookmarkModal(true);
   };
+
+  // 新增資料夾相關
+  const [showFolderModal, setShowFolderModal] = useState(false);
+  const handleAddFolderButtonClick = () => {
+    setShowFolderModal(true);
+  };
+
   // 篩選tag相關
   const [showTagFilterModal, setShowTagFilterModal] = useState(false);
   const handleTagFilterButtonClick = () => {
     setShowTagFilterModal(true);
   };
+
+  // 獲取當前篩選標籤
+  const currentFilterTags = bookmarksTree.getCurrentFilterTags();
+
+  // 獲取所有標籤
+  const allTags = Array.from(
+    new Set(Object.values(bookmarksTree.idToBookmark).flatMap((bookmark) => bookmark.tags))
+  );
+
+  // 檢查篩選標籤是否有效
+  const isFilterActive = currentFilterTags.length > 0 && currentFilterTags.length < allTags.length;
 
   return (
     <nav className="d-flex flex-wrap gap-2">
@@ -25,7 +48,7 @@ const Navbar = () => {
           <span>排序與檢視</span>
         </button>
         <button
-          className="btn btn-outline-secondary d-flex align-items-center"
+          className={`btn d-flex align-items-center ${isFilterActive ? 'btn-dark' : 'btn-outline-secondary'}`}
           onClick={handleTagFilterButtonClick}
         >
           <img src={imageMap["tag.png"]} alt="Tag Icon" />
@@ -33,12 +56,19 @@ const Navbar = () => {
         </button>
         <button
           className="btn btn-outline-secondary d-flex align-items-center"
-          onClick={handleAddButtonClick}
+          onClick={handleAddBookmarkButtonClick}
         >
           <img src={imageMap["add.png"]} alt="Add Button" />
         </button>
+        <button
+          className="btn btn-outline-secondary d-flex align-items-center"
+          onClick={handleAddFolderButtonClick}
+        >
+          <img src={imageMap["folder.png"]} alt="Add Folder Button" />
+        </button>
       </div>
-      {showModal && <AddBookmarkModal onClose={() => setShowModal(false)} />}
+      {showBookmarkModal && <AddBookmarkModal onClose={() => setShowBookmarkModal(false)} currentFilterTags={currentFilterTags} />}
+      {showFolderModal && <AddFolderModal onClose={() => setShowFolderModal(false)} />}
       {showTagFilterModal && <TagFilterModal onClose={() => setShowTagFilterModal(false)} />}
     </nav>
   );

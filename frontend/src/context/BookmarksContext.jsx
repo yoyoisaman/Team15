@@ -7,7 +7,6 @@ const BookmarksContext = createContext();
 export function BookmarksProvider({ children }) {
   const [, forceUpdate] = useState(0);
   const bookmarksTreeRef = useRef(new BookmarksTree(treeStructure, idToBookmark, () => {
-    console.log("onUpdate called"); // 調試代碼
     forceUpdate(n => n + 1);
   }));
 
