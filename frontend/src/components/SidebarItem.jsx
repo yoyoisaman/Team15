@@ -1,9 +1,10 @@
 import imageMap from "../utils/imageMap";
 
-const HomeItem = ({onMoveToFolder}) => {
+const HomeItem = ({ onMoveToFolder }) => {
   return (
     <div className="bookmark-item">
-      <a onClick={(e) => {
+      <a
+        onClick={(e) => {
           e.preventDefault();
           onMoveToFolder(0);
         }}
@@ -17,36 +18,33 @@ const HomeItem = ({onMoveToFolder}) => {
   );
 };
 
-const SidebarItem = ({ item, onToggleStar, onMoveToFolder}) => {
+const SidebarItem = ({ item, onToggleStar, onMoveToFolder }) => {
+  const handleClick = (e) => {
+    if (e.target.name == "star") {
+      // 點擊 star
+
+      e.preventDefault();
+      onToggleStar(item.id);
+    } else if (item.url === "#") {
+      // 點擊資料夾
+      e.preventDefault();
+      onMoveToFolder(item.id);
+    }
+  };
   return (
     <div className="bookmark-item">
       <a
         href={item.url}
         target={item.url && "_blank"}
         rel="noopener noreferrer"
-        onClick={(e) => {
-          if (item.url === "#") {
-            e.preventDefault();
-            onMoveToFolder(item.id);
-          }
-          if (e.target.closest(".hidden-setting")) {
-            e.preventDefault();
-          }
-        }}
+        onClick={handleClick}
       >
         <div className="title">
           <img src={imageMap[item.img]} alt={item.name} />
           <span>{item.name}</span>
         </div>
         <div className="hidden-setting">
-          <img
-            src={imageMap["full_star.png"]}
-            alt="Star Icon"
-            onClick={(e) => {
-              e.preventDefault();
-              onToggleStar(item.id);
-            }}
-          />
+          <img src={imageMap["full_star.png"]} alt="Star Icon" name="star" />
         </div>
       </a>
     </div>

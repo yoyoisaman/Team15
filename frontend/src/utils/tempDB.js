@@ -1,6 +1,6 @@
 // 先用這個檔案來模擬資料庫的功能，之後再改成真正的資料庫
 export const treeStructure = {
-    0: { parent_id: null, children_id: [1, 2, 3, 4, 5, 6, 7, 10, 11, 12] },
+    0: { parent_id: null, children_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
     1: { parent_id: 0, children_id: [] },
     2: { parent_id: 0, children_id: [] },
     3: { parent_id: 0, children_id: [] },

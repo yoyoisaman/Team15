@@ -50,6 +50,17 @@ class BookmarksTree {
     return this.treeStructure[this.currentNode].parent_id;
   }
 
+  // 取得從 root 走到 currentNode 的路徑，回傳 bookmark array
+  getPathToBookmark() {
+    const path = [];
+    let current = this.currentNode;
+    while (current !== 0) {
+      path.unshift(this.idToBookmark[current]);
+      current = this.treeStructure[current].parent_id;
+    }
+    return path;
+  }
+
   // 移動到 node id，並通知 React 更新
   moveToFolder(id) {
     this.currentNode = id;

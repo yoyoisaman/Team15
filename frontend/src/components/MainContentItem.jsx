@@ -15,42 +15,40 @@ const MainContentItem = ({
     }
   };
   const imgSrc = isUrl(bookmark.img) ? bookmark.img : imageMap[bookmark.img];
+
+  const handleClick = (e) => {
+    if (e.target.matches(".tags span")) {
+      // 點擊 tag
+      e.preventDefault();
+    } else if (e.target.name === "delete") {
+      // 點擊 bin
+      e.preventDefault();
+      onDeleteBookmark(bookmark.id);
+    } else if (e.target.name === "star") {
+      // 點擊 star
+      e.preventDefault();
+      onToggleStar(bookmark.id);
+    } else if (bookmark.url === "#") {
+      // 點擊其他地方，但是是資料夾
+      e.preventDefault();
+      onMoveToFolder(bookmark.id);
+    }
+  };
   return (
     <a
       href={bookmark.url}
       target="_blank"
       rel="noopener noreferrer"
       className="tag-card"
-      onClick={(e) => {
-        if (bookmark.url === "#") {
-          e.preventDefault();
-          onMoveToFolder(bookmark.id);
-        }
-        if (
-          e.target.matches(".tags span") ||
-          e.target.closest(".hidden-setting")
-        ) {
-          e.preventDefault();
-        }
-      }}
+      onClick={handleClick}
     >
       <div className="hidden-setting">
         <img
           src={imageMap[bookmark.starred ? "full_star.png" : "empty_star.png"]}
           alt="Star Icon"
-          onClick={(e) => {
-            e.preventDefault();
-            onToggleStar(bookmark.id);
-          }}
+          name="star"
         />
-        <img
-          src={imageMap["delete.png"]}
-          alt="Edit Icon"
-          onClick={(e) => {
-            e.preventDefault();
-            onDeleteBookmark(bookmark.id);
-          }}
-        />
+        <img src={imageMap["delete.png"]} alt="Delete Icon" name="delete" />
       </div>
       <div className="title">
         <img src={imgSrc} alt={bookmark.name} />

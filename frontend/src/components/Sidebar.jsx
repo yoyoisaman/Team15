@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import BookmarksContext from "../context/BookmarksContext";
 import { HomeItem, SidebarItem } from "./SidebarItem";
+import BookmarksContext from "../context/BookmarksContext";
 
 const Sidebar = () => {
   const { bookmarksTree } = useContext(BookmarksContext);

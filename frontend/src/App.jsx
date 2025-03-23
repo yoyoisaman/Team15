@@ -1,6 +1,7 @@
 import { BookmarksProvider } from "./context/BookmarksContext";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
+import Breadcrumb from "./components/Breadcrumb";
 import MainContent from "./components/MainContent";
 import "./styles.css";
 
@@ -10,6 +11,7 @@ function Layout({ children }) {
       <Sidebar />
       <div className="main-content">
         <Navbar />
+        <Breadcrumb />
         {children}
       </div>
     </div>
