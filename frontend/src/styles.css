@@ -37,7 +37,7 @@ body {
     border-radius: 5px;
     display: inline-flex;
     align-items: center;
-    /* width: 40%; */
+    width: 400px;
 }
 
 .search-bar input {
