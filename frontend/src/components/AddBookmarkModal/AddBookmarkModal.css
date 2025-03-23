@@ -50,8 +50,8 @@
 
 .modal-content .form-group .tag-input-container {
   display: flex;
-  align-items: center; 
-  gap: 10px; 
+  align-items: center;
+  gap: 10px;
 }
 
 .modal-content .form-group .tag-input-container input {

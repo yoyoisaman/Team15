@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import BookmarksContext from "../../context/BookmarksContext";
-import './AddFolderModal.css';
+import "./AddFolderModal.css";
 
 const AddFolderModal = ({ onClose }) => {
   const { bookmarksTree } = useContext(BookmarksContext);
@@ -11,7 +11,9 @@ const AddFolderModal = ({ onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const currentFilterTags = bookmarksTree.getCurrentFilterTags();
-    const hidden = currentFilterTags.length > 0 && !currentFilterTags.some(tag => tags.includes(tag));
+    const hidden =
+      currentFilterTags.length > 0 &&
+      !currentFilterTags.some((tag) => tags.includes(tag));
     const newFolder = { name, tags, hidden };
     bookmarksTree.addFolder(newFolder);
     onClose();
@@ -25,7 +27,7 @@ const AddFolderModal = ({ onClose }) => {
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
   return (
@@ -53,20 +55,36 @@ const AddFolderModal = ({ onClose }) => {
                 onChange={(e) => setTagInput(e.target.value)}
                 placeholder="新增標籤"
               />
-              <button type="button" onClick={handleAddTag}>新增</button>
+              <button type="button" onClick={handleAddTag}>
+                新增
+              </button>
             </div>
             <div className="tags-list">
               {tags.map((tag, index) => (
                 <span key={index} className="tag">
                   {tag}
-                  <button type="button" className="remove-tag-button" onClick={() => handleRemoveTag(tag)}>x</button>
+                  <button
+                    type="button"
+                    className="remove-tag-button"
+                    onClick={() => handleRemoveTag(tag)}
+                  >
+                    x
+                  </button>
                 </span>
               ))}
             </div>
           </div>
           <div className="form-actions">
-            <button type="submit" className="btn btn-primary">確認</button>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>取消</button>
+            <button type="submit" className="btn btn-primary">
+              確認
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
+              取消
+            </button>
           </div>
         </form>
       </div>

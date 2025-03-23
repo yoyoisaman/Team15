@@ -31,11 +31,16 @@ const Navbar = () => {
 
   // 獲取所有標籤
   const allTags = Array.from(
-    new Set(Object.values(bookmarksTree.idToBookmark).flatMap((bookmark) => bookmark.tags))
+    new Set(
+      Object.values(bookmarksTree.idToBookmark).flatMap(
+        (bookmark) => bookmark.tags,
+      ),
+    ),
   );
 
   // 檢查篩選標籤是否有效
-  const isFilterActive = currentFilterTags.length > 0 && currentFilterTags.length < allTags.length;
+  const isFilterActive =
+    currentFilterTags.length > 0 && currentFilterTags.length < allTags.length;
 
   return (
     <nav className="d-flex flex-wrap gap-2">
@@ -48,7 +53,7 @@ const Navbar = () => {
           <span>排序與檢視</span>
         </button>
         <button
-          className={`btn d-flex align-items-center ${isFilterActive ? 'btn-dark' : 'btn-outline-secondary'}`}
+          className={`btn d-flex align-items-center ${isFilterActive ? "btn-dark" : "btn-outline-secondary"}`}
           onClick={handleTagFilterButtonClick}
         >
           <img src={imageMap["tag.png"]} alt="Tag Icon" />
@@ -67,9 +72,18 @@ const Navbar = () => {
           <img src={imageMap["folder.png"]} alt="Add Folder Button" />
         </button>
       </div>
-      {showBookmarkModal && <AddBookmarkModal onClose={() => setShowBookmarkModal(false)} currentFilterTags={currentFilterTags} />}
-      {showFolderModal && <AddFolderModal onClose={() => setShowFolderModal(false)} />}
-      {showTagFilterModal && <TagFilterModal onClose={() => setShowTagFilterModal(false)} />}
+      {showBookmarkModal && (
+        <AddBookmarkModal
+          onClose={() => setShowBookmarkModal(false)}
+          currentFilterTags={currentFilterTags}
+        />
+      )}
+      {showFolderModal && (
+        <AddFolderModal onClose={() => setShowFolderModal(false)} />
+      )}
+      {showTagFilterModal && (
+        <TagFilterModal onClose={() => setShowTagFilterModal(false)} />
+      )}
     </nav>
   );
 };

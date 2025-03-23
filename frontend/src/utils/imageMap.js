@@ -6,7 +6,7 @@ const imageMap = Object.fromEntries(
   Object.entries(images).map(([key, module]) => {
     const fileName = key.split("/").pop();
     return [fileName, module.default];
-  })
+  }),
 );
 
 export default imageMap;

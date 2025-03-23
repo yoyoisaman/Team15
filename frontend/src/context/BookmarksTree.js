@@ -9,7 +9,7 @@ class BookmarksTree {
     // 通知 React 更新的函式
     this.onUpdate = onUpdate;
     // 紀錄目前的tag
-    this.currentFilterTags = []
+    this.currentFilterTags = [];
     if (treeStructure && idToBookmark) {
       this._buildTree(treeStructure, idToBookmark);
     }
@@ -30,7 +30,9 @@ class BookmarksTree {
 
   // 取得快速存取的書籤，即 starred == true 的書籤，回傳 bookmark array
   getStarredBookmarks() {
-    return Object.values(this.idToBookmark).filter(bookmark => bookmark.starred);
+    return Object.values(this.idToBookmark).filter(
+      (bookmark) => bookmark.starred,
+    );
   }
 
   // 對 node id 的 srarred 屬性取反，並通知 React 更新
@@ -41,8 +43,9 @@ class BookmarksTree {
 
   // 取得當前位置(currentNode)下的書籤，回傳 bookmark array
   getCurrentChildren() {
-    return this.treeStructure[this.currentNode].children_id
-      .map(id => this.idToBookmark[id]);
+    return this.treeStructure[this.currentNode].children_id.map(
+      (id) => this.idToBookmark[id],
+    );
   }
 
   // 取得當前位置(currentNode)的父節點，回傳 node id
@@ -93,7 +96,9 @@ class BookmarksTree {
         }
       }
       const parent_id = this.treeStructure[node_id].parent_id;
-      this.treeStructure[parent_id].children_id = this.treeStructure[parent_id].children_id.filter(child_id => child_id !== node_id);
+      this.treeStructure[parent_id].children_id = this.treeStructure[
+        parent_id
+      ].children_id.filter((child_id) => child_id !== node_id);
       delete this.treeStructure[node_id];
       delete this.idToBookmark[node_id];
     };
@@ -132,8 +137,6 @@ class BookmarksTree {
   getCurrentFilterTags() {
     return this.currentFilterTags || [];
   }
-
-
 }
 
 export default BookmarksTree;

@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import BookmarksContext from "../../context/BookmarksContext";
-import './AddBookmarkModal.css';
+import "./AddBookmarkModal.css";
 
 const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
   const { bookmarksTree } = useContext(BookmarksContext);
@@ -12,7 +12,9 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const hidden = currentFilterTags.length > 0 && !currentFilterTags.some(tag => tags.includes(tag));
+    const hidden =
+      currentFilterTags.length > 0 &&
+      !currentFilterTags.some((tag) => tags.includes(tag));
     const newBookmark = { name, url, tags, img: faviconUrl, hidden };
     bookmarksTree.addBookmark(newBookmark);
     onClose();
@@ -44,7 +46,7 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
   return (
@@ -65,17 +67,16 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
           </div>
           <div className="form-group">
             <label>連接網址:</label>
-            <input
-              type="url"
-              value={url}
-              onChange={handleUrlChange}
-              required
-            />
+            <input type="url" value={url} onChange={handleUrlChange} required />
           </div>
           {faviconUrl && (
             <div className="form-group">
               <label>網站圖標預覽:</label>
-              <img src={faviconUrl} alt="網站圖標預覽" className="favicon-preview" />
+              <img
+                src={faviconUrl}
+                alt="網站圖標預覽"
+                className="favicon-preview"
+              />
             </div>
           )}
           <div className="form-group">
@@ -86,20 +87,32 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
               />
-              <button type="button" onClick={handleAddTag}>新增</button>
+              <button type="button" onClick={handleAddTag}>
+                新增
+              </button>
             </div>
             <div className="tags-list">
               {tags.map((tag, index) => (
                 <span key={index} className="tag">
                   {tag}
-                  <button type="button" onClick={() => handleRemoveTag(tag)}>x</button>
+                  <button type="button" onClick={() => handleRemoveTag(tag)}>
+                    x
+                  </button>
                 </span>
               ))}
             </div>
           </div>
           <div className="form-actions">
-            <button type="submit" className="btn btn-primary">確認</button>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>取消</button>
+            <button type="submit" className="btn btn-primary">
+              確認
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
+              取消
+            </button>
           </div>
         </form>
       </div>

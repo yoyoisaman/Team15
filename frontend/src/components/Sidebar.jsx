@@ -11,7 +11,7 @@ const Sidebar = () => {
   };
   const handleMoveToFolder = (id) => {
     bookmarksTree.moveToFolder(id);
-  }
+  };
 
   return (
     <div className="sidebar d-none d-lg-block">

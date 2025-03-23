@@ -9,7 +9,9 @@ const TagFilterModal = ({ onClose }) => {
   // 處理標籤點擊事件
   const handleTagClick = (tag) => {
     setSelectedTags((prevTags) =>
-      prevTags.includes(tag) ? prevTags.filter((t) => t !== tag) : [...prevTags, tag]
+      prevTags.includes(tag)
+        ? prevTags.filter((t) => t !== tag)
+        : [...prevTags, tag],
     );
   };
 
@@ -35,7 +37,11 @@ const TagFilterModal = ({ onClose }) => {
 
   // 獲取所有標籤
   const allTags = Array.from(
-    new Set(Object.values(bookmarksTree.idToBookmark).flatMap((bookmark) => bookmark.tags))
+    new Set(
+      Object.values(bookmarksTree.idToBookmark).flatMap(
+        (bookmark) => bookmark.tags,
+      ),
+    ),
   );
 
   return (
@@ -60,8 +66,16 @@ const TagFilterModal = ({ onClose }) => {
             </div>
           </div>
           <div className="form-actions">
-            <button type="submit" className="btn btn-primary">確認</button>
-            <button type="button" className="btn btn-secondary" onClick={handleClose}>取消</button>
+            <button type="submit" className="btn btn-primary">
+              確認
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleClose}
+            >
+              取消
+            </button>
           </div>
         </form>
       </div>
