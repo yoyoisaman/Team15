@@ -1,14 +1,11 @@
 import imageMap from "../utils/imageMap";
 
-const MainContentItem = ({ bookmark, onToggleStar }) => {
-  const handleClick = (e) => {
-    if (bookmark.url === "#") {
-      e.preventDefault();
-    }
-    if (e.target.matches(".tags span") || e.target.closest(".hidden-setting")) {
-      e.preventDefault();
-    }
-  };
+const MainContentItem = ({
+  bookmark,
+  onToggleStar,
+  onMoveToFolder,
+  onDeleteBookmark,
+}) => {
   const isUrl = (str) => {
     try {
       new URL(str);
@@ -24,7 +21,18 @@ const MainContentItem = ({ bookmark, onToggleStar }) => {
       target="_blank"
       rel="noopener noreferrer"
       className="tag-card"
-      onClick={handleClick}
+      onClick={(e) => {
+        if (bookmark.url === "#") {
+          e.preventDefault();
+          onMoveToFolder(bookmark.id);
+        }
+        if (
+          e.target.matches(".tags span") ||
+          e.target.closest(".hidden-setting")
+        ) {
+          e.preventDefault();
+        }
+      }}
     >
       <div className="hidden-setting">
         <img
@@ -35,7 +43,14 @@ const MainContentItem = ({ bookmark, onToggleStar }) => {
             onToggleStar(bookmark.id);
           }}
         />
-        <img src={imageMap["edit.png"]} alt="Edit Icon" />
+        <img
+          src={imageMap["delete.png"]}
+          alt="Edit Icon"
+          onClick={(e) => {
+            e.preventDefault();
+            onDeleteBookmark(bookmark.id);
+          }}
+        />
       </div>
       <div className="title">
         <img src={imgSrc} alt={bookmark.name} />

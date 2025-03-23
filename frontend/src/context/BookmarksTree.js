@@ -72,7 +72,25 @@ class BookmarksTree {
     this.onUpdate();
   }
 
-  // 根據你傳入的書籤，對網頁渲染
+  // 遞迴刪除 node id 以下的所有節點(含自身)，並通知 React 更新
+  deleteBookmark(id) {
+    const _deleteBookmark = (node_id) => {
+      if (this.treeStructure[node_id].children_id.length > 0) {
+        const children_ids = [...this.treeStructure[node_id].children_id];
+        for (const child_id of children_ids) {
+          _deleteBookmark(child_id);
+        }
+      }
+      const parent_id = this.treeStructure[node_id].parent_id;
+      this.treeStructure[parent_id].children_id = this.treeStructure[parent_id].children_id.filter(child_id => child_id !== node_id);
+      delete this.treeStructure[node_id];
+      delete this.idToBookmark[node_id];
+    };
+    _deleteBookmark(id);
+    this.onUpdate();
+  }
+
+  // 根據你傳入的標籤，對網頁渲染
   filterBookmarksByTags(tags) {
     this.currentFilterTags = tags;
     for (const id in this.idToBookmark) {

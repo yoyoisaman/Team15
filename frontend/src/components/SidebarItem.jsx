@@ -1,9 +1,39 @@
 import imageMap from "../utils/imageMap";
 
-const SidebarItem = ({ item, onToggleStar }) => {
+const HomeItem = ({onMoveToFolder}) => {
   return (
     <div className="bookmark-item">
-      <a href={item.url} target={item.url && "_blank"} rel="noopener noreferrer">
+      <a onClick={(e) => {
+          e.preventDefault();
+          onMoveToFolder(0);
+        }}
+      >
+        <div className="title">
+          <img src={imageMap["home.png"]} alt="Home" />
+          <span>Home</span>
+        </div>
+      </a>
+    </div>
+  );
+};
+
+const SidebarItem = ({ item, onToggleStar, onMoveToFolder}) => {
+  return (
+    <div className="bookmark-item">
+      <a
+        href={item.url}
+        target={item.url && "_blank"}
+        rel="noopener noreferrer"
+        onClick={(e) => {
+          if (item.url === "#") {
+            e.preventDefault();
+            onMoveToFolder(item.id);
+          }
+          if (e.target.closest(".hidden-setting")) {
+            e.preventDefault();
+          }
+        }}
+      >
         <div className="title">
           <img src={imageMap[item.img]} alt={item.name} />
           <span>{item.name}</span>
@@ -13,15 +43,14 @@ const SidebarItem = ({ item, onToggleStar }) => {
             src={imageMap["full_star.png"]}
             alt="Star Icon"
             onClick={(e) => {
-              e.preventDefault(); // 避免觸發 <a> 的點擊事件
+              e.preventDefault();
               onToggleStar(item.id);
             }}
           />
-          <img src={imageMap["edit.png"]} alt="Edit Icon" />
         </div>
       </a>
     </div>
   );
 };
 
-export default SidebarItem;
+export { HomeItem, SidebarItem };
