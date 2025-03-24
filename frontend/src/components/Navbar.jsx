@@ -42,10 +42,23 @@ const Navbar = () => {
   const isFilterActive =
     currentFilterTags.length > 0 && currentFilterTags.length < allTags.length;
 
+  // 搜尋相關
+  const [searchInput, setSearchInput] = useState("");
+  const handleSearchInputChange = (e) => {
+    const keyword = e.target.value;
+    setSearchInput(keyword);
+    bookmarksTree.filterBookmarksByKeyword(keyword);
+  };
+
   return (
     <nav className="d-flex flex-wrap gap-2">
       <div className="search-bar flex-shrink-0 col-12 col-md-5 col-lg-4">
-        <input type="text" placeholder="搜尋書籤、資料夾" />
+        <input
+          type="text"
+          placeholder="搜尋書籤、資料夾"
+          value={searchInput}
+          onChange={handleSearchInputChange}
+        />
       </div>
       <div className="d-flex justify-content-center align-items-center gap-2">
         <button className="btn btn-outline-secondary d-flex align-items-center">

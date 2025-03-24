@@ -10,6 +10,8 @@ class BookmarksTree {
     this.onUpdate = onUpdate;
     // 紀錄目前的tag
     this.currentFilterTags = [];
+    // 紀錄目前的搜尋關鍵字
+    this.currentSearchKeyword = "";
     if (treeStructure && idToBookmark) {
       this._buildTree(treeStructure, idToBookmark);
     }
@@ -110,27 +112,29 @@ class BookmarksTree {
   // 根據你傳入的標籤，對網頁渲染
   filterBookmarksByTags(tags) {
     this.currentFilterTags = tags;
-    for (const id in this.idToBookmark) {
-      const bookmark = this.idToBookmark[id];
-      bookmark.hidden = !tags.some((tag) => bookmark.tags.includes(tag));
-    }
-    this.onUpdate();
+    this.applyFilters();
   }
 
-  // 插入一個資料夾，並通知 React 更新
-  addFolder({ name, tags, hidden }) {
-    const id = Date.now(); // 使用當前時間戳作為唯一 ID
-    this.idToBookmark[id] = {
-      id,
-      name,
-      url: "#",
-      tags,
-      img: "folder.png",
-      starred: false,
-      hidden: hidden || false,
-    };
-    this.treeStructure[id] = { parent_id: this.currentNode, children_id: [] };
-    this.treeStructure[this.currentNode].children_id.push(id);
+  // 根據關鍵字過濾書籤和資料夾
+  filterBookmarksByKeyword(keyword) {
+    this.currentSearchKeyword = keyword;
+    this.applyFilters();
+  }
+
+  // 同時應用搜尋和篩選
+  applyFilters() {
+    const lowerKeyword = this.currentSearchKeyword.toLowerCase();
+    const currentFilterTags = this.getCurrentFilterTags();
+    for (const id in this.idToBookmark) {
+      const bookmark = this.idToBookmark[id];
+      const matchesKeyword =
+        bookmark.name.toLowerCase().includes(lowerKeyword) ||
+        bookmark.tags.some((tag) => tag.toLowerCase().includes(lowerKeyword));
+      const matchesTags =
+        currentFilterTags.length === 0 ||
+        currentFilterTags.some((tag) => bookmark.tags.includes(tag));
+      bookmark.hidden = !(matchesKeyword && matchesTags);
+    }
     this.onUpdate();
   }
 

@@ -29,9 +29,9 @@ const TagFilterModal = ({ onClose }) => {
     onClose();
   };
 
-  // 關閉視窗時套用篩選
+  // 關閉視窗時恢復顯示全部
   const handleClose = () => {
-    applyTagFilter();
+    bookmarksTree.filterBookmarksByTags([]);
     onClose();
   };
 
