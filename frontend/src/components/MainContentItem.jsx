@@ -6,16 +6,6 @@ const MainContentItem = ({
   onMoveToFolder,
   onDeleteBookmark,
 }) => {
-  const isUrl = (str) => {
-    try {
-      new URL(str);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
-  const imgSrc = isUrl(bookmark.img) ? bookmark.img : imageMap[bookmark.img];
-
   const handleClick = (e) => {
     if (e.target.matches(".tags span")) {
       // 點擊 tag
@@ -51,7 +41,7 @@ const MainContentItem = ({
         <img src={imageMap["delete.png"]} alt="Delete Icon" name="delete" />
       </div>
       <div className="title">
-        <img src={imgSrc} alt={bookmark.name} />
+        <img src={imageMap[bookmark.img]} alt={bookmark.name} />
         {bookmark.name}
       </div>
       <div className="tags">
