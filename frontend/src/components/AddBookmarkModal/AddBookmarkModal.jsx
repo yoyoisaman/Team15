@@ -29,8 +29,8 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
   const fetchFavicon = (websiteUrl) => {
     try {
       const urlObj = new URL(websiteUrl);
-      const domain = urlObj.origin;
-      const faviconPath = `${domain}/favicon.ico`;
+      const domain = urlObj.hostname;
+      const faviconPath = `https://www.google.com/s2/favicons?domain=${domain}`;
       setFaviconUrl(faviconPath);
     } catch (error) {
       console.error("Invalid URL:", error);
