@@ -83,6 +83,7 @@ class BookmarksTree {
       hidden: hidden || false,
     };
     this.treeStructure[this.currentNode].children_id.push(id);
+    this.treeStructure[id] = { parent_id: this.currentNode, children_id: [] };
     this.onUpdate();
   }
 
