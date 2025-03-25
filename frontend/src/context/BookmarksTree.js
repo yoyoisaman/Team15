@@ -88,6 +88,22 @@ class BookmarksTree {
     this.treeStructure[id] = { parent_id: this.currentNode, children_id: [] };
     this.onUpdate();
   }
+  // 插入一個資料夾，並通知 React 更新
+  addFolder({ name, tags, hidden }) {
+    const id = Date.now(); // 使用當前時間戳作為唯一 ID
+    this.idToBookmark[id] = {
+      id,
+      name,
+      url: "#",
+      tags,
+      img: "folder.png",
+      starred: false,
+      hidden: hidden || false,
+    };
+    this.treeStructure[id] = { parent_id: this.currentNode, children_id: [] };
+    this.treeStructure[this.currentNode].children_id.push(id);
+    this.onUpdate();
+  }
 
   // 遞迴刪除 node id 以下的所有節點(含自身)，並通知 React 更新
   deleteBookmark(id) {
