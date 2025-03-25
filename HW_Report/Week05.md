@@ -4,7 +4,10 @@
 
 ## 課內技術練習
 
-此次我們透過建立 React component 並運用 JSX 語法，將整體網頁模組化。各 components 之間的階層結構如下所示。使用者書籤的樹狀結構與相關資訊定義於 [class BookmarksTree](../frontend/src/context/BookmarksTree.js) 中，並透過 React Context 機制共享，這對應到下方結構中的 `BookmarksProvider`。更詳細的技術實作細節可參考後方的「額外相關技術」章節。
+此次我們透過建立 React component 並運用 JSX 語法，將整體網頁模組化。各 components 之間的階層結構如下所示。
+
+使用者書籤的樹狀結構與相關資訊定義於 [class BookmarksTree](../frontend/src/context/BookmarksTree.js) 中，並透過 React Context 機制共享，這對應到下方結構中的 `BookmarksProvider`。更詳細的技術實作細節可參考後方的「額外相關技術」章節。
+
 使用者的操作會透過事件註冊，觸發對應的 JavaScript function，進一步更新 React Context 中的變數，並啟動 React 的重新渲染流程，從而即時反映使用者的操作狀態。
 
 ```
@@ -80,7 +83,9 @@ export function BookmarksProvider({ children }) {
 }
 ```
 
-在 `BookmarksProvider` 中，我們使用 `useRef` 來儲存 `BookmarksTree` 的實例，如下方程式碼。這麼做的主要原因，是為了 **避免每次 re-render 時都重新建立新的樹狀結構物件**。因為在 React 的 function component 中，所有在函式內宣告的變數（即使透過 `useState` 儲存）在每次 render 時都會被重新建立並賦值。而 `useRef` 則能讓我們維持同一個複雜的樹狀結構，避免不斷執行複雜的 constructor，進而提升效能。
+在 `BookmarksProvider` 中，我們使用 `useRef` 來儲存 `BookmarksTree` 的實例，如下方程式碼。
+
+這麼做的主要原因，是為了 **避免每次 re-render 時都重新建立新的樹狀結構物件**。因為在 React 的 function component 中，所有在函式內宣告的變數（即使透過 `useState` 儲存）在每次 render 時都會被重新建立並賦值。而 `useRef` 則能讓我們維持同一個複雜的樹狀結構，避免不斷執行複雜的 constructor，進而提升效能。
 
 ```jsx
 const bookmarksTreeRef = useRef(
@@ -97,6 +102,7 @@ forceUpdate((n) => n + 1);
 ```
 
 這是一個小技巧，用來 **強制觸發 React 重新渲染畫面**。由於 `useRef` 的變化不會自動觸發畫面更新，因此當 `BookmarksTree` 的內容變動時，我們需要 **主動通知 React 更新畫面**，才能呈現最新的狀態。
+
 這裡透過呼叫 `forceUpdate`，實際上是改變一個透過 useState 建立的值，藉此觸發整個元件的 re-render。這種作法讓我們能夠維持 `BookmarksTree` 的物件實例不變，同時在資料變動時即時更新 UI，確保顯示的內容與內部狀態保持一致。
 
 ### 2. Prettier
