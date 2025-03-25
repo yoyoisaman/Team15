@@ -14,12 +14,12 @@ const imageMapHandler = {
     if (key in map) {
       return map[key];
     }
-    
+
     try {
       new URL(key);
-      return key
+      return key;
     } catch (_) {
-      return ""
+      return "";
     }
   },
 };
