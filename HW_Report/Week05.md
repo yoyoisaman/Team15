@@ -107,6 +107,34 @@ forceUpdate((n) => n + 1);
 
 Prettier 是用於 **統一程式碼風格** 的工具，在開發過程中未統一的撰寫風格透過 Prettier 得以統合，例如下面的例子所示。
 
+原始程式碼如下：
+
+```jsx
+return (
+  <>
+    {starredBookmarks.map((item) => (
+      <SidebarItem key={item.id} onToggleStar={handleToggleStar} onMoveToFolder={handleMoveToFolder} />
+    ))}
+  </>
+);
+```
+
+在使用 Prettier 格式化後：
+
+```jsx
+return (
+  <>
+    {starredBookmarks.map((item) => (
+      <SidebarItem
+        key={item.id}
+        onToggleStar={handleToggleStar}
+        onMoveToFolder={handleMoveToFolder}
+      />
+    ))}
+  </>
+);
+```
+
 ### 3. JaveScript - Vite and Proxy
 
 透過 Vite 中的 `import.meta.glob` 可簡便的載入所需的資源，並確保在使用前載入完成。
