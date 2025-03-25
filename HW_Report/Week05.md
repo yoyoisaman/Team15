@@ -74,9 +74,7 @@ const BookmarksContext = createContext();
 export function BookmarksProvider({ children }) {
   // ...
   return (
-    <BookmarksContext.Provider
-      value={{ bookmarksTree: bookmarksTreeRef.current }}
-    >
+    <BookmarksContext.Provider value={{ bookmarksTree: bookmarksTreeRef.current }}>
       {children}
     </BookmarksContext.Provider>
   );
@@ -114,11 +112,7 @@ Prettier 是用於 **統一程式碼風格** 的工具，在開發過程中未�
 return (
   <>
     {starredBookmarks.map((item) => (
-      <SidebarItem
-        key={item.id}
-        onToggleStar={handleToggleStar}
-        onMoveToFolder={handleMoveToFolder}
-      />
+      <SidebarItem key={item.id} onToggleStar={handleToggleStar} onMoveToFolder={handleMoveToFolder} />
     ))}
   </>
 );
