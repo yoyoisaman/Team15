@@ -25,7 +25,7 @@ App
             └─ MainContentItem (multiple)
 ```
 
-接下來將說明並展示此次所完成的功能。
+我們的頁面可切分為三個區域，如下圖。接下來將分別說明並展示它們的功能。
 
 ![img1](./report_imgs/Week05/img1.png)
 
