@@ -1,4 +1,14 @@
-import { treeStructure, idToBookmark } from "../utils/tempDB.js";  // 模擬server資料庫
+// import { treeStructure, idToBookmark } from "../utils/tempDB.js";  // 模擬server資料庫
+
+// use API to get data from server
+let treeStructure = null;
+let idToBookmark = null;
+await fetch('http://127.0.0.1:8000/api/bookmarks/')
+    .then(response => response.json())
+    .then(data => {
+        treeStructure = data.treeStructure;
+        idToBookmark = data.idToBookmark;
+    })
 
 const treeStructureTableName = "treeStructure";
 const bookmarksTableName = "bookmarks";
