@@ -51,12 +51,11 @@
 .modal-content .form-group .tag-input-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .modal-content .form-group .tag-input-container input {
   flex: 1;
-  max-width: 82%; /* 限制 input 的最大寬度，讓按鈕有更多空間往左 */
   padding: 8px 10px;
   border: 1px solid #666;
   border-radius: 5px;

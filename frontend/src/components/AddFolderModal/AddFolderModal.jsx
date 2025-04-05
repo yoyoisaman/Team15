@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import BookmarksContext from "../../context/BookmarksContext";
-import "./AddFolderModal.css";
+import styles from './AddFolderModal.module.css';
 
 const AddFolderModal = ({ onClose }) => {
   const { bookmarksTree } = useContext(BookmarksContext);
@@ -30,42 +30,47 @@ const AddFolderModal = ({ onClose }) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
+  function handleBackdropClick() {
+    onClose();
+  }
+
+  function stopBackdropClick(event) {
+    event.stopPropagation();
+  }
+
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>
-          &times;
-        </span>
+    <div className={styles['modal']} onClick={handleBackdropClick}>
+      <div className={styles['modal-content']} onClick={stopBackdropClick}>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>新增資料夾名稱:</label>
+          <div className={styles['form-group']}>
+            <label>新增資料夾名稱</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              autoFocus
             />
           </div>
-          <div className="form-group">
-            <label>標籤名稱:</label>
-            <div className="tag-input-container">
+          <div className={styles['form-group']}>
+            <label>標籤</label>
+            <div className={styles['tag-input-container']}>
               <input
                 type="text"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                placeholder="新增標籤"
               />
               <button type="button" onClick={handleAddTag}>
                 新增
               </button>
             </div>
-            <div className="tags-list">
+            <div className={styles['tags-list']}>
               {tags.map((tag, index) => (
-                <span key={index} className="tag">
+                <span key={index} className={styles['tag']}>
                   {tag}
                   <button
                     type="button"
-                    className="remove-tag-button"
+                    className={styles['remove-tag-button']}
                     onClick={() => handleRemoveTag(tag)}
                   >
                     x
@@ -74,16 +79,16 @@ const AddFolderModal = ({ onClose }) => {
               ))}
             </div>
           </div>
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary">
-              確認
-            </button>
+          <div className={styles['form-actions']}>
             <button
               type="button"
-              className="btn btn-secondary"
+              className={`btn btn-secondary ${styles['btn-secondary']}`}
               onClick={onClose}
             >
               取消
+            </button>
+            <button type="submit" className={`btn btn-primary ${styles['btn-primary']}`}>
+              確認
             </button>
           </div>
         </form>

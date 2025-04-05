@@ -131,7 +131,7 @@ body {
   background: #555;
   padding: 5px 10px;
   border-radius: 5px;
-  font-size: 12px;
+  font-size: 0.9rem;
 }
 
 img {
@@ -208,8 +208,6 @@ img {
   height: 20px;
 }
 
-/* just for UI example */
-/* TODO: remove this part */
 a:link {
   color: white;
   text-decoration: none;
@@ -220,7 +218,7 @@ a:visited {
 }
 
 .btn-dark {
-  background-color: #343a40;
+  background-color: #007bff;
   color: white;
 }
 

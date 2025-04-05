@@ -1,12 +1,11 @@
 import { useState, useContext } from "react";
 import BookmarksContext from "../../context/BookmarksContext";
-import "./TagFilterModal.css";
+import styles from './TagFilterModal.module.css';
 
 const TagFilterModal = ({ onClose }) => {
   const { bookmarksTree } = useContext(BookmarksContext);
   const [selectedTags, setSelectedTags] = useState([]);
 
-  // 處理標籤點擊事件
   const handleTagClick = (tag) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
@@ -15,27 +14,22 @@ const TagFilterModal = ({ onClose }) => {
     );
   };
 
-  // 處理篩選提交
-  // 都不選就讓它全部顯示
   const applyTagFilter = () => {
     const tagsToFilter = selectedTags.length === 0 ? allTags : selectedTags;
     bookmarksTree.filterBookmarksByTags(tagsToFilter);
   };
 
-  // 確認篩選
   const handleSubmit = (e) => {
     e.preventDefault();
     applyTagFilter();
     onClose();
   };
 
-  // 關閉視窗時恢復顯示全部
   const handleClose = () => {
     bookmarksTree.filterBookmarksByTags([]);
     onClose();
   };
 
-  // 獲取所有標籤
   const allTags = Array.from(
     new Set(
       Object.values(bookmarksTree.idToBookmark).flatMap(
@@ -44,20 +38,25 @@ const TagFilterModal = ({ onClose }) => {
     ),
   );
 
+  function handleBackdropClick() {
+    onClose();
+  }
+
+  function stopBackdropClick(event) {
+    event.stopPropagation();
+  }
+
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={handleClose}>
-          &times;
-        </span>
+    <div className={styles['modal']} onClick={handleBackdropClick}>
+      <div className={styles['modal-content']} onClick={stopBackdropClick}>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>篩選標籤:</label>
-            <div className="tags-container">
+          <div className={styles['form-group']}>
+            <label style={{ fontSize: '1.15rem' }}>篩選標籤</label>
+            <div className={styles['tags-container']}>
               {allTags.map((tag) => (
                 <span
                   key={tag}
-                  className={`tag ${selectedTags.includes(tag) ? "selected" : ""}`}
+                  className={`${styles['tag']} ${selectedTags.includes(tag) ? styles['selected'] : ''}`}
                   onClick={() => handleTagClick(tag)}
                 >
                   {tag}
@@ -65,16 +64,16 @@ const TagFilterModal = ({ onClose }) => {
               ))}
             </div>
           </div>
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary">
-              確認
-            </button>
+          <div className={styles['form-actions']}>
             <button
               type="button"
-              className="btn btn-secondary"
+              className={`btn btn-secondary ${styles['btn-secondary']}`}
               onClick={handleClose}
             >
               取消
+            </button>
+            <button type="submit" className={`btn btn-primary ${styles['btn-primary']}`}>
+              確認
             </button>
           </div>
         </form>

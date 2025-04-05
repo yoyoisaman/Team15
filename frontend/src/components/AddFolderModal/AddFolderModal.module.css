@@ -48,21 +48,54 @@
   color: white;
 }
 
-.modal-content .form-group .tags-container {
+.modal-content .form-group .tag-input-container {
   display: flex;
-  flex-wrap: wrap;
   gap: 5px;
+  align-items: center;
 }
 
-.modal-content .form-group .tags-container .tag {
-  background-color: #555;
-  padding: 5px 10px;
+.modal-content .form-group .tag-input-container input {
+  flex: 1;
+  height: 40px;
+  padding-right: 30px;
+}
+
+.modal-content .form-group .tag-input-container button {
+  right: 10px;
+  height: 40px;
+  background-color: #007bff;
+  color: white;
+  border: none;
   border-radius: 5px;
+  padding: 5px 10px;
   cursor: pointer;
 }
 
-.modal-content .form-group .tags-container .tag.selected {
-  background-color: #007bff;
+.modal-content .form-group .tag-input-container button:hover {
+  background-color: #0056b3;
+}
+
+.modal-content .form-group .tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.modal-content .form-group .tags-list .tag {
+  background-color: #555;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.modal-content .form-group .tags-list .tag button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
 
 .modal-content .form-actions {

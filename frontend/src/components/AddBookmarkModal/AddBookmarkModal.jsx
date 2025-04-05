@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import BookmarksContext from "../../context/BookmarksContext";
-import "./AddBookmarkModal.css";
+import styles from './AddBookmarkModal.module.css';
 
 const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
   const { bookmarksTree } = useContext(BookmarksContext);
@@ -49,39 +49,45 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
+  function handleBackdropClick() {
+    onClose();
+  }
+
+  function stopBackdropClick(event) {
+    event.stopPropagation();
+  }
+
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>
-          &times;
-        </span>
+    <div className={styles['modal']} onClick={handleBackdropClick}>
+      <div className={styles['modal-content']} onClick={stopBackdropClick}>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>新增書籤名稱:</label>
+          <div className={styles['form-group']}>
+            <label>新增書籤名稱</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              autoFocus
             />
           </div>
-          <div className="form-group">
-            <label>連接網址:</label>
+          <div className={styles['form-group']}>
+            <label>連接網址</label>
             <input type="url" value={url} onChange={handleUrlChange} required />
           </div>
           {faviconUrl && (
-            <div className="form-group">
+            <div className={styles['form-group']}>
               <label>網站圖標預覽:</label>
               <img
                 src={faviconUrl}
                 alt="網站圖標預覽"
-                className="favicon-preview"
+                className={styles['favicon-preview']}
               />
             </div>
           )}
-          <div className="form-group">
-            <label>標籤名稱:</label>
-            <div className="tag-input-container">
+          <div className={styles['form-group']}>
+            <label>標籤</label>
+            <div className={styles['tag-input-container']}>
               <input
                 type="text"
                 value={tagInput}
@@ -91,9 +97,9 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
                 新增
               </button>
             </div>
-            <div className="tags-list">
+            <div className={styles['tags-list']}>
               {tags.map((tag, index) => (
-                <span key={index} className="tag">
+                <span key={index} className={styles['tag']}>
                   {tag}
                   <button type="button" onClick={() => handleRemoveTag(tag)}>
                     x
@@ -102,16 +108,15 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
               ))}
             </div>
           </div>
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary">
-              確認
-            </button>
+          <div className={styles['form-actions']}>
             <button
               type="button"
-              className="btn btn-secondary"
+              className={`btn btn-secondary ${styles['btn-secondary']}`}
               onClick={onClose}
             >
               取消
+            </button><button type="submit" className={`btn btn-primary ${styles['btn-primary']}`}>
+              確認
             </button>
           </div>
         </form>
