@@ -1,5 +1,12 @@
 {
+  "name": "my_project",
+  "version": "1.0.0",
+  "scripts": {
+    "setup": "pip install -r backend/requirements.txt && npm install && cd frontend && npm install",
+    "dev": "concurrently \"cd backend && python manage.py runserver\" \"cd frontend && npm run dev\""
+  },
   "devDependencies": {
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "concurrently": "^7.0.0"
   }
 }
