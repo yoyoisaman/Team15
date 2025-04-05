@@ -61,10 +61,10 @@ const Navbar = () => {
         />
       </div>
       <div className="d-flex justify-content-center align-items-center gap-2">
-        <button className="btn btn-outline-secondary d-flex align-items-center">
+        {/* <button className="btn btn-outline-secondary d-flex align-items-center">
           <img src={imageMap["sort.png"]} alt="Sort Icon" />
           <span>排序與檢視</span>
-        </button>
+        </button> */}
         <button
           className={`btn d-flex align-items-center ${isFilterActive ? "btn-dark" : "btn-outline-secondary"}`}
           onClick={handleTagFilterButtonClick}
