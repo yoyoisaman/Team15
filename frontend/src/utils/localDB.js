@@ -87,9 +87,12 @@ const localDBfunc = {
         };
     },
     putBookmark(id, data) {  // if id exists, original data will be replaced
+        // ensure the data is not hidden when put into localDB
+        let copy_data = {...data};
+        copy_data.hidden = false;
         let transaction = loaclDB.transaction(bookmarksTableName, "readwrite");
         let store = transaction.objectStore(bookmarksTableName);
-        let request = store.put(data, id);
+        let request = store.put(copy_data, id);
         request.onerror = function (event) {
             throw new Error("loaclDB Error", event.target.error);
         };
