@@ -8,7 +8,8 @@ services:
     ports:
       - "5174:5174"  # Vite 預設端口
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app/frontend  # Bind local source files to container
+      - /app/frontend/node_modules  # Prevent local node_modules from overwriting container's
 
   backend:
     build:
