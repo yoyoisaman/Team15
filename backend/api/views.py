@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from .models import Bookmarks
+from .models import Bookmarks, DatabaseStatus
 import json
 
 # Create your views here.
@@ -7,6 +7,9 @@ def bookmarks_api(request):
     '''
     returns JSON:
     {
+        'databaseStatus': {
+            'lastUpdated': '2025-04-07T02:06:22.107Z'
+        },
         'idToBookmark': {
             0: {
                 'bid': 0,
@@ -27,6 +30,7 @@ def bookmarks_api(request):
     }
     '''
     data = list(Bookmarks.objects.values())
+    databaseStatus = DatabaseStatus.objects.last()
     idToBookmark = {}
     treeStructure = {}
 
@@ -47,6 +51,9 @@ def bookmarks_api(request):
         }
 
     response_data = {
+        'databaseStatus': {
+            'lastUpdated': databaseStatus.lastUpdated
+        },
         'idToBookmark': idToBookmark,
         'treeStructure': treeStructure
     }

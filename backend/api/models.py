@@ -11,3 +11,7 @@ class Bookmarks(models.Model):
     hidden = models.BooleanField(default=False)
     parent_id = models.IntegerField(default=None, null=True, blank=True)  # parent_id can be null
     children_id = models.JSONField(default=list, blank=True)
+
+class DatabaseStatus(models.Model):
+    sid = models.IntegerField(primary_key=True)
+    lastUpdated = models.DateTimeField(auto_now_add=True)
