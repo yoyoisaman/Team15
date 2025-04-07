@@ -1,0 +1,13 @@
+services:
+  frontend:
+    image: yoyoisaman/bookmark-frontend:v1  # 匯入的映像名稱
+    ports:
+      - "5174:5174"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+
+  backend:
+    image: yoyoisaman/bookmark-backend:v1  # 匯入的映像名稱
+    ports:
+      - "8000:8000"
