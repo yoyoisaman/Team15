@@ -19,3 +19,26 @@ services:
       - "8000:8000"  # Django 預設端口
     volumes:
       - ./backend:/app
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: bookmarks
+      POSTGRES_USER: team15
+      POSTGRES_PASSWORD: '16'
+    ports:
+      - "5432:5432" 
+    volumes:
+      - ./postgres:/var/lib/postgresql/data  # Persist database data
+
+  # pgadmin:
+  #   image: dpage/pgadmin4:9.2.0
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
+  #     PGADMIN_DEFAULT_PASSWORD: '16'
+  #   ports:
+  #     - '5050:80'
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - ./pgadmin:/var/lib/pgadmin
