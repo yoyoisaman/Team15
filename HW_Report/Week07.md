@@ -4,7 +4,6 @@
 
 在 UI/UX 改進部分，我們嘗試基於 [Swapy](https://github.com/TahaSh/swapy)，讓書籤可以像手機 App 一樣透過拖曳改變順序。此功能目前已能在頁面上運作，但尚未與前後端資料庫串接，因此暫時放在 GitHub branch [GitHub branch](https://github.com/yoyoisaman/Team15/tree/draggable)。
 
-
 ## 課內技術練習
 
 本專案目前的整體架構如下圖（淺色文字代表尚未完成）。我們這兩週實作了圖中橘色區塊的「前後端資料庫」，以下將分為 **前端資料庫（IndexedDB）** 與 **後端資料庫（PostgreSQL）** 兩大部分說明。
@@ -19,16 +18,16 @@
 
 後端資料庫包含兩個表格，一個紀錄用戶的最後上傳時間，另一個紀錄用戶的書籤資料，格式如下：
 
-| 欄位名稱    | 型別           | 說明               |
-|-------------|----------------|--------------------|
-| token       | VARCHAR(200)    | 用戶識別碼         |
-| bid         | INTEGER         | 書籤的識別碼       |
-| url         | VARCHAR(2000)   | 書籤網址           |
-| name        | VARCHAR(200)    | 書籤名稱           |
-| tags        | JSON            | 標籤 (列表格式)    |
-| starred     | BOOLEAN         | 是否標記為最愛     |
-| parent_id   | INTEGER         | 節點的 parent      |
-| children_id | JSON            | 節點的 child       |
+| 欄位名稱    | 型別          | 說明            |
+| ----------- | ------------- | --------------- |
+| token       | VARCHAR(200)  | 用戶識別碼      |
+| bid         | INTEGER       | 書籤的識別碼    |
+| url         | VARCHAR(2000) | 書籤網址        |
+| name        | VARCHAR(200)  | 書籤名稱        |
+| tags        | JSON          | 標籤 (列表格式) |
+| starred     | BOOLEAN       | 是否標記為最愛  |
+| parent_id   | INTEGER       | 節點的 parent   |
+| children_id | JSON          | 節點的 child    |
 
 [Views.py](../backend/api/views.py) 會調用這個表格的資料，並轉換為 `BookmarksTree` 物件中 `treeStructure` 與 `bookmarks` 的格式，附加最後修改時間後回傳給使用者。
 
@@ -48,7 +47,6 @@ Django 預設使用 SQLite 作為後端資料庫，但由於 SQLite 屬於輕量
 
 PostgreSQL 除了支援多用戶寫入，還加強了對 JSON 資料型態的處理，因此我們選擇使用 PostgreSQL 取代 Django 預設的 SQLite 作為後端資料庫。為了方便測試，我們使用 [pgAdmin 4](https://www.pgadmin.org/) 作為 GUI 工具，並在 `docker-compose.yml` 中預設註解（關閉），如有需要可以自行啟用。
 
-
 ### 2. 拖曳排序功能
 
 我們在另一個 [Branch](https://github.com/yoyoisaman/Team15/tree/draggable) 中，基於 [Swapy](https://github.com/TahaSh/swapy) 實作了拖曳排序功能，讓書籤可以像手機 App 一樣自由調整順序，如下圖所示。然而，由於此功能需要大幅重構現有程式碼，尚未來得及整合進 main branch，我們將於下次報告中說明完整邏輯。
@@ -57,9 +55,9 @@ PostgreSQL 除了支援多用戶寫入，還加強了對 JSON 資料型態的處
 
 ## Docker Image Pull 連結及啟動方式
 
-(1)安裝 docker
+### 1. 安裝 docker
 
-(2)測試 docker 是否安裝成功
+### 2. 測試 docker 是否安裝成功
 
 打開終端機或命令提示字元，輸入以下指令檢查版本：
 
@@ -67,9 +65,9 @@ PostgreSQL 除了支援多用戶寫入，還加強了對 JSON 資料型態的處
 docker -v
 ```
 
-(3)專案設定
+### 3. 專案設定
 
-從 GitHub 專案中取得 `docker-compose.yml` 之 docker 的設定檔
+從 GitHub 專案中取得 `docker-compose.yml` 之 docker 的設定檔。
 
 GitHub 專案結構如下：
 
@@ -87,7 +85,7 @@ TEAM15
 cd TEAM15/docker
 ```
 
-(4)執行容器
+### 4. 執行容器
 
 當位於 `docker-compose.yml` 所在的資料夾時，執行以下指令啟動容器：
 
@@ -100,7 +98,7 @@ docker-compose up
 ```yaml
 services:
   frontend:
-    image: yoyoisaman/bookmark-frontend:v1  # 匯入的映像名稱
+    image: yoyoisaman/bookmark-frontend:v1 # 匯入的映像名稱
     ports:
       - "5174:5174"
     volumes:
@@ -108,7 +106,7 @@ services:
       - /app/frontend/node_modules
 
   backend:
-    image: yoyoisaman/bookmark-backend:v1  # 匯入的映像名稱
+    image: yoyoisaman/bookmark-backend:v1 # 匯入的映像名稱
     ports:
       - "8000:8000"
 
@@ -117,11 +115,12 @@ services:
     environment:
       POSTGRES_DB: bookmarks
       POSTGRES_USER: team15
-      POSTGRES_PASSWORD: '16'
+      POSTGRES_PASSWORD: "16"
     ports:
-      - "5432:5432" 
+      - "5432:5432"
     volumes:
-      - ../postgres:/var/lib/postgresql/data  # Persist database data
+      - ../postgres:/var/lib/postgresql/data # Persist database data
+
 
   # pgadmin:
   #   image: dpage/pgadmin4:9.2.0
@@ -136,15 +135,15 @@ services:
   #     - ../pgadmin:/var/lib/pgadmin
 ```
 
-frontend :
+#### frontend :
 
--指定 frontend 容器使用 Docker Hub 上的映像檔 `yoyoisaman/bookmark-frontend:v1`
--主機的 `5174` port 對應容器內部的 `5174` port，這樣可透過 `localhost:5174` 訪問前端。
+- 指定 frontend 容器使用 Docker Hub 上的映像檔 `yoyoisaman/bookmark-frontend:v1`
+- 主機的 `5174` port 對應容器內部的 `5174` port，這樣可透過 `localhost:5174` 訪問前端。
 
-backend :
+#### backend :
 
--指定 frontend 容器使用 Docker Hub 上的映像檔 `yoyoisaman/bookmark-backend:v1`
--主機的 `8000` port 對應容器內部的 `8000` port，可透過 `http://localhost:8000` 訪問後端 API。
+- 指定 frontend 容器使用 Docker Hub 上的映像檔 `yoyoisaman/bookmark-backend:v1`
+- 主機的 `8000` port 對應容器內部的 `8000` port，可透過 `http://localhost:8000` 訪問後端 API。
 
 ## 組員分工情形 - Team 15
 
