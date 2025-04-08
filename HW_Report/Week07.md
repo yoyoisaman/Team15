@@ -1,9 +1,4 @@
 # 進度報告 - Team 15, Week 7
-| 週次     | 主要進度 |
-|---------|-------------|
-| Week 2-3 | • 使用基本的 HTML 與 CSS 建構不具功能的前端頁面。<br>• 透過 `Bootstrap` 框架進行 Responsive Web Design (RWD)。 |
-| Week 4-5 | • 完全使用 React 重新建構專案，模組化各個 component。<br>• 完成頁面基本功能。<br>• 建構 `BookmarksTree` 類別，以樹狀結構紀錄書籤資訊並提供操作功能。
-| Week 6-7 | • 建構前端資料庫（IndexedDB）與後端資料庫（PostgreSQL），永久儲存用戶的書籤資料。<br>• 嘗試讓書籤可透過拖動排序。<br>• 打包成 Docker Image。 |
 
 在這次作業中，我們將記錄標籤/資料夾結構的 `BookmarksTree` 儲存到前端資料庫 [IndexedDB](https://developer.mozilla.org/zh-TW/docs/Web/API/IndexedDB_API)，讓用戶在重啟瀏覽器後仍能保留內容。此外，我們也使用 Django 搭配 PostgreSQL 在後端儲存用戶書籤，為下週開發 **跨裝置同步** 功能做準備。
 
