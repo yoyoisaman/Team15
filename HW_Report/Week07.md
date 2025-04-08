@@ -55,9 +55,9 @@ PostgreSQL 除了支援多用戶寫入，還加強了對 JSON 資料型態的處
 
 ## Docker Image Pull 連結及啟動方式
 
-### 1. 安裝 docker
+### 1. 安裝 Docker
 
-### 2. 測試 docker 是否安裝成功
+### 2. 測試 Docker 是否安裝成功
 
 打開終端機或命令提示字元，輸入以下指令檢查版本：
 
@@ -67,7 +67,7 @@ docker -v
 
 ### 3. 專案設定
 
-從 GitHub 專案中取得 `docker-compose.yml` 之 docker 的設定檔。
+從 GitHub 專案中取得 `docker-compose.yml` 之 Docker 的設定檔。
 
 GitHub 專案結構如下：
 
@@ -147,7 +147,7 @@ services:
 
 ## 組員分工情形 - Team 15
 
-- 王凱右 - 25%：docker
+- 王凱右 - 25%：Docker
 - 胡凱騰 - 25%：前後段資料庫
 - 陳立亘 - 25%：撰寫報告
 - 蔡佾家 - 25%：前端(IndexedDB)
