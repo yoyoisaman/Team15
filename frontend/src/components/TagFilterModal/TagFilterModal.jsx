@@ -26,7 +26,8 @@ const TagFilterModal = ({ onClose }) => {
   };
 
   const handleClose = () => {
-    bookmarksTree.filterBookmarksByTags([]);
+    setSelectedTags([]); // 重置選擇的標籤
+    bookmarksTree.filterBookmarksByTags([]); // 清空篩選
     onClose();
   };
 
