@@ -23,18 +23,13 @@
 
 ```json
 {
-  "id": "folder_1",
-  "type": "folder",
-  "title": "開發工具",
-  "children": [
-    {
-      "id": "bookmark_1",
-      "type": "bookmark",
-      "title": "GitHub",
-      "url": "https://github.com",
-      "tags": ["程式", "工具"]
-    }
-  ]
+    "id": "number",
+    "url": "#",
+    "img": "img.png",
+    "name": "web",
+    "tags": ["tag1", "tag2"],
+    "starred": "bool",
+    "hidden": "bool",
 }
 ```
 
@@ -52,9 +47,9 @@
 
 | 資料結構  | 用途                           |
 |-----------|--------------------------------|
-| `bookmarks` | 儲存書籤樹狀資料             |
-| `tags`     | 儲存所有標籤列表               |
-| `hotkeys`  | 儲存用戶自訂快捷鍵設定           |
+| `databaseStatus` | 儲存資料庫狀態，例如 lastUpdated 時間             |
+| `treeStructure`     | 儲存書籤的樹狀結構               |
+| `bookmarks`  | 儲存書籤詳細資料（id 對應資料）。           |
 
 前端資料流程：
 
@@ -62,13 +57,12 @@
 1. 操作 UI (ex: 新增書籤)
 2. 更新 IndexedDB
 3. 重新顯示畫面
-4. 開啟 API 傳送同步至後端
 ```
 
 
 #### b.後端資料庫 (MySQL)
 
-系統後端使用 PHP + MySQL 儲存用戶書籤、標籤、快捷鍵等資料，支援跨裝置同步。
+系統後端使用 SQLite 儲存用戶書籤、標籤、快捷鍵等資料，支援跨裝置同步。
 
 | 資料表        | 欄位                                          |
 |----------------|-----------------------------------------------|
