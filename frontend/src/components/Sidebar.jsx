@@ -7,9 +7,11 @@ const Sidebar = () => {
   const starredBookmarks = bookmarksTree.getStarredBookmarks();
 
   const handleToggleStar = (id) => {
+    bookmarksTree.filterBookmarksByTags([]); // 清空篩選標籤
     bookmarksTree.toggleStarred(id);
   };
   const handleMoveToFolder = (id) => {
+    bookmarksTree.filterBookmarksByTags([]); // 清空篩選標籤
     bookmarksTree.moveToFolder(id);
   };
 
