@@ -2,7 +2,7 @@
 
 在這次作業中，我們將記錄標籤/資料夾結構的 `BookmarksTree` 儲存到前端資料庫 [IndexedDB](https://developer.mozilla.org/zh-TW/docs/Web/API/IndexedDB_API)，讓用戶在重啟瀏覽器後仍能保留內容。此外，我們也使用 Django 搭配 PostgreSQL 在後端儲存用戶書籤，為後續開發 **跨裝置同步** 功能做準備。
 
-在 UI/UX 改進部分，我們嘗試基於 [Swapy](https://github.com/TahaSh/swapy)，讓書籤可以像手機 App 一樣透過拖曳改變順序。此功能目前已能在頁面上運作，但尚未與前後端資料庫串接，因此暫時放在 GitHub branch [GitHub branch](https://github.com/yoyoisaman/Team15/tree/draggable)。
+在 UI/UX 改進部分，我們嘗試基於 [Swapy](https://github.com/TahaSh/swapy)，讓書籤可以像手機 App 一樣透過拖曳改變順序。此功能目前已能在頁面上運作，但尚未與前後端資料庫串接，因此暫時放在 [GitHub branch](https://github.com/yoyoisaman/Team15/tree/draggable)。
 
 ## 課內技術練習
 
