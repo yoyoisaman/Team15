@@ -37,6 +37,7 @@ const loaclDBPromise = new Promise((resolve, reject) => {
     };
     dbRequest.onsuccess = function (event) {
         loaclDB = event.target.result;
+        console.log("loaclDB dbRequest.onsuccess");
 
         function getDataPromise(tableName) {
             return new Promise((resolve, reject) => {
@@ -69,10 +70,19 @@ const loaclDBPromise = new Promise((resolve, reject) => {
 
 // ensure loaclDBPromise is resolved -> loaclDB also initialized
 let loaclTreeStructure = null;
-let loaclBookmarks = null;
+let localBookmarks = null;
 await loaclDBPromise.then((data) => {
+    console.log("loaclDB initialized");
     loaclTreeStructure = data.treeStructure;
-    loaclBookmarks = data.bookmarks;
+    localBookmarks = data.bookmarks;
+    // <- 資料庫新增 rank 欄位後刪除這段
+    Object.values(localBookmarks).forEach(bookmark => {
+        bookmark.rank = bookmark.id;
+    });
+    localBookmarks[1].rank = 2;
+    localBookmarks[2].rank = 1;
+    console.log("localBookmarks", localBookmarks);
+    // <- 刪除終點
 }).catch((error) => {
     console.error("Error initializing localDB:", error);
 });
@@ -112,4 +122,4 @@ const localDBfunc = {
     }
 }
 
-export { loaclTreeStructure as treeStructure, loaclBookmarks as idToBookmark, localDBfunc as localDB };
+export { loaclTreeStructure as treeStructure, localBookmarks as idToBookmark, localDBfunc as localDB };

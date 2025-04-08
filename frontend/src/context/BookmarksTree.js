@@ -1,5 +1,7 @@
 class BookmarksTree {
   constructor(treeStructure = null, idToBookmark = null, loaclDB, onUpdate) {
+    console.log("in BookmarksTree constructor");
+    console.trace()
     // 以 map 紀錄樹狀結構：node id -> { parent_id, children_id }
     this.treeStructure = { 0: { parent_id: null, children_id: [] } };
     // 以 map 紀錄書籤資訊：node id -> bookmark
@@ -21,6 +23,8 @@ class BookmarksTree {
 
   // 深拷貝 treeStructure 和 idToBookmark
   _buildTree(treeStructure, idToBookmark) {
+    console.log("in _buildTree");
+    console.log("idToBookmark", idToBookmark);
     this.idToBookmark = { ...idToBookmark };
     this.treeStructure = {};
     for (const id in treeStructure) {
@@ -34,6 +38,7 @@ class BookmarksTree {
 
   // 取得快速存取的書籤，即 starred == true 的書籤，回傳 bookmark array
   getStarredBookmarks() {
+    console.log("in getStarredBookmarks");
     return Object.values(this.idToBookmark).filter(
       (bookmark) => bookmark.starred,
     );
@@ -41,6 +46,7 @@ class BookmarksTree {
 
   // 對 node id 的 srarred 屬性取反，並通知 React 更新
   toggleStarred(id) {
+    console.log("in toggleStarred");
     this.idToBookmark[id].starred = !this.idToBookmark[id].starred;
     this.loaclDB.putBookmark(id, this.idToBookmark[id]);
     this.onUpdate();
@@ -55,11 +61,13 @@ class BookmarksTree {
 
   // 取得當前位置(currentNode)的父節點，回傳 node id
   getCurrentParent() {
+    console.log("getCurrentParent");
     return this.treeStructure[this.currentNode].parent_id;
   }
 
   // 取得從 root 走到 currentNode 的路徑，回傳 bookmark array
   getPathToBookmark() {
+    console.log("getPathToBookmark");
     const path = [];
     let current = this.currentNode;
     while (current !== 0) {
@@ -71,12 +79,15 @@ class BookmarksTree {
 
   // 移動到 node id，並通知 React 更新
   moveToFolder(id) {
+    console.log("moveToFolder", id);
+    console.log(this.idToBookmark);
     this.currentNode = id;
     this.onUpdate();
   }
 
   // 插入一個書籤，並通知 React 更新
   addBookmark({ name, url, tags, img, hidden }) {
+    console.log("addBookmark");
     const id = Date.now(); // 使用當前時間戳作為唯一 ID
     this.idToBookmark[id] = {
       id,
@@ -96,6 +107,7 @@ class BookmarksTree {
   }
   // 插入一個資料夾，並通知 React 更新
   addFolder({ name, tags, hidden }) {
+    console.log("addFolder");
     const id = Date.now(); // 使用當前時間戳作為唯一 ID
     this.idToBookmark[id] = {
       id,
@@ -116,6 +128,7 @@ class BookmarksTree {
 
   // 遞迴刪除 node id 以下的所有節點(含自身)，並通知 React 更新
   deleteBookmark(id) {
+    console.log("deleteBookmark", id);
     const _deleteBookmark = (node_id) => {
       if (this.treeStructure[node_id].children_id.length > 0) {
         const children_ids = [...this.treeStructure[node_id].children_id];
@@ -141,18 +154,21 @@ class BookmarksTree {
 
   // 根據你傳入的標籤，對網頁渲染
   filterBookmarksByTags(tags) {
+    console.log("filterBookmarksByTags");
     this.currentFilterTags = tags;
     this.applyFilters();
   }
 
   // 根據關鍵字過濾書籤和資料夾
   filterBookmarksByKeyword(keyword) {
+    console.log("filterBookmarksByKeyword");
     this.currentSearchKeyword = keyword;
     this.applyFilters();
   }
 
   // 同時應用搜尋和篩選
   applyFilters() {
+    console.log("applyFilters");
     const lowerKeyword = this.currentSearchKeyword.toLowerCase();
     const currentFilterTags = this.getCurrentFilterTags();
     for (const id in this.idToBookmark) {
@@ -170,7 +186,19 @@ class BookmarksTree {
 
   // 取得現在的標籤篩選狀態
   getCurrentFilterTags() {
+    console.log("getCurrentFilterTags");
     return this.currentFilterTags || [];
+  }
+
+  // 更新排序，參數是 swapy 的 slotItemMap.asArray
+  updateRank(slotItemMap) {
+    console.log('updateRank', slotItemMap);
+    console.log('itemMap', this.idToBookmark);
+    slotItemMap.forEach(({ slot, item }) => {
+      const itemId = parseInt(item, 10);
+      this.idToBookmark[slot].rank = itemId;  
+    });
+    console.log('after itemMap', this.idToBookmark);
   }
 }
 

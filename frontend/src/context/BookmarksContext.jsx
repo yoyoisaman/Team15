@@ -6,11 +6,14 @@ const BookmarksContext = createContext();
 
 export function BookmarksProvider({ children }) {
   const [, forceUpdate] = useState(0);
-  const bookmarksTreeRef = useRef(
-    new BookmarksTree(treeStructure, idToBookmark, localDB, () => {
+  const bookmarksTreeRef = useRef(null);
+  if (!bookmarksTreeRef.current) {
+    console.log("BookmarksTree constructor");
+    bookmarksTreeRef.current = new BookmarksTree(treeStructure, idToBookmark, localDB, () => {
       forceUpdate((n) => n + 1);
-    }),
-  );
+    });
+  }
+  
 
   return (
     <BookmarksContext.Provider

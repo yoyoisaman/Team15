@@ -25,24 +25,26 @@ const MainContentItem = ({
     }
   };
   return (
-    <a
+    <div
       href={bookmark.url}
       target="_blank"
       rel="noopener noreferrer"
       className="tag-card"
       onClick={handleClick}
     >
-      <div className="hidden-setting">
-        <img
-          src={imageMap[bookmark.starred ? "full_star.png" : "empty_star.png"]}
-          alt="Star Icon"
-          name="star"
-        />
-        <img src={imageMap["delete.png"]} alt="Delete Icon" name="delete" />
-      </div>
-      <div className="title">
-        <img src={imageMap[bookmark.img]} alt={bookmark.name} />
-        {bookmark.name}
+      <div style={{ display: "flex", justifyContent: "space-between"}}>
+        <div className="title">
+          <img src={imageMap[bookmark.img]} alt={bookmark.name} />
+          {bookmark.name}
+        </div>
+        <div className="hidden-setting">
+          <img
+            src={imageMap[bookmark.starred ? "full_star.png" : "empty_star.png"]}
+            alt="Star Icon"
+            name="star"
+          />
+          <img src={imageMap["delete.png"]} alt="Delete Icon" name="delete" />
+        </div>
       </div>
       <div className="tags">
         {bookmark.tags.map((tag, tagIdx) => (
@@ -51,7 +53,8 @@ const MainContentItem = ({
           </span>
         ))}
       </div>
-    </a>
+    </div>
+    
   );
 };
 

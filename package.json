@@ -9,5 +9,8 @@
         "concurrently": "^7.0.0",
         "prettier": "^3.5.3",
         "react-smooth-dnd": "^0.11.1"
+    },
+    "dependencies": {
+        "swapy": "^1.0.5"
     }
 }
