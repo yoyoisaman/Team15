@@ -7,6 +7,10 @@ export default defineConfig({
   server: {
     host: true, // needed for the Docker Container port mapping to work
     strictPort: true,
-    port: 5174, // 
+    port: 5174,
+    proxy: {
+      '/login': 'http://localhost:8000', // 將 /login 請求代理到 Django
+      '/static': 'http://localhost:8000',
+    },
   }
 });

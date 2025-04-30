@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom"; // LOGIN
 import imageMap from "../utils/imageMap";
 import AddBookmarkModal from "./AddBookmarkModal/AddBookmarkModal";
 import AddFolderModal from "./AddFolderModal/AddFolderModal";
@@ -7,6 +8,10 @@ import BookmarksContext from "../context/BookmarksContext";
 
 const Navbar = () => {
   const { bookmarksTree } = useContext(BookmarksContext);
+  const handleLoginClick = () => {
+    window.location.href = "/login"; 
+  };
+   // LOGIN
 
   // 新增書籤相關
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
@@ -84,6 +89,14 @@ const Navbar = () => {
         >
           <img src={imageMap["folder.png"]} alt="Add Folder Button" />
         </button>
+        <button
+          className="btn btn-outline-secondary d-flex align-items-center"
+          onClick={handleLoginClick}
+        >
+          <img src={imageMap["login.png"]} alt="Login Icon" />
+          <span>登入</span>
+        </button>
+
       </div>
       {showBookmarkModal && (
         <AddBookmarkModal

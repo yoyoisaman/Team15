@@ -1,8 +1,24 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from .models import Bookmarks, DatabaseStatus
+from django.shortcuts import render
+
 import json
 
-# Create your views here.
+
+# Django template loging
+def login_view(request):
+    """
+    A simple login page for practice.
+    """
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        if username == "admin" and password == "password":
+            return HttpResponseRedirect("/sample-template/")
+        else:
+            return render(request, "login.html", {"error": "Invalid credentials"})
+    return render(request, "login.html")
+
 def bookmarks_api(request):
     '''
     returns JSON:
