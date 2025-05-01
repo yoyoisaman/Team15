@@ -81,22 +81,40 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bookmarks',
-        'USER': 'team15',
-        'PASSWORD': '16',
-        'HOST': 'localhost',
-        'PORT': '5432',
+import os
+DB = os.getenv('DB_TYPE')
+
+if DB == 'postgres':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'bookmarks',
+            'USER': 'team15',
+            'PASSWORD': '16',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
     }
-}
+elif DB == 'mariadb':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'bookmarks',
+            'USER': 'team15',
+            'PASSWORD': '16',
+            'HOST': 'db',
+            'PORT': '3306',
+        }
+    }
+elif DB == 'sqlite':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    raise ValueError("Unsupported DB_TYPE. Supported types are: 'postgres', 'mariadb', 'sqlite'")
 
 
 # Password validation

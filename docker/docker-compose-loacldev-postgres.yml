@@ -1,0 +1,55 @@
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5174:5174"
+    volumes:
+      - ../frontend:/app/frontend
+      - /app/frontend/node_modules
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend:/app
+    environment:
+      - DB_TYPE=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16
+    container_name: db
+    environment:
+      POSTGRES_DB: bookmarks
+      POSTGRES_USER: team15
+      POSTGRES_PASSWORD: '16'
+    ports:
+      - "5432:5432" 
+    volumes:
+      - ../postgres:/var/lib/postgresql/data  # Persist database data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U team15 -d bookmarks"]
+      interval: 6s
+      timeout: 3s
+      retries: 3
+
+  pgadmin:
+    image: dpage/pgadmin4:9.2.0
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: '16'
+    ports:
+      - '5050:80'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ../pgadmin:/var/lib/pgadmin
+
