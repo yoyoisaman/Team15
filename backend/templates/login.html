@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}"> 
+</head>
+<body>
+    <div class="login-container">
+        <h1>登入</h1>
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <label for="username">Email</label>
+            <input type="text" id="username" name="username" placeholder="您的 Email" required>
+
+            <label for="password">密碼</label>
+            <input type="password" id="password" name="password" placeholder="您的密碼" required>
+
+            <a href="#">忘記密碼</a>
+
+            <button type="submit">登入</button>
+        </form>
+    </div>
+</body>
+</html>
