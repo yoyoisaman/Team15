@@ -105,8 +105,8 @@ class BookmarksTree {
       starred: false,
       hidden: hidden || false,
     };
-    this.treeStructure[id] = { parent_id: this.currentNode, children_id: [] };
     this.treeStructure[this.currentNode].children_id.push(id);
+    this.treeStructure[id] = { parent_id: this.currentNode, children_id: [] };
     this.loaclDB.createId(id, this.idToBookmark[id], this.treeStructure[id]);
     this.loaclDB.updateTreeStructure(this.currentNode, this.treeStructure[this.currentNode])
     this.onUpdate();

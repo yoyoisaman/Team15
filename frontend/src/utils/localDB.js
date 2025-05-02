@@ -182,18 +182,21 @@ const localDBfunc = {
 
         let transaction = loaclDB.transaction(treeStructureTableName, "readwrite");
         let store = transaction.objectStore(treeStructureTableName);
-        let updateRequest = store.get(id);
-        updateRequest.onerror = function (event) {
-            if (event.result !== undefined) {
+        let checkRequest = store.get(id);
+        checkRequest.onsuccess = function (event) {
+            if (event.target.result !== undefined) {
                 let updateRequest = store.put(data, id);
                 updateRequest.onerror = function (event) {
                     throw new Error("loaclDB Error", event.target.error);
                 };
+                updateRequest.onsuccess = function (event) {
+                    console.log("loaclDB update success:", event.target.result);
+                }
+            }
+            else {
+                throw new Error("loaclDB Error: id not found", id);
             }
         }
-        updateRequest.onsuccess = function (event) {
-            console.log("loaclDB update success:", event.target.result);
-        };
 
         updateLoaclStatus(updateTime);
 
@@ -230,6 +233,9 @@ const localDBfunc = {
                 updateRequest.onerror = function (event) {
                     throw new Error("loaclDB Error", event.target.error);
                 };
+                updateRequest.onsuccess = function (event) {
+                    console.log("loaclDB update success:", event.target.result);
+                }
             }
         }
         checkRequest.onerror = function (event) {
