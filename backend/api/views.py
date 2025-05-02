@@ -113,7 +113,6 @@ def bookmarks_update_api(request, bid):
     if request.method == 'GET':
         return JsonResponse({'status': 'error', 'message': 'GET method not allowed'}, status=405)
 
-    
     account = 'admin'  # TODO: get from request
     request_data = json.loads(request.body)
 
@@ -152,7 +151,7 @@ def bookmarks_update_api(request, bid):
             account=user,
             bid=bookmark,
             parent_id=parent_id,
-            children_id=[]
+            children_id=children_id
         )
         user.lastUpdated = time
 
@@ -164,6 +163,7 @@ def bookmarks_update_api(request, bid):
         tree_structure = tree_structure[0]
 
         tree_structure.parent_id = parent_id if parent_id is not None else tree_structure.parent_id
+        tree_structure.children_id = children_id if children_id is not None else tree_structure.children_id
         bookmark.url = url if url is not None else bookmark.url
         bookmark.img = img if img is not None else bookmark.img
         bookmark.name = name if name is not None else bookmark.name
