@@ -36,7 +36,7 @@ services:
     volumes:
       - ../mariadb:/var/lib/mysql  # Persist database data
     healthcheck:
-      test: ["CMD-SHELL", "healthcheck.sh --connect --innodb_initialized"]
+      test: ["CMD-SHELL", "mysql -u team15 -p16 -e 'SELECT 1;'"]
       interval: 6s
       timeout: 3s
       retries: 3
