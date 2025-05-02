@@ -16,10 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import bookmarks_api, login_view
+from api.views import get_csrf, bookmarks_init_api, bookmarks_update_api, bookmarks_delete_api, login_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/bookmarks/', bookmarks_api, name='bookmarks_api'),
+    path('api/get_csrf', get_csrf, name='get_csrf'),
+    path('api/bookmarks/init', bookmarks_init_api, name='bookmarks_init_api'),
+    path('api/bookmarks/update/<int:bid>', bookmarks_update_api, name='bookmarks_update_api'),
+    path('api/bookmarks/delete/<int:bid>', bookmarks_delete_api, name='bookmarks_delete_api'),
     path('login/', login_view, name='login'),
 ]

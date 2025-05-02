@@ -6,8 +6,8 @@ services:
     ports:
       - "5174:5174"
     volumes:
-      - ../frontend:/app/frontend
-      - /app/frontend/node_modules
+      - ../frontend:/app
+      - /app/node_modules
 
   backend:
     build:

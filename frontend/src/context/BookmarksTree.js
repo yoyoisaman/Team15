@@ -42,7 +42,7 @@ class BookmarksTree {
   // 對 node id 的 srarred 屬性取反，並通知 React 更新
   toggleStarred(id) {
     this.idToBookmark[id].starred = !this.idToBookmark[id].starred;
-    this.loaclDB.putBookmark(id, this.idToBookmark[id]);
+    this.loaclDB.updateBookmark(id, this.idToBookmark[id]);
     this.onUpdate();
   }
 
@@ -89,9 +89,8 @@ class BookmarksTree {
     };
     this.treeStructure[this.currentNode].children_id.push(id);
     this.treeStructure[id] = { parent_id: this.currentNode, children_id: [] };
-    this.loaclDB.putBookmark(id, this.idToBookmark[id]);
-    this.loaclDB.putTreeStructure(id, this.treeStructure[id]);
-    this.loaclDB.putTreeStructure(this.currentNode, this.treeStructure[this.currentNode])
+    this.loaclDB.createId(id, this.idToBookmark[id], this.treeStructure[id]);
+    this.loaclDB.updateTreeStructure(this.currentNode, this.treeStructure[this.currentNode])
     this.onUpdate();
   }
   // 插入一個資料夾，並通知 React 更新
@@ -108,9 +107,8 @@ class BookmarksTree {
     };
     this.treeStructure[id] = { parent_id: this.currentNode, children_id: [] };
     this.treeStructure[this.currentNode].children_id.push(id);
-    this.loaclDB.putBookmark(id, this.idToBookmark[id]);
-    this.loaclDB.putTreeStructure(id, this.treeStructure[id]);
-    this.loaclDB.putTreeStructure(this.currentNode, this.treeStructure[this.currentNode])
+    this.loaclDB.createId(id, this.idToBookmark[id], this.treeStructure[id]);
+    this.loaclDB.updateTreeStructure(this.currentNode, this.treeStructure[this.currentNode])
     this.onUpdate();
   }
 
@@ -129,13 +127,11 @@ class BookmarksTree {
       ].children_id.filter((child_id) => child_id !== node_id);
       delete this.treeStructure[node_id];
       delete this.idToBookmark[node_id];
-      this.loaclDB.delTreeStructure(node_id);
-      this.loaclDB.delBookmark(node_id);
+      this.loaclDB.delId(node_id);
     };
     _deleteBookmark(id);
-    this.loaclDB.delTreeStructure(id);
-    this.loaclDB.putTreeStructure(this.currentNode, this.treeStructure[this.currentNode])
-    this.loaclDB.delBookmark(id);
+    this.loaclDB.updateTreeStructure(this.currentNode, this.treeStructure[this.currentNode])
+    this.loaclDB.delId(id);
     this.onUpdate();
   }
 

@@ -1,16 +1,45 @@
 // import { treeStructure, idToBookmark } from "../utils/tempDB.js";  // 模擬server資料庫
+import Cookie from 'js-cookie'; 
+import $ from 'jquery';  // jQuery is required for AJAX requests
 
 // use API to get data from server
 let databaseStatus = null;
 let treeStructure = null;
 let idToBookmark = null;
-await fetch('http://127.0.0.1:8000/api/bookmarks/')
-    .then(response => response.json())
-    .then(data => {
+let csrfToken = null;
+await $.ajax({
+    url: 'http://localhost:8000/api/get_csrf',
+    type: 'GET',
+    contentType: 'application/json',
+    xhrFields: {
+        withCredentials: true  // include cookies in the request
+    },
+    success: function (data) {
+    },
+    error: function (xhr, status, error) {
+        console.error('Error:', error);
+    }
+}).then(() => {
+    csrfToken = Cookie.get('csrftoken');
+    $.ajaxSetup({
+        headers: {'X-CSRFToken': csrfToken},
+        xhrFields: {withCredentials: true }
+    });
+})
+
+await $.ajax({
+    url: 'http://localhost:8000/api/bookmarks/init',
+    type: 'POST',
+    contentType: 'application/json',
+    success: function (data) {
         databaseStatus = data.databaseStatus;
         treeStructure = data.treeStructure;
         idToBookmark = data.idToBookmark;
-    })
+    },
+    error: function (xhr, status, error) {
+        console.error('Error:', error);
+    }
+})
 
 const databaseStatusTableName = "databaseStatus";
 const treeStructureTableName = "treeStructure";
@@ -137,55 +166,176 @@ await loaclDBPromise.then((data) => {
     console.error("Error initializing localDB:", error);
 });
 
-function updateStatus() {
-    // update lastUpdated time
+function updateLoaclStatus(updateTime) {
+    // update lastUpdated time in localDB
     let transaction = loaclDB.transaction(databaseStatusTableName, "readwrite");
     let store = transaction.objectStore(databaseStatusTableName);
-    let request = store.put({'lastUpdated': (new Date()).toISOString()}, 0);
+    let request = store.put({'lastUpdated': updateTime}, 0);
     request.onerror = function (event) {
         throw new Error("loaclDB Error", event.target.error);
     };
 }
 
 const localDBfunc = {
-    putTreeStructure(id, data) {  // if id exists, original data will be replaced
+    updateTreeStructure(id, data) {  // only for update existing treeStructure
+        let updateTime = (new Date()).toISOString();
+
         let transaction = loaclDB.transaction(treeStructureTableName, "readwrite");
         let store = transaction.objectStore(treeStructureTableName);
-        let request = store.put(data, id);
-        request.onerror = function (event) {
-            throw new Error("loaclDB Error", event.target.error);
+        let updateRequest = store.get(id);
+        updateRequest.onerror = function (event) {
+            if (event.result !== undefined) {
+                let updateRequest = store.put(data, id);
+                updateRequest.onerror = function (event) {
+                    throw new Error("loaclDB Error", event.target.error);
+                };
+            }
+        }
+        updateRequest.onsuccess = function (event) {
+            console.log("loaclDB update success:", event.target.result);
         };
-        updateStatus();
+
+        updateLoaclStatus(updateTime);
+
+        $.ajax({
+            url: 'http://localhost:8000/api/bookmarks/update/' + id,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                time: updateTime,
+                parent_id: data.parent_id,
+                children_id: data.children_id,
+            }),
+            success: function (data) {
+                console.log("Server update success:", data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Server update error:', error);
+            }
+        });
     },
-    putBookmark(id, data) {  // if id exists, original data will be replaced
-        // ensure the data is not hidden when put into localDB
-        let copy_data = {...data};
-        copy_data.hidden = false;
+    updateBookmark(id, data) {  // only for update existing bookmark or folder
+        let updateTime = (new Date()).toISOString();
+
         let transaction = loaclDB.transaction(bookmarksTableName, "readwrite");
         let store = transaction.objectStore(bookmarksTableName);
-        let request = store.put(copy_data, id);
+        let checkRequest = store.get(id);
+        checkRequest.onsuccess = function (event) {
+            if (event.target.result !== undefined) {
+                // ensure the data is not hidden when put into localDB
+                let copy_data = {...data};
+                copy_data.hidden = false;
+
+                let updateRequest = store.put(copy_data, id);
+                updateRequest.onerror = function (event) {
+                    throw new Error("loaclDB Error", event.target.error);
+                };
+            }
+        }
+        checkRequest.onerror = function (event) {
+            throw new Error("loaclDB Error", event.target.error);
+        }
+
+        updateLoaclStatus(updateTime);
+
+        $.ajax({
+            url: 'http://localhost:8000/api/bookmarks/update/' + id,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                time: updateTime,
+                url: data.url,
+                img: data.img,
+                name: data.name,
+                tags: data.tags,
+                starred: data.starred,
+                hidden: data.hidden
+            }),
+            success: function (data) {
+                console.log("Server update success:", data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Server update error:', error);
+            }
+        });
+    },
+    createId(id, bookmarkData, treeStructureData) {  
+        // for create new bookmark or folder, also create corresponding treeStructure
+        // if existing id is passed, it will be updated instead of created
+        let updateTime = (new Date()).toISOString();
+
+        let transaction = loaclDB.transaction(bookmarksTableName, "readwrite");
+        let store = transaction.objectStore(bookmarksTableName);
+        let request = store.put(bookmarkData, id);
         request.onerror = function (event) {
             throw new Error("loaclDB Error", event.target.error);
         };
-        updateStatus();
+
+        transaction = loaclDB.transaction(treeStructureTableName, "readwrite");
+        store = transaction.objectStore(treeStructureTableName);
+        request = store.put(treeStructureData, id);
+        request.onerror = function (event) {
+            throw new Error("loaclDB Error", event.target.error);
+        };
+
+        updateLoaclStatus(updateTime);
+
+        $.ajax({
+            url: 'http://localhost:8000/api/bookmarks/update/' + id,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                time: updateTime,
+                url: bookmarkData.url,
+                img: bookmarkData.img,
+                name: bookmarkData.name,
+                tags: bookmarkData.tags,
+                starred: bookmarkData.starred,
+                hidden: bookmarkData.hidden,
+                parent_id: treeStructureData.parent_id,
+                children_id: treeStructureData.children_id,
+            }),
+            success: function (data) {
+                console.log("Server create success:", data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Server create error:', error);
+            }
+        });
     },
-    delTreeStructure(id) {
+    delId(id) {
+        let updateTime = (new Date()).toISOString();
+
         let transaction = loaclDB.transaction(treeStructureTableName, "readwrite");
         let store = transaction.objectStore(treeStructureTableName);
         let request = store.delete(id);
         request.onerror = function (event) {
             throw new Error("loaclDB Error", event.target.error);
         };
-        updateStatus();
-    },
-    delBookmark(id) {
-        let transaction = loaclDB.transaction(bookmarksTableName, "readwrite");
-        let store = transaction.objectStore(bookmarksTableName);
-        let request = store.delete(id);
+
+        transaction = loaclDB.transaction(bookmarksTableName, "readwrite");
+        store = transaction.objectStore(bookmarksTableName);
+        request = store.delete(id);
         request.onerror = function (event) {
             throw new Error("loaclDB Error", event.target.error);
         };
-        updateStatus();
+
+        updateLoaclStatus(updateTime);
+
+        $.ajax({
+            url: 'http://localhost:8000/api/bookmarks/delete/' + id,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                time: updateTime,
+            }),
+            success: function (data) {
+                console.log("Server delete success:", data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Server delete error:', error);
+            }
+        });
     }
 }
 
