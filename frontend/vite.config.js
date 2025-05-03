@@ -5,12 +5,12 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // needed for the Docker Container port mapping to work
+    host: true,
     strictPort: true,
     port: 5174,
     proxy: {
-      '/login': 'http://localhost:8000', // 將 /login 請求代理到 Django
-      '/static': 'http://localhost:8000',
+      '/login': 'http://backend:8000', // 用 backend 取代 localhost，docker跑得起來
+      '/static': 'http://backend:8000',
     },
   }
 });
