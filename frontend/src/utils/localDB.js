@@ -99,7 +99,9 @@ const loaclDBPromise = new Promise((resolve, reject) => {
             if (localLastUpdated >= serverLastUpdated) {
                 return [Promise.resolve({})];
             } else if (localLastUpdated < serverLastUpdated) {
-                let promises = []
+                let promises = [];
+                let serverKeys = Object.keys(idToBookmark);
+                serverKeys = serverKeys.map((key) => parseInt(key));
                 let databaseStatusStore = loaclDB.transaction(databaseStatusTableName, "readwrite").objectStore(databaseStatusTableName);
                 let treeStructureStore = loaclDB.transaction(treeStructureTableName, "readwrite").objectStore(treeStructureTableName);
                 let bookmarksStore = loaclDB.transaction(bookmarksTableName, "readwrite").objectStore(bookmarksTableName);
@@ -110,22 +112,63 @@ const loaclDBPromise = new Promise((resolve, reject) => {
                         resolve(event.target.result);
                     };
                 }));
-                for (let i = 0; i < Object.keys(treeStructure).length; i++) {
+                for (let i = 0; i < serverKeys.length; i++) {
+                    let key = serverKeys[i];
                     promises.push(new Promise((resolve, reject) => {
-                        let request = treeStructureStore.put(treeStructure[i], idToBookmark[i].id);
+                        let request = treeStructureStore.put(treeStructure[key], idToBookmark[key].id);
                         request.onsuccess = function (event) {
                             resolve(event.target.result);
                         };
                     }));
                 }
-                for (let i = 0; i < Object.keys(idToBookmark).length; i++) {
+                for (let i = 0; i < serverKeys.length; i++) {
+                    let key = serverKeys[i];
                     promises.push(new Promise((resolve, reject) => {
-                        let request = bookmarksStore.put(idToBookmark[i], idToBookmark[i].id);
+                        let request = bookmarksStore.put(idToBookmark[key], idToBookmark[key].id);
                         request.onsuccess = function (event) {
                             resolve(event.target.result);
                         };
                     }));
                 }
+
+                // delete non-existing data in server
+                promises.push(new Promise((resolve, reject) => {
+                    treeStructureStore.openCursor().onsuccess = function (event) {
+                        let cursor = event.target.result;
+                        if (!cursor) {
+                            resolve();
+                            return;
+                        }
+
+                        if (!serverKeys.includes(cursor.key)) {
+                            let request = treeStructureStore.delete(cursor.key);
+                            promises.push(new Promise((resolve, reject) => {
+                                request.onsuccess = function (event) {
+                                    resolve(event.target.result);
+                                }
+                            }));
+                        }
+                        cursor.continue();
+                }}));
+                promises.push(new Promise((resolve, reject) => {
+                    bookmarksStore.openCursor().onsuccess = function (event) {
+                        let cursor = event.target.result;
+                        if (!cursor) {
+                            resolve();
+                            return;
+                        }
+
+                        if (!serverKeys.includes(cursor.key)) {
+                            let request = bookmarksStore.delete(cursor.key);
+                            promises.push(new Promise((resolve, reject) => {
+                                request.onsuccess = function (event) {
+                                    resolve(event.target.result);
+                                }
+                            }));
+                        }
+                        cursor.continue();
+                }}));
+
                 return promises;
             }
         }
