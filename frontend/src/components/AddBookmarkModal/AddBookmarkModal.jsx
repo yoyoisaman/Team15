@@ -30,7 +30,7 @@ const AddBookmarkModal = ({ onClose, currentFilterTags }) => {
     try {
       const urlObj = new URL(websiteUrl);
       const domain = urlObj.hostname;
-      const faviconPath = `https://www.google.com/s2/favicons?domain=${domain}`;
+      const faviconPath = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
       setFaviconUrl(faviconPath);
     } catch (error) {
       console.error("Invalid URL:", error);
