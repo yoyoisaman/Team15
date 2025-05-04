@@ -125,7 +125,7 @@ backend/
 
 在這裡，我們要求使用者以 e-mail 作為帳號，接著再輸入密碼，並且我們亦有提供忘記密碼的選項。登錄模板實作範例其內容如下：
 
-![img1](./report_imgs/Week05/img1.gif)
+![img1](./report_imgs/Week11/img1.gif)
 
 
 2.登錄邏輯、 url 配置
