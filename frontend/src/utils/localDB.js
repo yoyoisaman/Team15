@@ -54,13 +54,17 @@ const loaclDBPromise = new Promise((resolve, reject) => {
             loaclDB.createObjectStore(treeStructureTableName);
             loaclDB.createObjectStore(bookmarksTableName);
 
+            let serverKeys = Object.keys(idToBookmark);
+            serverKeys = serverKeys.map((key) => parseInt(key));
             let treeStructureStore = event.target.transaction.objectStore(treeStructureTableName);
             let bookmarksStore = event.target.transaction.objectStore(bookmarksTableName);
-            for (let i = 0; i < Object.keys(treeStructure).length; i++) {
-                treeStructureStore.put(treeStructure[i], idToBookmark[i].id);
+            for (let i = 0; i < serverKeys.length; i++) {
+                let key = serverKeys[i];
+                treeStructureStore.put(treeStructure[key], idToBookmark[key].id);
             }
-            for (let i = 0; i < Object.keys(idToBookmark).length; i++) {
-                bookmarksStore.put(idToBookmark[i], idToBookmark[i].id);
+            for (let i = 0; i < serverKeys.length; i++) {
+                let key = serverKeys[i];
+                bookmarksStore.put(idToBookmark[key], idToBookmark[key].id);
             }
         }
         if (event.oldVersion <= 1) {  // ver1 -> ver2: record last_updated
