@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: yoyoisaman/bookmark-frontend:v1  # 匯入的映像名稱
+    image: yoyoisaman/bookmark-frontend:v2  # 匯入的映像名稱
     ports:
       - "5174:5174"
     volumes:
@@ -8,20 +8,58 @@ services:
       - /app/frontend/node_modules
 
   backend:
-    image: yoyoisaman/bookmark-backend:v1  # 匯入的映像名稱
+    image: yoyoisaman/bookmark-backend:v2  # 匯入的映像名稱
     ports:
       - "8000:8000"
-
-  postgres:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: bookmarks
-      POSTGRES_USER: team15
-      POSTGRES_PASSWORD: '16'
-    ports:
-      - "5432:5432" 
     volumes:
-      - ../postgres:/var/lib/postgresql/data  # Persist database data
+        - ../backend:/app
+    environment:
+      - DB_TYPE=mariadb
+    depends_on:
+      mariadb:
+        condition: service_healthy
+  mariadb:
+    image: mariadb:11.7-ubi9
+    container_name: db
+    environment:
+      MYSQL_DATABASE: bookmarks
+      MYSQL_USER: team15
+      MYSQL_ROOT_PASSWORD: '16'
+      MYSQL_PASSWORD: '16'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../mariadb:/var/lib/mysql  # Persist database data
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -u team15 -p16 -e 'SELECT 1;'"]
+      interval: 6s
+      timeout: 3s
+      retries: 3
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    environment:
+      PMA_HOST: db
+      PMA_USER: team15
+      PMA_PASSWORD: '16'
+    ports:
+      - "8080:80"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+
+
+  # postgres:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_DB: bookmarks
+  #     POSTGRES_USER: team15
+  #     POSTGRES_PASSWORD: '16'
+  #   ports:
+  #     - "5432:5432" 
+  #   volumes:
+  #     - ../postgres:/var/lib/postgresql/data  # Persist database data
 
   # pgadmin:
   #   image: dpage/pgadmin4:9.2.0

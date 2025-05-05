@@ -3,6 +3,7 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+    image: team15-frontend
     ports:
       - "5174:5174"
     volumes:
@@ -13,6 +14,7 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
+    image: team15-backend
     ports:
       - "8000:8000"
     volumes:
