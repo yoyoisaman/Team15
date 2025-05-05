@@ -114,10 +114,11 @@ MTV檔案示意圖如下
 
 backend/
 ├── templates/
-│   └── login.html         # 登入頁面模板
+│   └── login.html  # 登入頁面模板
 ├── api/
-│   └── views.py           # 處理登入頁面的視圖邏輯
-├── urls.py                # URL 路徑配置
+│   └── views.py    # 處理登入頁面的視圖邏輯
+└── urls.py         # URL 路徑配置
+
 
 
 1.使用者登錄 ( Template )
