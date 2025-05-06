@@ -1,20 +1,18 @@
 # 進度報告 - Team 15, Week 11
 
-1.AJAX實作
+在這次作業中，我們運用課堂所學的 **AJAX、Template 與 URL 網址派發**，進一步完善了前後端的溝通機制。
 
-在這次作業中，我們使用 `AJAX` 技術來實現前端與後端的非同步資料交換，利用 `jQuery` API 處理與後端 API 進行的所有資料交互。
-配合本組書籤管理系統，實現資料庫進行非同步請求，並更新 UI 以便展示最新的書籤數據。
+同時，我們也針對 **SQL Injection 與 XSS 攻擊** 進行課外研究，實作防範措施。
 
-2.Django Login Page Template 與 MTV 架構
-
-基於 Django 框架，實現了一個簡單的登入頁面。
-
+此外，為提升資料庫的穩定性與可維護性，我們對後端使用的 MySQL 進行 **資料庫正規化**，以優化資料結構並降低冗餘。
 
 ## 課內技術練習
 
 本專案目前的整體架構如下圖所示。這兩週我們實作了圖中以紅字標示的功能，主要包括：
-1. 運用 **AJAX 技術**，將前端對書籤的操作即時同步至後端，為跨裝置同步功能做準備。
-2. 利用 **URL 網址派發** 以及 **Template 技術**，優化 Django 後端的配置，提升系統的擴展性與可維護性。
+
+- 運用 **AJAX 技術**，將前端對書籤的操作即時同步至後端，為跨裝置同步功能做準備。
+
+- 利用 **URL 網址派發** 以及 **Template 技術**，優化 Django 後端的配置，提升系統的擴展性與可維護性。
 
 ![flow.jpg](report_imgs/Week11/flow.jpg)
 
@@ -44,55 +42,61 @@
 
 ### 2. Template 實作
 
+首先，我們基於 Django 的 Template 技術，建立 `base.html` 作為可重複利用的母版：
+
 ```html+django
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
 <body>
-    <div class="login-container">
-        <h1>登入</h1>
-        {% if error %}
-            <p>{{ error }}</p>
-        {% endif %}
-        <form method="POST">
-            {% csrf_token %}
-            <label for="username">Email</label>
-            <input type="text" id="username" name="username" placeholder="您的 Email" required>
-            ...
-        </form>
-    </div>
+    {% block content %}{% endblock %}
 </body>
+</html>
 ```
 
+在這個母版中，我們使用 `{% block %}` 語法預留多個可覆寫的區塊，包含頁面標題、額外的 head 區段，以及主要內容區域。
 
+透過這樣的設計，我們可以在保留整體網站風格與結構的同時，快速建立多個不同功能的頁面，並根據需要填入各自的內容。
 
+舉例來說，以下為我們基於 `base.html` 實作的登入頁面 `login.html`：
+
+```html+django
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="login-container">
+    <h1>登入</h1>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <label for="username">Email</label>
+        <input type="text" id="username" name="username" placeholder="您的 Email" required>
+        ...
+    </form>
+</div>
+{% endblock %}
+```
+
+呈現出的 HTML 如下圖：
+
+![img1](report_imgs/Week11/img1.gif)
 
 ### 3. 使用 AJAX 與後端溝通
 
+由於前後端溝通涉及敏感資訊（如使用者識別 ID），我們統一採用 POST request 傳送資料，以提升傳輸安全性。
 
+而 Django 為防範跨站請求偽造（CSRF）攻擊，要求所有 POST request 必須附帶有效的 CSRF Token。
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### 使用 AJAX 進行資料操作
-
-`$.ajax()` 是 jQuery 提供的 AJAX 方法，他被用來進行資料請求，具有多種函式式的選項和配置，例如 xhrFields、success、error 等處理函式，這些功能可以讓開發者處理 HTTP 請求和回應的各種狀況，並且在此次作業實作中均有使用。
-
-
-1.初始化 CSRF Token
-
-為了防止跨站請求偽造 (CSRF)，首先向後端請求 CSRF Token 並將其存儲，後續的 AJAX 請求將會附帶此 token。
-
-這段程式碼通過向後端發送 GET 請求來獲取 CSRF Token，並將其保存在 `csrfToken` 變數中:
+因此，使用者進入網站時，前端會先透過 GET request 向後端取得 Token，並儲存於 Cookie 中，作為後續資料操作的驗證依據。
 
 ```javascript
 await $.ajax({
@@ -105,37 +109,13 @@ await $.ajax({
     success: function (data) {
         csrfToken = Cookie.get('csrftoken');  // 儲存 CSRF Token
     },
-    error: function (xhr, status, error) {
-        console.error('Error:', error);
-    }
+    ...
 });
 ```
 
+在取得 CSRF Token 後，使用者進行新增、編輯或刪除書籤時，前端會即時更新本地端的 IndexedDB，同時透過 AJAX 將資料同步傳送至後端。
 
-2.初始化書籤資料
-
-當用戶首次載入頁面時，會通過 AJAX 向伺服器發送 POST 請求來初始化書籤資料。這些資料會儲存於本地的 `IndexedDB` 中。
-在向後端發送 POST 請求後，獲取書籤資料並儲存到本地資料庫中:
-
-```javascript
-await $.ajax({
-    url: 'http://localhost:8000/api/bookmarks/init',
-    type: 'POST',
-    contentType: 'application/json',
-    success: function (data) {
-        databaseStatus = data.databaseStatus;
-        treeStructure = data.treeStructure;
-        idToBookmark = data.idToBookmark;
-    },
-    error: function (xhr, status, error) {
-        console.error('Error:', error);
-    }
-});
-```
-
-3.更新書籤資料
-
-在更新書籤或資料夾時，會將更新資料發送到伺服器，並更新本地資料庫的書籤資料。
+以下為書籤更新（包含新增及編輯）所對應的 AJAX 程式碼：
 
 ```javascript
 $.ajax({
@@ -147,76 +127,17 @@ $.ajax({
         parent_id: data.parent_id,
         children_id: data.children_id,
     }),
-    success: function (data) {
-        console.log("Server update success:", data);
-    },
-    error: function (xhr, status, error) {
-        console.error('Server update error:', error);
-    }
+    ...
 });
 ```
 
+伺服器收到請求後，會根據傳入的資料對 MySQL 資料庫中的用戶書籤紀錄進行對應的操作。
 
-4.刪除書籤資料
+採用 AJAX 的原因是，其非同步特性能讓前端在不重新載入頁面的情況下與後端溝通，進而提供更加流暢且不中斷的使用者體驗。
 
-當用戶刪除書籤或資料夾時，使用 AJAX 發送刪除請求，並更新本地資料庫以反映變更。
+我們下週將會接續實作使用者 token 機制，完成後系統將能根據使用者的身份驗證資訊，回傳儲存在後端的最新書籤資料，進一步實現 **跨裝置同步** 的功能。
 
-```javascript
-$.ajax({
-    url: 'http://localhost:8000/api/bookmarks/delete/' + id,
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({
-        time: updateTime,
-    }),
-    success: function (data) {
-        console.log("Server delete success:", data);
-    },
-    error: function (xhr, status, error) {
-        console.error('Server delete error:', error);
-    }
-});
-```
-
-
-### MTV架構與Template實作
-
-MTV檔案示意圖如下
-
-```bash
-backend/
-├── templates/
-│   └── login.html  # 登入頁面模板
-├── api/
-│   └── views.py    # 處理登入頁面的視圖邏輯
-└── urls.py         # URL 路徑配置
-```
-
-
-1.使用者登錄 ( Template )
-
-當用戶選擇登錄帳戶時會進入到使用者登錄畫面
-
-在這裡，我們要求使用者以 e-mail 作為帳號，接著再輸入密碼，並且亦有提供忘記密碼的選項。登錄模板實作範例其內容如下：
-
-![img1](./report_imgs/Week11/img1.gif)
-
-
-2.登錄邏輯、 url 配置
-
-登入邏輯在 `views.py` 中實現，為了處理用戶的請求並返回適當的回應， `login_view` 的函式會處理登入頁面的顯示和表單提交。當用戶提交登入表單時，會檢查提供的用戶名和密碼是否正確。如果不正確，會重新渲染 login.html 並顯示錯誤訊息。
-
-為了配置 url ，在 `urls.py` 中設置路徑 /login 指向 login_view，這樣當用戶訪問 /login 時， Django 會調用該視圖處理登入頁面的渲染。程式範例如下:
-
-```python
-from api.views import login_view
-
-urlpatterns = [
-    path('login/', login_view, name='login'),
-]
-```
-
-
+由於後端 View 涉及與 MySQL 資料庫的操作，程式碼較為冗長，詳細實作可參考 [view.py](../backend/api/views.py) 中的 `bookmarks_update_api` 與 `bookmarks_delete_api` 函式。
 
 ## 額外相關技術
 
