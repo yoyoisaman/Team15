@@ -192,7 +192,7 @@ def bookmarks_init_api(request):
         idToBookmark[bid] = {
             'id': bid,
             'url': sanitize_string(bookmarks[i].url),
-            'img': sanitize_string(bookmarks[i].img),
+            'img': bookmarks[i].img,
             'name': sanitize_string(bookmarks[i].name),
             'tags': sanitize_data(bookmarks[i].tags),
             'starred': bookmarks[i].starred,
@@ -251,7 +251,7 @@ def bookmarks_update_api(request, bid):
     parent_id = request_data.get('parent_id')
     children_id = request_data.get('children_id')
     url = sanitize_string(request_data.get('url'))
-    img = sanitize_string(request_data.get('img'))
+    img = request_data.get('img')
     name = sanitize_string(request_data.get('name'))
     tags = sanitize_data(request_data.get('tags'))
     starred = request_data.get('starred')
