@@ -12,6 +12,77 @@
 
 ## 課內技術練習
 
+本專案目前的整體架構如下圖所示。這兩週我們實作了圖中以紅字標示的功能，主要包括：
+1. 運用 **AJAX 技術**，將前端對書籤的操作即時同步至後端，為跨裝置同步功能做準備。
+2. 利用 **URL 網址派發** 以及 **Template 技術**，優化 Django 後端的配置，提升系統的擴展性與可維護性。
+
+![flow.jpg](report_imgs/Week11/flow.jpg)
+
+### 1. URL 網址派發
+
+```python
+    path('login/', login_view, name='login'),
+    path('api/get_csrf', get_csrf, name='get_csrf'),
+    path('api/bookmarks/init', bookmarks_init_api, name='bookmarks_init_api'),
+    path('api/bookmarks/update/<int:bid>', bookmarks_update_api, name='bookmarks_update_api'),
+    path('api/bookmarks/delete/<int:bid>', bookmarks_delete_api, name='bookmarks_delete_api'),
+```
+
+我們根據上課講解的網址派發原則，設計並整理後端的 URL Routing，包含以下五項：
+
+- `login/`：對應登入頁面。使用者登入成功後，網站會顯示用戶儲存於後端的書籤資料。此頁面由 **Template 技術** 完整產出 HTML。
+
+- `api/get_csrf`：用於取得 CSRF token。
+
+- `api/bookmarks/init`：當用戶載入網站時，會呼叫此 API 取得初始書籤資料。<br>（我們下週將在這裡引入 Session Cookie，記憶使用者的登入狀態，實現「重開瀏覽器仍保持登入」的功能，並透過此 API 回傳對應用戶的書籤資訊。）
+
+- `api/bookmarks/update/<int:bid>`：當使用者新增或編輯書籤時，會透過 AJAX 呼叫此 API，同步更新後端資料。
+
+- `api/bookmarks/update/<int:bid>`：當使用者刪除書籤時，同樣透過 AJAX 呼叫此 API，刪除對應的後端資料。
+
+在更新與刪除書籤的 API 上，我們以資源導向為原則，利用 URL Parameter `<int:bid>` 指明需要編輯的書籤資源。
+
+### 2. Template 實作
+
+```html+django
+<body>
+    <div class="login-container">
+        <h1>登入</h1>
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <label for="username">Email</label>
+            <input type="text" id="username" name="username" placeholder="您的 Email" required>
+            ...
+        </form>
+    </div>
+</body>
+```
+
+
+
+
+### 3. 使用 AJAX 與後端溝通
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### 使用 AJAX 進行資料操作
 
 `$.ajax()` 是 jQuery 提供的 AJAX 方法，他被用來進行資料請求，具有多種函式式的選項和配置，例如 xhrFields、success、error 等處理函式，這些功能可以讓開發者處理 HTTP 請求和回應的各種狀況，並且在此次作業實作中均有使用。
