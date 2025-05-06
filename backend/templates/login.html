@@ -1,30 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}"> 
-</head>
-<body>
-    <div class="login-container">
-        <h1>登入</h1>
-        {% if error %}
-            <p>{{ error }}</p>
-        {% endif %}
-        <form method="POST">
-            {% csrf_token %}
-            <label for="username">Email</label>
-            <input type="text" id="username" name="username" placeholder="您的 Email" required>
+{% extends 'base.html' %}
 
-            <label for="password">密碼</label>
-            <input type="password" id="password" name="password" placeholder="您的密碼" required>
+{% block title %}Login{% endblock %}
 
-            <a href="#">忘記密碼</a>
+{% block content %}
+<div class="login-container">
+    <h1>登入</h1>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <label for="username">Email</label>
+        <input type="text" id="username" name="username" placeholder="您的 Email" required>
 
-            <button type="submit">登入</button>
-        </form>
-    </div>
-</body>
-</html>
+        <label for="password">密碼</label>
+        <input type="password" id="password" name="password" placeholder="您的密碼" required>
+        <a href="#"></a>
+
+        <button type="submit">登入</button>
+    </form>
+</div>
+{% endblock %}
