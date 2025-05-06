@@ -2,9 +2,7 @@
 
 在這次作業中，我們運用課堂所學的 **AJAX、Template 與 URL 網址派發**，進一步完善了前後端的溝通機制。
 
-同時，我們也針對 **SQL Injection 與 XSS 攻擊** 進行課外研究，實作防範措施。
-
-此外，為提升資料庫的穩定性與可維護性，我們對後端使用的 MySQL 進行 **資料庫正規化**，以優化資料結構並降低冗餘。
+同時，我們也針對 **SQL Injection 與 XSS 攻擊** 進行課外研究，實作相應的防禦機制，並新增 **Rate Limiting** 與 **資料驗證** 功能，強化伺服器的安全性與穩定性。
 
 ## 課內技術練習
 
@@ -92,7 +90,7 @@
 
 ### 3. 使用 AJAX 與後端溝通
 
-由於前後端溝通涉及敏感資訊（如使用者識別 ID），我們統一採用 POST request 傳送資料，以提升傳輸安全性。
+由於前後端溝通涉及敏感資訊（如使用者識別 ID），我們統一採用 POST request 傳送資料。
 
 而 Django 為防範跨站請求偽造（CSRF）攻擊，要求所有 POST request 必須附帶有效的 CSRF Token。
 
@@ -137,68 +135,96 @@ $.ajax({
 
 我們下週將會接續實作使用者 token 機制，完成後系統將能根據使用者的身份驗證資訊，回傳儲存在後端的最新書籤資料，進一步實現 **跨裝置同步** 的功能。
 
-由於後端 View 涉及與 MySQL 資料庫的操作，程式碼較為冗長，詳細實作可參考 [view.py](../backend/api/views.py) 中的 `bookmarks_update_api` 與 `bookmarks_delete_api` 函式。
+由於後端 View 涉及與 MySQL 資料庫的操作，程式碼較為冗長，詳細實作可參考 [views.py](../backend/api/views.py) 中的 `bookmarks_update_api` 與 `bookmarks_delete_api` 函式。
+
 
 ## 額外相關技術
 
-這次課外的部分，我們為了預防應用程式遭受 SQL Injection 和 XSS 攻擊。以下是這次採用的相關防護措施保以及實際操作說明。
-
 ### 1. SQL Injection 防護
 
-SQL Injection 是一種通過注入惡意 SQL 語句來攻擊資料庫的手段。配合這次的實作，我們使用 Django 提供的 ORM 來進行資料庫查詢。Django ORM 會自動處理 SQL 語句的生成，並且避免了直接寫入原生 SQL，從而有效防止了 SQL Injection 攻擊。例如：
+SQL Injection 是一種常見的攻擊方式，攻擊者透過注入惡意的 SQL 語句來操控或竄改資料庫內容。
+
+為了防止 SQL Injection，我們改用上課提到的 ORM 方式操作資料庫，避免了直接拼接 SQL 字串，如下方程式碼：
 
 ```python
-bookmark = Bookmarks.objects.filter(account=user.account, bid=bid)
+Bookmarks.objects.filter(account=user.account, bid=bid)
+User.objects.get(account=account)
 ```
 
-這種方式會自動對輸入進行處理，避免了直接拼接 SQL 字串，Django ORM 自動參數化查詢，能有效防止 SQL Injection 攻擊。
+### 2. XSS 攻擊防護
 
-### 2.XSS 攻擊
+為防範 XSS 攻擊，我們在後端對書籤資料的接收與回傳過程中，實施兩個層次的消毒（sanitize）處理：
 
-除了 SQL Injection 以外，也考慮到了 XSS 攻擊。為避免攻擊者將惡意的 JavaScript 程式碼注入到網站中，並且利用用戶瀏覽器執行。以下是我們的防護措施：
+- **字串消毒**：使用 `html.escape()` 跳脫特殊字符，並搭配正規表示法過濾常見攻擊 pattern，包括 `<script>`、`javascript:`、`on*=`（如 `onclick=` 和 `onmouseover=`）。
 
-1.字串消毒處理
+```python
+def sanitize_string(value):
+    ...
+    # Escape HTML special characters
+    value = html.escape(value)
+    # Remove script and event handler patterns
+    value = re.sub(r'<script.*?>.*?</script>', '', value, flags=re.IGNORECASE | re.DOTALL)
+    value = re.sub(r'javascript:', '', value, flags=re.IGNORECASE)
+    value = re.sub(r'on\w+\s*=', '', value, flags=re.IGNORECASE)
+    return value
+```
 
-對所有來自用戶的輸入進行字串消毒，以確保特殊字符被轉義，並移除可能執行 JavaScript 的元素。
-
-2.資料結構的消毒處理
-
-除了處理單一字串外，我們也會遞迴地處理整個資料結構（如字典或列表），以確保其中的所有字串都經過清洗。這樣不僅能處理單一字串，還能處理包含字串的複雜資料結構，從而有效防止 XSS 攻擊。
+- **資料結構消毒**：遞迴處理輸入資料的整體結構（例如字典或列表），確保其中所有字串都經過清洗，避免攻擊程式碼藏於資料層級深處。
 
 ```python
 def sanitize_data(data):
-
     if isinstance(data, str):
         return sanitize_string(data)
     elif isinstance(data, list):
         return [sanitize_data(item) for item in data]
     elif isinstance(data, dict):
         return {k: sanitize_data(v) for k, v in data.items()}
-    else:
-        return data
+    ...
 ```
 
-### 3.驗證輸入資料
+### 3. 驗證輸入資料
 
-為了確保從用戶端接收到的資料是有效且安全的，我們對用戶提交的資料進行嚴格的驗證。在這部分，除了檢查資料的類型和長度限制外，我們也會確保所有必須的欄位都已經填寫並且資料格式正確。
+為了確保資料與資料庫欄位的定義相符，我們在後端處理書籤資料時，加入輸入驗證機制，檢查如書籤名稱是否超出長度限制、標籤數量是否過多等條件。
+
+當使用者提供的資料不符合系統要求時，伺服器將回傳錯誤回應，避免異常資料寫入資料庫。
+
+舉例來說，在 [models.py](../backend/api/models.py) 中，我們定義 `Bookmarks` 資料表的 `name` 欄位長度上限為 200 個字元：
+
+```python
+class Bookmarks(models.Model):
+    account = models.ForeignKey('User', on_delete=models.CASCADE, related_name='bookmarks')
+    bid = models.BigIntegerField(primary_key=True)
+    name = models.CharField(max_length=200)
+    ...
+```
+
+對對應，在 [views.py](../backend/api/views.py) 中，我們加入驗證程式碼，若輸入資料不符規範，將以 `error` 狀態回應 AJAX 請求：
 
 ```python
 def validate_bookmark_request(data, require_all_fields=False):
-    required_fields = {
-        'time': str,
-        'parent_id': int,
-        'children_id': list,
-        'url': str,
-        'img': str,
-        'name': str,
-        'tags': list,
-        'starred': bool,
-        'hidden': bool
-    }
+    ...
+    if 'name' in data and len(data['name']) > length_limits['name']:
+        return False, JsonResponse({'status': 'error', 'message': f'名稱長度不能超過{length_limits["name"]}個字符'}, status=400)
 ```
-這樣可以確保所有提交的資料符合預期格式，並有效防止錯誤資料的注入。
 
+### 4. 請求速率限制（Rate Limiting）
 
+為防止短時間內來自同一來源的過量請求，我們在後端實作了 Rate Limiting 機制，限制單位時間內的請求次數。
+
+當同一 IP 在一分鐘內的請求數超過預設上限時，伺服器將回應 HTTP 429（Too Many Requests），提示使用者稍後再試。此機制有助於防範暴力破解密碼與 DoS 等攻擊行為。
+
+```python
+def rate_limit(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        ip = request.META.get('REMOTE_ADDR')
+        key = f'rate_limit:{ip}'
+        current = cache.get(key, 0)
+        if current >= 10: # 每分鐘10次請求
+            return HttpResponse("Too Many Requests", status=429)
+        cache.set(key, current + 1, 60) # 60秒過期
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
+```
 
 ## 組員分工情形 - Team 15
 

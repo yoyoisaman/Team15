@@ -3,7 +3,7 @@ from .models import Bookmarks, TreeStructure, User
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.cache import cache
-from django.http import HttpResponseForbidden
+from django.http import HttpResponse
 import re
 from datetime import datetime
 import json
@@ -18,7 +18,7 @@ def rate_limit(view_func):
         
         current = cache.get(key, 0)
         if current >= limit:
-            return HttpResponseForbidden("請求過於頻繁，請稍後再試")
+            return HttpResponse("Too Many Requests", status=429)
         
         cache.set(key, current + 1, 60)  # 60秒過期
         return view_func(request, *args, **kwargs)
