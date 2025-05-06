@@ -26,8 +26,8 @@ services:
       MYSQL_USER: team15
       MYSQL_ROOT_PASSWORD: '16'
       MYSQL_PASSWORD: '16'
-    ports:
-      - "3306:3306"
+    # ports:
+    #   - "3306:3306"
     volumes:
       - ../mariadb:/var/lib/mysql  # Persist database data
     healthcheck:
@@ -47,8 +47,6 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-
-
 
   # postgres:
   #   image: postgres:16

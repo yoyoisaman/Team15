@@ -232,3 +232,53 @@ def rate_limit(view_func):
 - 胡凱騰 - 25%：上課作業實作
 - 陳立亘 - 25%：撰寫報告
 - 蔡佾家 - 25%：撰寫報告
+
+## Docker Image Pull 連結及啟動方式
+
+### 1. 安裝 Docker
+
+### 2. 測試 Docker 是否安裝成功
+
+打開終端機或命令提示字元，輸入以下指令檢查版本：
+
+```bash
+docker -v
+```
+
+### 3. 專案設定
+
+從 GitHub 專案中取得 `docker-compose.yml` 的 Docker 的設定檔。
+
+GitHub 專案結構如下：
+
+```
+TEAM15
+├─ backend
+├─ frontend
+└─ docker
+    └─ docker-compose.yml
+```
+
+### 4. 移動至指定目錄
+
+在終端機中切換至 `docker` 資料夾：
+
+```bash
+cd TEAM15/docker
+```
+
+### 4. 執行容器
+
+當位於 `docker-compose.yml` 所在的資料夾時，執行以下指令啟動容器：
+
+```bash
+docker-compose -f ./docker-compose.yml up
+```
+
+### 5. 訪問網站
+
+- 可透過 `localhost:5174` 訪問前端。
+
+- 可透過 `localhost:8000` 訪問後端 API。
+
+- 可透過 `localhost:8080` 訪問後端資料庫。
