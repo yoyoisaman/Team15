@@ -300,10 +300,17 @@ def bookmarks_update_api(request, bid):
             children_id=children_id
         )
         user.lastUpdated = time
-
         bookmark.save()
         tree_structure.save()
         user.save()
+        
+    if parent_id is not None:
+        parent_ts = TreeStructure.objects.get(account=user, bid=parent_id)
+        children = parent_ts.children_id or []
+        children = list(set(children + [bid]))
+        parent_ts.children_id = children
+        parent_ts.save()
+        
     else: # update the existing bookmark
         bookmark = bookmark[0]
         tree_structure = tree_structure[0]
@@ -344,20 +351,34 @@ def bookmarks_delete_api(request, bid):
         return JsonResponse({'status': 'success'}, status=200)
 
     user = User.objects.get(account=account)
-    bookmark = Bookmarks.objects.filter(account=user.account, bid=bid)
-    if len(bookmark) == 0:
+    try:
+        ts = TreeStructure.objects.get(account=user, bid=bid)
+    except TreeStructure.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'bookmark not found'}, status=404)
+
     try:
         request_data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+
     time = request_data.get('time')
-    if time is None:  # time is required
+    if time is None:
         return JsonResponse({'status': 'error', 'message': 'missing time'}, status=400)
 
-    bookmark[0].delete()
+    parent_id = ts.parent_id
+    if parent_id is not None:
+        try:
+            parent_ts = TreeStructure.objects.get(account=user, bid=parent_id)
+            children = parent_ts.children_id or []
+            if bid in children:
+                children.remove(bid)
+                parent_ts.children_id = children
+                parent_ts.save()
+                print("Updated parent", parent_id, "children_id to:", parent_ts.children_id)
+        except TreeStructure.DoesNotExist:
+            pass
+    ts.delete()
+    Bookmarks.objects.filter(account=user, bid=bid).delete()
     user.lastUpdated = time
-
     user.save()
-
     return JsonResponse({'status': 'success'}, status=200)
