@@ -6,12 +6,24 @@ import AddFolderModal from "./AddFolderModal/AddFolderModal";
 import TagFilterModal from "./TagFilterModal/TagFilterModal";
 import BookmarksContext from "../context/BookmarksContext";
 
+import $ from 'jquery';
+
 const Navbar = () => {
   const { bookmarksTree } = useContext(BookmarksContext);
   const handleLoginClick = () => {
-    window.location.href = "/login"; 
+    if (bookmarksTree.username === "admin") {
+      window.location.href = "/login"; 
+    } else {
+      $.ajax({
+        url: 'http://localhost:8000/logout/',
+        type: 'POST',
+        xhrFields: { withCredentials: true },
+        success() {
+          window.location.reload();
+        }
+      });
+    }
   };
-   // LOGIN
 
   // 新增書籤相關
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
@@ -65,38 +77,37 @@ const Navbar = () => {
           onChange={handleSearchInputChange}
         />
       </div>
-      <div className="d-flex justify-content-center align-items-center gap-2">
-        {/* <button className="btn btn-outline-secondary d-flex align-items-center">
-          <img src={imageMap["sort.png"]} alt="Sort Icon" />
-          <span>排序與檢視</span>
-        </button> */}
-        <button
-          className={`btn d-flex align-items-center ${isFilterActive ? "btn-dark" : "btn-outline-secondary"}`}
-          onClick={handleTagFilterButtonClick}
-        >
-          <img src={imageMap["tag.png"]} alt="Tag Icon" />
-          <span>篩選標籤</span>
-        </button>
-        <button
-          className="btn btn-outline-secondary d-flex align-items-center"
-          onClick={handleAddBookmarkButtonClick}
-        >
-          <img src={imageMap["add.png"]} alt="Add Button" />
-        </button>
-        <button
-          className="btn btn-outline-secondary d-flex align-items-center"
-          onClick={handleAddFolderButtonClick}
-        >
-          <img src={imageMap["folder.png"]} alt="Add Folder Button" />
-        </button>
-        <button
-          className="btn btn-outline-secondary d-flex align-items-center"
-          onClick={handleLoginClick}
-        >
-          <img src={imageMap["login.png"]} alt="Login Icon" />
-          <span>登入</span>
-        </button>
-
+      <div className="nav-button-group">
+        <div className="d-flex justify-content-center align-items-center gap-2">
+          <button
+            className={`btn d-flex align-items-center ${isFilterActive ? "btn-dark" : "btn-outline-secondary"}`}
+            onClick={handleTagFilterButtonClick}
+          >
+            <img src={imageMap["tag.png"]} alt="Tag Icon" />
+            <span>篩選標籤</span>
+          </button>
+          <button
+            className="btn btn-outline-secondary d-flex align-items-center"
+            onClick={handleAddBookmarkButtonClick}
+          >
+            <img src={imageMap["add.png"]} alt="Add Button" />
+          </button>
+          <button
+            className="btn btn-outline-secondary d-flex align-items-center"
+            onClick={handleAddFolderButtonClick}
+          >
+            <img src={imageMap["folder.png"]} alt="Add Folder Button" />
+          </button>
+        </div>
+        <div className="d-flex justify-content-center align-items-center gap-2">
+          <button
+            className="btn btn-outline-secondary d-flex align-items-center"
+            onClick={handleLoginClick}
+          >
+            <img src={bookmarksTree.username === "admin" ? imageMap["login.png"] : imageMap["logout.png"]} alt="Login Icon" />
+            <span>{bookmarksTree.username === "admin" ? "登入" : "登出 " + bookmarksTree.username}</span>
+          </button>
+        </div>
       </div>
       {showBookmarkModal && (
         <AddBookmarkModal

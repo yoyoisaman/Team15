@@ -1,5 +1,7 @@
 class BookmarksTree {
-  constructor(treeStructure = null, idToBookmark = null, loaclDB, onUpdate) {
+  constructor(username = 'admin', treeStructure = null, idToBookmark = null, loaclDB, onUpdate) {
+    // 紀錄用戶名稱，訪客為 admin
+    this.username = username;
     // 以 map 紀錄樹狀結構：node id -> { parent_id, children_id }
     this.treeStructure = { 0: { parent_id: null, children_id: [] } };
     // 以 map 紀錄書籤資訊：node id -> bookmark
@@ -21,6 +23,9 @@ class BookmarksTree {
 
   // 深拷貝 treeStructure 和 idToBookmark
   _buildTree(treeStructure, idToBookmark) {
+    console.log('treeStructure', treeStructure);
+    console.log('idToBookmark', idToBookmark);
+
     this.idToBookmark = { ...idToBookmark };
     this.treeStructure = {};
     for (const id in treeStructure) {

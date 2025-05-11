@@ -45,7 +45,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -173,3 +172,17 @@ print("BASE_DIR:", BASE_DIR)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+''' 
+登入狀態設定 (為了讓登入狀態可以透過 HttpOnly Cookie 保存)
+'''
+# Session 存活 7 天（秒）
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+# 關閉瀏覽器不刪除 session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+# 只允許 HTTP 傳送，JavaScript 無法存取
+SESSION_COOKIE_HTTPONLY = True
+# 開發時如非 HTTPS，可先設 False；正式環境務必設 True
+SESSION_COOKIE_SECURE = False
+# SameSite 可用 'Lax' 或 'Strict'
+SESSION_COOKIE_SAMESITE = 'Lax'

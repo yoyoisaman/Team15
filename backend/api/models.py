@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Bookmarks(models.Model):
     account = models.ForeignKey('User', on_delete=models.CASCADE, related_name='bookmarks')
     bid = models.BigIntegerField(primary_key=True)
@@ -10,6 +9,8 @@ class Bookmarks(models.Model):
     tags = models.JSONField(default=list, blank=True)
     starred = models.BooleanField(default=False)
     hidden = models.BooleanField(default=False)
+    class Meta:
+        db_table = 'api_bookmarks_new'
 
 class TreeStructure(models.Model):
     account = models.ForeignKey('User', on_delete=models.CASCADE, related_name='tree_structure')

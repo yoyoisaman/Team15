@@ -225,3 +225,9 @@ a:visited {
 .btn-dark:hover {
   background-color: #23272b;
 }
+
+.nav-button-group {
+  display: flex; 
+  justify-content: space-between; 
+  flex: 1;
+}

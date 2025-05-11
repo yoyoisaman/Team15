@@ -1,7 +1,8 @@
 from django.http import JsonResponse, HttpResponseRedirect
 from .models import Bookmarks, TreeStructure, User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
 from django.core.cache import cache
 from django.http import HttpResponse
 import re
@@ -128,20 +129,25 @@ def validate_bookmark_request(data, require_all_fields=False):
 
     return True, validated
 
-# Django template login
 @rate_limit
 def login_view(request):
-    """
-    A login page .
-    """
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        if username == "admin" and password == "password":
-            return HttpResponseRedirect("/")
-        else:
-            return render(request, "login.html", {"error": "Invalid credentials"})
-    return render(request, "login.html")
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            user = User.objects.get(account=username, password=password)
+            request.session['username'] = user.account
+            request.session['is_authenticated'] = True
+            request.session.set_expiry(60 * 60 * 24 * 7)
+            return redirect('http://localhost:5174')
+        except User.DoesNotExist:
+            return render(request, 'login.html', {'error': '登入失敗'})
+    return render(request, 'login.html')
+
+@require_POST
+def logout_view(request):
+    request.session.flush()
+    return JsonResponse({'status': 'success'})
 
 @ensure_csrf_cookie
 def get_csrf(request):
@@ -178,13 +184,14 @@ def bookmarks_init_api(request):
     '''
     if request.method == 'GET':
         return JsonResponse({'status': 'error', 'message': 'GET method not allowed'}, status=405)
-
-    account = 'admin'  # TODO: get from request
-
+    account = request.session.get('username', 'admin')
+    
     user = User.objects.get(account=account)
     bookmarks = user.bookmarks.all()
     tree_structure = user.tree_structure.all()
-
+    # lastUpdated = user.lastUpdated if username != 'admin' else datetime.now()
+    lastUpdated = datetime.now()
+    
     idToBookmark = {}
     treeStructure = {}
     for i in range(len(bookmarks)):
@@ -205,7 +212,8 @@ def bookmarks_init_api(request):
 
     response_data = {
         'databaseStatus': {
-            'lastUpdated': user.lastUpdated
+            'username': account,
+            'lastUpdated': lastUpdated
         },
         'idToBookmark': idToBookmark,
         'treeStructure': treeStructure
@@ -242,7 +250,7 @@ def bookmarks_update_api(request, bid):
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
 
-    account = 'admin'  # TODO: get from request
+    account = request.session.get('username', 'admin')
     request_data = json.loads(request.body)
 
     time = request_data.get('time')
@@ -329,7 +337,7 @@ def bookmarks_delete_api(request, bid):
     if request.method == 'GET':
         return JsonResponse({'status': 'error', 'message': 'GET method not allowed'}, status=405)
 
-    account = 'admin'  # TODO: get from request
+    account = request.session.get('username', 'admin')
 
     user = User.objects.get(account=account)
     bookmark = Bookmarks.objects.filter(account=user.account, bid=bid)

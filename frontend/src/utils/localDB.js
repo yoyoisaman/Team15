@@ -7,6 +7,7 @@ let databaseStatus = null;
 let treeStructure = null;
 let idToBookmark = null;
 let csrfToken = null;
+let username = null;
 await $.ajax({
     url: 'http://localhost:8000/api/get_csrf',
     type: 'GET',
@@ -31,10 +32,16 @@ await $.ajax({
     url: 'http://localhost:8000/api/bookmarks/init',
     type: 'POST',
     contentType: 'application/json',
+    crossDomain: true,
+    xhrFields: {
+        withCredentials: true
+    },
     success: function (data) {
         databaseStatus = data.databaseStatus;
         treeStructure = data.treeStructure;
         idToBookmark = data.idToBookmark;
+        username = databaseStatus.username;
+        console.log('username', databaseStatus.username);
     },
     error: function (xhr, status, error) {
         console.error('Error:', error);
@@ -251,6 +258,10 @@ const localDBfunc = {
             url: 'http://localhost:8000/api/bookmarks/update/' + id,
             type: 'POST',
             contentType: 'application/json',
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
             data: JSON.stringify({
                 time: updateTime,
                 parent_id: data.parent_id,
@@ -295,6 +306,10 @@ const localDBfunc = {
             url: 'http://localhost:8000/api/bookmarks/update/' + id,
             type: 'POST',
             contentType: 'application/json',
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
             data: JSON.stringify({
                 time: updateTime,
                 url: data.url,
@@ -337,6 +352,10 @@ const localDBfunc = {
             url: 'http://localhost:8000/api/bookmarks/update/' + id,
             type: 'POST',
             contentType: 'application/json',
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
             data: JSON.stringify({
                 time: updateTime,
                 url: bookmarkData.url,
@@ -379,6 +398,10 @@ const localDBfunc = {
             url: 'http://localhost:8000/api/bookmarks/delete/' + id,
             type: 'POST',
             contentType: 'application/json',
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
             data: JSON.stringify({
                 time: updateTime,
             }),
@@ -392,4 +415,4 @@ const localDBfunc = {
     }
 }
 
-export { loaclTreeStructure as treeStructure, loaclBookmarks as idToBookmark, localDBfunc as localDB };
+export { username as username, loaclTreeStructure as treeStructure, loaclBookmarks as idToBookmark, localDBfunc as localDB };
