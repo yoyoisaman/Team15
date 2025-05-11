@@ -251,8 +251,10 @@ def bookmarks_update_api(request, bid):
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
 
     account = request.session.get('username', 'admin')
+    if account == 'admin':
+        return JsonResponse({'status': 'success'}, status=200)
+    
     request_data = json.loads(request.body)
-
     time = request_data.get('time')
     if time is None:  # time is required
         return JsonResponse({'status': 'error', 'message': 'missing time'}, status=400)
@@ -338,6 +340,8 @@ def bookmarks_delete_api(request, bid):
         return JsonResponse({'status': 'error', 'message': 'GET method not allowed'}, status=405)
 
     account = request.session.get('username', 'admin')
+    if account == 'admin':
+        return JsonResponse({'status': 'success'}, status=200)
 
     user = User.objects.get(account=account)
     bookmark = Bookmarks.objects.filter(account=user.account, bid=bid)
