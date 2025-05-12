@@ -5,10 +5,11 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from django.core.cache import cache
 from django.http import HttpResponse
-import re
 from datetime import datetime
+import requests
 import json
 import html
+import re
 
 # Request rate limit
 def rate_limit(view_func):
@@ -136,7 +137,9 @@ def login_view(request):
         password = request.POST.get('password')
         try:
             user = User.objects.get(account=username, password=password)
+            request.session['name'] = user.name
             request.session['username'] = user.account
+            request.session['picture'] = user.picture
             request.session['is_authenticated'] = True
             request.session.set_expiry(60 * 60 * 24 * 7)
             return redirect('http://localhost:5174')
@@ -148,6 +151,81 @@ def login_view(request):
 def logout_view(request):
     request.session.flush()
     return JsonResponse({'status': 'success'})
+
+def oauth2callback(request):
+    code = request.GET.get('code')
+    token_resp = requests.post(
+        'https://oauth2.googleapis.com/token',
+        data={
+            'code': code,
+            'client_id': '488776431237-iqnrui5o43arlrm357sig0b7vtinb45m.apps.googleusercontent.com',
+            'client_secret': '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',
+            'redirect_uri': 'http://localhost:8000/oauth2callback/',
+            'grant_type': 'authorization_code'
+        }
+    )
+    tokens = token_resp.json()
+    access_token = tokens.get('access_token')
+    userinfo_resp = requests.get(
+        'https://openidconnect.googleapis.com/v1/userinfo',
+        headers={'Authorization': f'Bearer {access_token}'}
+    )
+    userinfo = userinfo_resp.json()
+    email = userinfo.get('email')
+    name = userinfo.get('name')
+    picture = userinfo.get('picture')
+
+    try:
+        existing = User.objects.get(account=email)
+        if existing.password:
+            return render(request, 'login.html', {
+                'error': '此帳號已存在，請使用密碼登入'
+            })
+    except User.DoesNotExist:
+        pass
+
+    user, created = User.objects.update_or_create(
+        account=email,
+        defaults={'name': name, 'picture': picture, 'password': ''}
+    )
+    root, bm_created = Bookmarks.objects.get_or_create(
+        bid=0,
+        account=user,
+        defaults={
+            'url': '#',
+            'img': 'folder.png',
+            'name': 'Home',
+            'tags': [],
+            'starred': False,
+            'hidden': False
+        }
+    )
+    tree, ts_created = TreeStructure.objects.update_or_create(
+        account=user,
+        bid=root,
+        defaults={'parent_id': None, 'children_id': []}
+    )
+
+    request.session['name'] = name
+    request.session['username'] = email
+    request.session['picture'] = picture
+    request.session['is_authenticated'] = False
+    request.session.set_expiry(60 * 60 * 24 * 7)
+    return render(request, 'password.html')
+
+def set_password(request):
+    if request.method == 'POST':
+        new_pw = request.POST.get('new_password')
+        confirm_pw = request.POST.get('confirm_password')
+        if new_pw != confirm_pw:
+            return render(request, 'password.html', {'error': '兩次輸入密碼不一致'})
+        username = request.session.get('username')
+        user = User.objects.get(account=username)
+        user.password = new_pw
+        user.save()
+        request.session['is_authenticated'] = True
+        return redirect('http://localhost:5174')
+    return render(request, 'password.html')
 
 @ensure_csrf_cookie
 def get_csrf(request):
@@ -184,12 +262,19 @@ def bookmarks_init_api(request):
     '''
     if request.method == 'GET':
         return JsonResponse({'status': 'error', 'message': 'GET method not allowed'}, status=405)
+    
+    # 如果 session 過期或未登入（從註冊中跳出），則清除 session
+    is_authenticated = request.session.get('is_authenticated', False)
+    if not is_authenticated:
+        request.session.flush()
+    
     account = request.session.get('username', 'admin')
+    name = request.session.get('name', 'default')
+    picture = request.session.get('picture', '')
     
     user = User.objects.get(account=account)
     bookmarks = user.bookmarks.all()
     tree_structure = user.tree_structure.all()
-    # lastUpdated = user.lastUpdated if username != 'admin' else datetime.now()
     lastUpdated = datetime.now()
     
     idToBookmark = {}
@@ -213,6 +298,8 @@ def bookmarks_init_api(request):
     response_data = {
         'databaseStatus': {
             'username': account,
+            'name': name,
+            'picture': picture,
             'lastUpdated': lastUpdated
         },
         'idToBookmark': idToBookmark,

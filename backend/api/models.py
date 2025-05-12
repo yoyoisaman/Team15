@@ -19,6 +19,8 @@ class TreeStructure(models.Model):
     children_id = models.JSONField(default=list, blank=True)
 
 class User(models.Model):
-    account = models.CharField(primary_key=True, max_length=50)
-    password = models.CharField(max_length=200)
-    lastUpdated = models.DateTimeField(auto_now_add=True)
+    account = models.EmailField(primary_key=True, max_length=254)
+    name = models.CharField(max_length=200)
+    picture = models.URLField(blank=True)
+    password = models.CharField(max_length=200, blank=True, null=True)
+    lastUpdated = models.DateTimeField(auto_now=True)

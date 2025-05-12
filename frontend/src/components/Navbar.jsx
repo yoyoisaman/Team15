@@ -6,21 +6,41 @@ import AddFolderModal from "./AddFolderModal/AddFolderModal";
 import TagFilterModal from "./TagFilterModal/TagFilterModal";
 import BookmarksContext from "../context/BookmarksContext";
 
-import $ from 'jquery';
+import $ from "jquery";
 
 const Navbar = () => {
   const { bookmarksTree } = useContext(BookmarksContext);
+  const isLogin = bookmarksTree.userInfo.username !== "admin";
+
+  // 註冊相關
+  const handleAuthClick = () => {
+    const clientId = '488776431237-iqnrui5o43arlrm357sig0b7vtinb45m.apps.googleusercontent.com'
+    const redirectUri = 'http://localhost:8000/oauth2callback/'
+    const scope = 'openid email profile'
+    const authUrl = [
+      'https://accounts.google.com/o/oauth2/v2/auth',
+      `?client_id=${clientId}`,
+      `&redirect_uri=${encodeURIComponent(redirectUri)}`,
+      `&response_type=code`,
+      `&scope=${encodeURIComponent(scope)}`,
+      `&access_type=offline`,
+      `&prompt=consent`
+    ].join('')
+    window.location.href = authUrl
+  };
+
+  // 登入登出相關
   const handleLoginClick = () => {
-    if (bookmarksTree.username === "admin") {
-      window.location.href = "/login"; 
+    if (!isLogin) {
+      window.location.href = "/login";
     } else {
       $.ajax({
-        url: 'http://localhost:8000/logout/',
-        type: 'POST',
+        url: "http://localhost:8000/logout/",
+        type: "POST",
         xhrFields: { withCredentials: true },
         success() {
           window.location.reload();
-        }
+        },
       });
     }
   };
@@ -50,9 +70,9 @@ const Navbar = () => {
   const allTags = Array.from(
     new Set(
       Object.values(bookmarksTree.idToBookmark).flatMap(
-        (bookmark) => bookmark.tags,
-      ),
-    ),
+        (bookmark) => bookmark.tags
+      )
+    )
   );
 
   // 檢查篩選標籤是否有效
@@ -100,13 +120,31 @@ const Navbar = () => {
           </button>
         </div>
         <div className="d-flex justify-content-center align-items-center gap-2">
-          <button
-            className="btn btn-outline-secondary d-flex align-items-center"
-            onClick={handleLoginClick}
-          >
-            <img src={bookmarksTree.username === "admin" ? imageMap["login.png"] : imageMap["logout.png"]} alt="Login Icon" />
-            <span>{bookmarksTree.username === "admin" ? "登入" : "登出 " + bookmarksTree.username}</span>
-          </button>
+          {!isLogin && (
+            <div className="d-flex justify-content-center align-items-center gap-2">
+              <button
+                className="btn btn-outline-secondary d-flex align-items-center"
+                onClick={handleAuthClick}
+              >
+                <img src={imageMap["google.png"]} alt="Google Icon" />
+                <span>註冊</span>
+              </button>
+            </div>
+          )}
+          <div className="d-flex justify-content-center align-items-center gap-2">
+            <button
+              className="btn btn-outline-secondary d-flex align-items-center"
+              onClick={handleLoginClick}
+            >
+              <img
+                src={!isLogin ? imageMap["login.png"] : imageMap["logout.png"]}
+                alt="Login Icon"
+              />
+              <span>
+                {!isLogin ? "登入" : "登出 " + bookmarksTree.userInfo.name}
+              </span>
+            </button>
+          </div>
         </div>
       </div>
       {showBookmarkModal && (

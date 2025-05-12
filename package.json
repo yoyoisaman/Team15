@@ -11,6 +11,6 @@
         "react-smooth-dnd": "^0.11.1"
     },
     "optionalDependencies": {
-      "@rollup/rollup-linux-x64-gnu": "*"
+        "@rollup/rollup-linux-x64-gnu": "*"
     }
 }

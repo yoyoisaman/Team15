@@ -7,7 +7,7 @@ let databaseStatus = null;
 let treeStructure = null;
 let idToBookmark = null;
 let csrfToken = null;
-let username = null;
+let userInfo = null;
 await $.ajax({
     url: 'http://localhost:8000/api/get_csrf',
     type: 'GET',
@@ -40,8 +40,13 @@ await $.ajax({
         databaseStatus = data.databaseStatus;
         treeStructure = data.treeStructure;
         idToBookmark = data.idToBookmark;
-        username = databaseStatus.username;
-        console.log('username', databaseStatus.username);
+        userInfo = {
+            'username': databaseStatus.username,
+            'name': databaseStatus.name,
+            'picture': databaseStatus.picture,
+            'lastUpdated': databaseStatus.lastUpdated
+        }
+        console.log('username', userInfo);
     },
     error: function (xhr, status, error) {
         console.error('Error:', error);
@@ -362,4 +367,4 @@ const localDBfunc = {
     }
 }
 
-export { username as username, treeStructure, idToBookmark, localDBfunc as localDB };
+export { userInfo as userInfo, treeStructure, idToBookmark, localDBfunc as localDB };
