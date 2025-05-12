@@ -5,6 +5,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from django.core.cache import cache
 from django.http import HttpResponse
+from django.conf import settings
 from datetime import datetime
 import requests
 import json
@@ -158,9 +159,9 @@ def oauth2callback(request):
         'https://oauth2.googleapis.com/token',
         data={
             'code': code,
-            'client_id': '488776431237-iqnrui5o43arlrm357sig0b7vtinb45m.apps.googleusercontent.com',
-            'client_secret': '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',
-            'redirect_uri': 'http://localhost:8000/oauth2callback/',
+            'client_id': settings.CLIENT_ID,
+            'client_secret': settings.CLIENT_SECRET,
+            'redirect_uri': settings.REDIRECT_URI,
             'grant_type': 'authorization_code'
         }
     )

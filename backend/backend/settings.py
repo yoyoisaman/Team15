@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+# 讀取環境變數 (.env)
+env = environ.Env()
+CLIENT_ID = env("CLIENT_ID")
+CLIENT_SECRET = env("CLIENT_SECRET")
+REDIRECT_URI = env("REDIRECT_URI")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
