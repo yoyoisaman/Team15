@@ -1,18 +1,18 @@
 import { useState, useContext } from "react";
-import ReCAPTCHA from "react-google-recaptcha"; // reCAPTCHA
 import { useNavigate } from "react-router-dom"; // LOGIN
 import imageMap from "../utils/imageMap";
 import AddBookmarkModal from "./AddBookmarkModal/AddBookmarkModal";
 import AddFolderModal from "./AddFolderModal/AddFolderModal";
 import TagFilterModal from "./TagFilterModal/TagFilterModal";
 import BookmarksContext from "../context/BookmarksContext";
+import BookmarkImportExportModal from "./BookmarkImportExportModal/BookmarkImportExportModal";
 
 import $ from "jquery";
-const RECAPTCHA_SITE_KEY = import.meta.env.RECAPTCHA_SITEKEY;
 
 const Navbar = () => {
   const { bookmarksTree } = useContext(BookmarksContext);
   const isLogin = bookmarksTree.userInfo.username !== "admin";
+  const [showImportExportModal, setShowImportExportModal] = useState(false);
 
 
 
@@ -112,6 +112,13 @@ const Navbar = () => {
             <span>篩選標籤</span>
           </button>
           <button
+            className="btn d-flex align-items-center btn-outline-secondary"
+            onClick={() => setShowImportExportModal(true)}
+          >
+            <img src={imageMap["add.png"]} alt="Export Icon"/>
+            <span>匯入/匯出</span>
+          </button>
+          <button
             className="btn btn-outline-secondary d-flex align-items-center"
             onClick={handleAddBookmarkButtonClick}
           >
@@ -152,6 +159,12 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      {showImportExportModal && (
+        <BookmarkImportExportModal
+          onClose={() => setShowImportExportModal(false)}
+          bookmarksTree={bookmarksTree}
+        />
+      )}
       {showBookmarkModal && (
         <AddBookmarkModal
           onClose={() => setShowBookmarkModal(false)}
