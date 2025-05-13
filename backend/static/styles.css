@@ -91,3 +91,16 @@ a:hover {
   color: #ff5656;
   font-size: 1.1rem;
 }
+
+.g-recaptcha {
+    /* 保持父容器的 margin */
+    /* display: block;  // 可选，但 margin: auto 通常会使其表现为块级元素 */
+    margin: 0 auto; /* 添加这一行来水平居中 */
+}
+
+/* 保持您现有的 .recaptcha-center 样式 */
+.recaptcha-center {
+    display: flex;
+    justify-content: center; /* 这仍然有助于在某些情况下工作 */
+    margin: 1rem 0;
+}

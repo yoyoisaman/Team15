@@ -3,11 +3,14 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+
 <div class="login-container">
     <h1>登入</h1>
     {% if error %}
         <p class="error">{{ error }}</p>
     {% endif %}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <form method="POST" action="{% url 'login' %}">
         {% csrf_token %}
         <label for="username">Email</label>
@@ -16,7 +19,9 @@
         <label for="password">密碼</label>
         <input type="password" id="password" name="password" placeholder="您的密碼" required>
         <a href="#">忘記密碼</a>
-
+        <div class="recaptcha-center">
+          <div class="g-recaptcha" data-sitekey="{{ sitekey }}"></div>
+        </div>        
         <button type="submit">登入</button>
     </form>
 </div>

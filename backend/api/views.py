@@ -11,6 +11,7 @@ import requests
 import json
 import html
 import re
+import os
 
 # Request rate limit
 def rate_limit(view_func):
@@ -134,6 +135,22 @@ def validate_bookmark_request(data, require_all_fields=False):
 @rate_limit
 def login_view(request):
     if request.method == 'POST':
+        # 驗證 reCAPTCHA
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        recaptcha_data = {
+            'secret': settings.RECAPTCHA_SECRETKEY,
+            'response': recaptcha_response,
+            'remoteip': request.META.get('REMOTE_ADDR')
+        }
+        r = requests.post(settings.RECAPTCHA_URL, data=recaptcha_data)
+        result = r.json()
+        if not result.get('success'):
+            return render(request, 'login.html', {
+                'error': 'reCAPTCHA 驗證失敗',
+                'sitekey': settings.RECAPTCHA_SITEKEY
+            })
+
+        # 帳號密碼驗證
         username = request.POST.get('username')
         password = request.POST.get('password')
         try:
@@ -145,8 +162,15 @@ def login_view(request):
             request.session.set_expiry(60 * 60 * 24 * 7)
             return redirect('http://localhost:5174')
         except User.DoesNotExist:
-            return render(request, 'login.html', {'error': '登入失敗'})
-    return render(request, 'login.html')
+            return render(request, 'login.html', {
+                'error': '登入失敗',
+                'sitekey': settings.RECAPTCHA_SITEKEY
+            })
+    
+    # GET 請求：正常顯示登入頁
+    return render(request, 'login.html', {
+        'sitekey': settings.RECAPTCHA_SITEKEY
+    })
 
 @require_POST
 def logout_view(request):

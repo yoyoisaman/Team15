@@ -18,6 +18,9 @@ env = environ.Env()
 CLIENT_ID = env("CLIENT_ID")
 CLIENT_SECRET = env("CLIENT_SECRET")
 REDIRECT_URI = env("REDIRECT_URI")
+RECAPTCHA_SECRETKEY = env("RECAPTCHA_SECRETKEY")
+RECAPTCHA_SITEKEY = env("RECAPTCHA_SITEKEY")
+RECAPTCHA_URL = env("RECAPTCHA_URL")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

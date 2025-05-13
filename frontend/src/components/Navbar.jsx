@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import ReCAPTCHA from "react-google-recaptcha"; // reCAPTCHA
 import { useNavigate } from "react-router-dom"; // LOGIN
 import imageMap from "../utils/imageMap";
 import AddBookmarkModal from "./AddBookmarkModal/AddBookmarkModal";
@@ -7,10 +8,14 @@ import TagFilterModal from "./TagFilterModal/TagFilterModal";
 import BookmarksContext from "../context/BookmarksContext";
 
 import $ from "jquery";
+const RECAPTCHA_SITE_KEY = import.meta.env.RECAPTCHA_SITEKEY;
 
 const Navbar = () => {
   const { bookmarksTree } = useContext(BookmarksContext);
   const isLogin = bookmarksTree.userInfo.username !== "admin";
+
+
+
 
   // 註冊相關
   const handleAuthClick = () => {
