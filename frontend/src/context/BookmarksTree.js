@@ -84,6 +84,7 @@ class BookmarksTree {
         // const rootChildrenIds = Object.keys(this.treeStructure).filter(bid_id => bid_id == '0');
 
         console.log('Updating existing bookmark:', id);
+        this.loaclDB.createId(id, idToBookmark[id], treeStructure[id]);
         this.loaclDB.updateBookmark(id, idToBookmark[id]);
       } else {
         // Create new bookmark
