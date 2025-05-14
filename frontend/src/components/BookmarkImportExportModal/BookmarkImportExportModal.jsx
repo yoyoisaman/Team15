@@ -23,18 +23,13 @@ const BookmarkImportExportModal = ({ onClose, bookmarksTree }) => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (evt) => {
-      try {
-        const data = JSON.parse(evt.target.result);
-        if (data.treeStructure && data.idToBookmark) {
-          bookmarksTree.buildNewTree(data.treeStructure, data.idToBookmark);
-          bookmarksTree.onUpdate();
-          alert("匯入成功，已完全替換原有書籤！");
-          onClose();
-        } else {
-          alert("檔案格式錯誤！");
-        }
-      } catch (error) {
-        alert(`檔案解析失敗！錯誤訊息：${error.message}`);
+      const data = JSON.parse(evt.target.result);
+      if (data.treeStructure && data.idToBookmark) {
+        bookmarksTree.buildNewTree(data.treeStructure, data.idToBookmark);
+        alert("匯入成功，已完全替換原有書籤！");
+        onClose();
+      } else {
+        alert("檔案格式錯誤！");
       }
     };
     reader.readAsText(file);

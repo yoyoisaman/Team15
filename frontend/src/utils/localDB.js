@@ -200,7 +200,8 @@ const localDBfunc = {
                 }
             }
             else {
-                throw new Error("loaclDB Error: id not found", id);
+                console.error(`loaclDB Error: id not found - ${id}`); // 印出 id
+                throw new Error(`loaclDB Error: id not found - ${id}`); // 包含 id 的錯誤訊息
             }
         }
 
@@ -294,6 +295,7 @@ const localDBfunc = {
         transaction = localDB.transaction(treeStructureTableName, "readwrite");
         store = transaction.objectStore(treeStructureTableName);
         request = store.put(treeStructureData, id);
+        console.log("store.put treeStructureData", treeStructureData);
         request.onerror = function (event) {
             throw new Error("loaclDB Error", event.target.error);
         };
