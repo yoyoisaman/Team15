@@ -6,7 +6,7 @@ const MainContent = () => {
   const { bookmarksTree } = useContext(BookmarksContext);
   const bookmarks = bookmarksTree
     .getCurrentChildren()
-    .filter((bookmark) => !bookmark.hidden);
+    .filter((bookmark) => bookmark && !bookmark.hidden);
   const handleToggleStar = (id) => {
     bookmarksTree.toggleStarred(id);
   };
