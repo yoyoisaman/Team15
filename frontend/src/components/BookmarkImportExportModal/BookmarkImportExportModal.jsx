@@ -33,8 +33,8 @@ const BookmarkImportExportModal = ({ onClose, bookmarksTree }) => {
         } else {
           alert("檔案格式錯誤！");
         }
-      } catch {
-        alert("檔案解析失敗！");
+      } catch (error) {
+        alert(`檔案解析失敗！錯誤訊息：${error.message}`);
       }
     };
     reader.readAsText(file);

@@ -36,6 +36,29 @@ class BookmarksTree {
       };
     }
   }
+  resetTreeStructure() {
+    // 保存需要刪除的所有節點ID (除了根節點)
+    const nodesToDelete = Object.keys(this.treeStructure).filter(bid_id => bid_id !== '0');
+    console.log(nodesToDelete)
+    //刪除所有節點 (除了根節點)
+    for (const id of nodesToDelete) {
+      // 從idToBookmark中刪除
+      delete this.idToBookmark[id];
+      
+      // 從treeStructure中刪除
+      delete this.treeStructure[id];
+      
+      // 從資料庫中刪除
+      this.loaclDB.delId(id);
+    }
+    
+    // 清空根節點的children_id陣列
+    this.treeStructure[0].children_id = [];
+    
+    // 更新資料庫中的樹結構
+    this.loaclDB.updateTreeStructure(0, this.treeStructure[0]);
+        
+  }
 
   buildNewTree(treeStructure, idToBookmark) {
     console.log('treeStructure', treeStructure);
@@ -58,25 +81,28 @@ class BookmarksTree {
     }
     
     // Get new IDs
-    const newBookmarkIds = Object.keys(idToBookmark);
+    // const newBookmarkIds = Object.keys(idToBookmark);
     
     // Delete bookmarks and tree nodes that exist in the old tree but not in the new tree
-    existingBookmarkIds.forEach(id => {
-      if (!newBookmarkIds.includes(id)) {
-        this.loaclDB.delId(id);
-      }
-    });
+    // id,parent_id,children_id
+    this.resetTreeStructure();
     
 
     for (const id in idToBookmark) {
       console.log('Processing ID:', id);
-      console.log('Bookmark data:', idToBookmark[id]);
-      console.log('Tree structure:', treeStructure[id]);
 
-      // Use createId which will handle both creation and update
-      // this.loaclDB.createId(id, idToBookmark[id], treeStructure[id]);
+      // Check if the ID already exists in localDB
+      if (existingBookmarkIds.includes(id)) {
+        // Update existing bookmark
+        console.log('Updating existing bookmark:', id);
+        // this.loaclDB.updateBookmark(id, idToBookmark[id]);
+        // this.loaclDB.updateTreeStructure(id, treeStructure[id]);
+      } else {
+        // Create new bookmark
+        console.log('Creating new bookmark:', id);
+        // this.loaclDB.createId(id, idToBookmark[id], treeStructure[id]);
+      }
     }
-
     
   }
 
