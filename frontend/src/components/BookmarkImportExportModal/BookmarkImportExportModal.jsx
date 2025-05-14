@@ -26,7 +26,7 @@ const BookmarkImportExportModal = ({ onClose, bookmarksTree }) => {
       try {
         const data = JSON.parse(evt.target.result);
         if (data.treeStructure && data.idToBookmark) {
-          bookmarksTree._buildTree(data.treeStructure, data.idToBookmark);
+          bookmarksTree.buildNewTree(data.treeStructure, data.idToBookmark);
           bookmarksTree.onUpdate();
           alert("匯入成功，已完全替換原有書籤！");
           onClose();

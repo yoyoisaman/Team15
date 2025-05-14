@@ -37,6 +37,49 @@ class BookmarksTree {
     }
   }
 
+  buildNewTree(treeStructure, idToBookmark) {
+    console.log('treeStructure', treeStructure);
+    console.log('idToBookmark', idToBookmark);
+
+    
+    // Store existing IDs before updating
+    const existingBookmarkIds = Object.keys(this.idToBookmark);
+    const existingTreeIds = Object.keys(this.treeStructure);
+    
+    // First update internal data structures
+    this.idToBookmark = { ...idToBookmark };
+    this.treeStructure = {};
+    for (const id in treeStructure) {
+      const node = treeStructure[id];
+      this.treeStructure[id] = {
+        parent_id: node.parent_id,
+        children_id: [...node.children_id],
+      };
+    }
+    
+    // Get new IDs
+    const newBookmarkIds = Object.keys(idToBookmark);
+    
+    // Delete bookmarks and tree nodes that exist in the old tree but not in the new tree
+    existingBookmarkIds.forEach(id => {
+      if (!newBookmarkIds.includes(id)) {
+        this.loaclDB.delId(id);
+      }
+    });
+    
+
+    for (const id in idToBookmark) {
+      console.log('Processing ID:', id);
+      console.log('Bookmark data:', idToBookmark[id]);
+      console.log('Tree structure:', treeStructure[id]);
+
+      // Use createId which will handle both creation and update
+      // this.loaclDB.createId(id, idToBookmark[id], treeStructure[id]);
+    }
+
+    
+  }
+
   // 取得快速存取的書籤，即 starred == true 的書籤，回傳 bookmark array
   getStarredBookmarks() {
     return Object.values(this.idToBookmark).filter(
