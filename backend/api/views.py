@@ -288,7 +288,8 @@ def oauth2callback(request):
         existing = User.objects.get(account=email)
         if existing.password:
             return render(request, 'login.html', {
-                'error': '此帳號已存在，請使用密碼登入'
+                'error': '此帳號已存在，請使用密碼登入',
+                'sitekey': settings.RECAPTCHA_SITEKEY
             })
     except User.DoesNotExist:
         pass

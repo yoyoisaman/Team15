@@ -25,8 +25,13 @@ const BookmarkImportExportModal = ({ onClose, bookmarksTree }) => {
     reader.onload = (evt) => {
       const data = JSON.parse(evt.target.result);
       if (data.treeStructure && data.idToBookmark) {
+        const isLogin = bookmarksTree.userInfo.username !== "admin";
         bookmarksTree.buildNewTree(data.treeStructure, data.idToBookmark);
-        alert("匯入成功，已完全替換原有書籤！");
+        if (isLogin) { 
+          alert("匯入成功，已完全替換原有書籤！");
+        } else {
+          alert("匯入成功，已完全替換原有書籤！\n(目前沒有登入，下次進入網頁即會消失)");
+        }
         onClose();
       } else {
         alert("檔案格式錯誤！");
