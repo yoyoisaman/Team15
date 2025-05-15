@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import get_csrf, bookmarks_init_api, bookmarks_update_api, bookmarks_delete_api, login_view, logout_view, oauth2callback, set_password
+from api.views import get_csrf, bookmarks_init_api, bookmarks_update_api, bookmarks_delete_api, login_view, logout_view, oauth2callback, set_password, forgot_password, reset_password
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +29,6 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('oauth2callback/', oauth2callback, name='oauth2callback'),
     path('password/', set_password, name='password'),
+    path('forgot-password/', forgot_password, name='forgot_password'),
+    path('reset-password/<str:token>/', reset_password, name='reset_password'),
 ]

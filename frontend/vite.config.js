@@ -9,8 +9,10 @@ export default defineConfig({
     strictPort: true,
     port: 5174,
     proxy: {
-      '/login': 'http://backend:8000', // 用 backend 取代 localhost，docker跑得起來
+      '/login': 'http://backend:8000',
       '/static': 'http://backend:8000',
+      '/forgot-password': 'http://backend:8000',
+      '/reset-password': 'http://backend:8000',
     },
   }
 });

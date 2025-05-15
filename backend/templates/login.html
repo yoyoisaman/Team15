@@ -18,7 +18,7 @@
 
         <label for="password">密碼</label>
         <input type="password" id="password" name="password" placeholder="您的密碼" required>
-        <a href="#">忘記密碼</a>
+        <a href="{% url 'forgot_password' %}">忘記密碼</a>        
         <div class="recaptcha-center">
           <div class="g-recaptcha" data-sitekey="{{ sitekey }}"></div>
         </div>        

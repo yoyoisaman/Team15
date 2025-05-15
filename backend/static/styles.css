@@ -93,14 +93,106 @@ a:hover {
 }
 
 .g-recaptcha {
-    /* 保持父容器的 margin */
-    /* display: block;  // 可选，但 margin: auto 通常会使其表现为块级元素 */
-    margin: 0 auto; /* 添加这一行来水平居中 */
+  
+    margin: 0 auto; 
 }
 
-/* 保持您现有的 .recaptcha-center 样式 */
 .recaptcha-center {
     display: flex;
-    justify-content: center; /* 这仍然有助于在某些情况下工作 */
+    justify-content: center;
     margin: 1rem 0;
+}
+
+.alt-style-forgot-password .alt-fp-heading {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  text-align: center; 
+}
+
+.alt-style-forgot-password .alt-fp-instruction-text {
+  font-size: 0.9rem;
+  color: #bbbbbb; /* Lighter text for instruction */
+  margin-bottom: 1.5rem; /* Space after instruction, before form elements */
+  text-align: left;
+}
+
+.alt-style-forgot-password .alt-fp-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.alt-style-forgot-password .alt-fp-label {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #dadada; /* Label color, slightly brighter */
+  margin-bottom: 0.4rem; /* Space between label and input */
+}
+
+.alt-style-forgot-password .alt-fp-input {
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #4a5568; /* Subtle border */
+  font-size: 1rem;
+  background-color: #333740; /* Darker background for input */
+  color: #e0e0e0; /* Light text color in input */
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem; /* Space after input, before button */
+}
+
+.alt-style-forgot-password .alt-fp-input::placeholder {
+  color: #888888;
+}
+
+.alt-style-forgot-password .alt-fp-submit-button {
+  background-color: #556688; /* Subdued blue-grey for button */
+  color: white;
+  border: none;
+  padding: 0.85rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%; /* Make button full width like input */
+  box-sizing: border-box;
+}
+
+.alt-style-forgot-password .alt-fp-submit-button:hover {
+  background-color: #627397; /* Slightly lighter blue-grey for hover */
+}
+
+.alt-style-forgot-password .alt-fp-form-footer {
+  margin-top: 1.5rem; /* Space above the "返回登入" link */
+  text-align: center;
+}
+
+.alt-style-forgot-password .alt-fp-link {
+  font-size: 0.9rem;
+  color: #cccccc;
+  text-decoration: none;
+}
+
+.alt-style-forgot-password .alt-fp-link:hover {
+  text-decoration: underline;
+}
+
+.alt-style-forgot-password .alt-fp-error,
+.alt-style-forgot-password .alt-fp-success {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.alt-style-forgot-password .alt-fp-error {
+  color: #ffffff;
+  background-color: #c53030; /* Red background for error message */
+}
+
+.alt-style-forgot-password .alt-fp-success {
+  color: #ffffff;
+  background-color: #38A169; /* Green background for success message */
 }
