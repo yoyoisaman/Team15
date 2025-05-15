@@ -21,14 +21,15 @@ REDIRECT_URI = env("REDIRECT_URI")
 RECAPTCHA_SECRETKEY = env("RECAPTCHA_SECRETKEY")
 RECAPTCHA_SITEKEY = env("RECAPTCHA_SITEKEY")
 RECAPTCHA_URL = env("RECAPTCHA_URL")
+
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # 以 Gmail 為例
+EMAIL_HOST = 'smtp.gmail.com' 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'team15pass16@gmail.com'  # 你的郵箱地址
-EMAIL_HOST_PASSWORD = 'tswt mrgo htbn yjyh'  # 應用專用密碼
-DEFAULT_FROM_EMAIL = 'team15pass16@gmail.com'
+EMAIL_HOST_USER = env("EMAIL_HOST_USER") 
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")  
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

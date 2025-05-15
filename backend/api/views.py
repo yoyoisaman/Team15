@@ -24,23 +24,18 @@ def forgot_password(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         try:
-            # 檢查該郵箱是否存在於資料庫
             user = User.objects.get(account=email)
             
-            # 生成一個唯一的令牌
             token = secrets.token_urlsafe(32)
             
-            # 存儲令牌和對應的使用者
             password_reset_tokens[token] = {
                 'user': user.account,
                 'expires': datetime.now() + timedelta(hours=1)  # 令牌有效期為1小時
             }
             
-            # 建立重設密碼的連結
             frontend_url = "http://localhost:5174"
             reset_link = f"{frontend_url}/reset-password/{token}/"
             
-            # 發送電子郵件
             subject = '重設您的密碼'
             message = f'''
             您好，
@@ -76,7 +71,6 @@ def forgot_password(request):
 
 def reset_password(request, token):
     """處理密碼重設"""
-    # 檢查令牌是否有效
     if token not in password_reset_tokens or datetime.now() > password_reset_tokens[token]['expires']:
         return render(request, 'reset_password.html', {
             'error': '密碼重設連結無效或已過期。請重新申請。'
@@ -92,19 +86,15 @@ def reset_password(request, token):
                 'token': token
             })
         
-        # 更新使用者密碼
         username = password_reset_tokens[token]['user']
         user = User.objects.get(account=username)
         user.password = new_pw
         user.save()
         
-        # 移除已使用的令牌
         del password_reset_tokens[token]
         
-        # 重定向到登入頁面
         return redirect('login')
     
-    # GET 請求：顯示重設密碼頁面
     return render(request, 'reset_password.html', {'token': token})
 
 # Request rate limit
