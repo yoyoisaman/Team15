@@ -46,7 +46,10 @@ await $.ajax({
             'picture': databaseStatus.picture,
             'lastUpdated': databaseStatus.lastUpdated
         }
+        console.log('init data from server');
         console.log('username', userInfo);
+        console.log('treeStructure', treeStructure);
+        console.log('idToBookmark', idToBookmark);
     },
     error: function (xhr, status, error) {
         console.error('Error:', error);
@@ -301,7 +304,6 @@ const localDBfunc = {
         };
 
         updateLocalStatus(updateTime);
-
         $.ajax({
             url: 'http://localhost:8000/api/bookmarks/update/' + id,
             type: 'POST',

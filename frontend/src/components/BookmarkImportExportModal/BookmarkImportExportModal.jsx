@@ -18,6 +18,50 @@ const BookmarkImportExportModal = ({ onClose, bookmarksTree }) => {
     URL.revokeObjectURL(url);
   };
 
+  function adjustIds(treeStructure, idToBookmark) {
+    // 隨機偏移量
+    const offset = Math.floor(Math.random() * (99999 - 10001 + 1)) + 10001;
+    console.log(`使用偏移量：${offset}`);
+
+    // 1. 先把 treeStructure 轉成 [origId, ts] 陣列，並依 parent_id 排序
+    const treeEntries = Object.entries(treeStructure)
+      .map(([k, ts]) => [Number(k), ts])
+      .sort((a, b) => {
+        const pa = a[1].parent_id === null ? -1 : a[1].parent_id;
+        const pb = b[1].parent_id === null ? -1 : b[1].parent_id;
+        return pa - pb;
+      });
+
+    // 2. 依照排好的順序建立 adjustedTree
+    const adjustedTree = {};
+    for (const [origId, ts] of treeEntries) {
+      const newKey = origId === 0 ? '0' : String(origId - offset);
+      const p = ts.parent_id;
+      const newParent = (p === null || p === 0) ? p : p - offset;
+      const newChildren = ts.children_id.map(cid =>
+        cid === 0 ? 0 : cid - offset
+      );
+      adjustedTree[newKey] = { parent_id: newParent, children_id: newChildren };
+    }
+
+    // 3. 調整 idToBookmark：維持原本「key 減 offset」且保持 key 遞增
+    const bmEntries = Object.entries(idToBookmark)
+      .map(([k, bm]) => [Number(k), bm])
+      .sort((a, b) => a[0] - b[0]);
+
+    const adjustedBookmarks = {};
+    for (const [origId, bm] of bmEntries) {
+      const newKey = origId === 0 ? '0' : String(origId - offset);
+      const newId = origId === 0 ? 0 : origId - offset;
+      adjustedBookmarks[newKey] = { ...bm, id: newId };
+    }
+
+    return {
+      treeStructure: adjustedTree,
+      idToBookmark: adjustedBookmarks
+    };
+  }
+
   const handleImport = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -25,8 +69,13 @@ const BookmarkImportExportModal = ({ onClose, bookmarksTree }) => {
     reader.onload = (evt) => {
       const data = JSON.parse(evt.target.result);
       if (data.treeStructure && data.idToBookmark) {
+        const { treeStructure, idToBookmark } = adjustIds(data.treeStructure, data.idToBookmark);
         const isLogin = bookmarksTree.userInfo.username !== "admin";
-        bookmarksTree.buildNewTree(data.treeStructure, data.idToBookmark);
+        bookmarksTree.buildNewTree(treeStructure, idToBookmark);
+        console.log("oldTreeStructure", bookmarksTree.treeStructure);
+        console.log("oldIdToBookmark", bookmarksTree.idToBookmark);
+        console.log("newTreeStructure", treeStructure);
+        console.log("newIdToBookmark", idToBookmark);
         if (isLogin) { 
           alert("匯入成功，已完全替換原有書籤！");
         } else {
@@ -39,6 +88,7 @@ const BookmarkImportExportModal = ({ onClose, bookmarksTree }) => {
     };
     reader.readAsText(file);
   };
+
 
   return (
     <div className={styles.backdrop}>

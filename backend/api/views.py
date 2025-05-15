@@ -383,39 +383,42 @@ def bookmarks_init_api(request):
     picture = request.session.get('picture', '')
     
     user = User.objects.get(account=account)
-    bookmarks = user.bookmarks.all()
-    tree_structure = user.tree_structure.all()
     lastUpdated = datetime.now()
-    
-    idToBookmark = {}
-    treeStructure = {}
-    for i in range(len(bookmarks)):
-        bid = bookmarks[i].bid
-        idToBookmark[bid] = {
-            'id': bid,
-            'url': sanitize_string(bookmarks[i].url),
-            'img': bookmarks[i].img,
-            'name': sanitize_string(bookmarks[i].name),
-            'tags': sanitize_data(bookmarks[i].tags),
-            'starred': bookmarks[i].starred,
-            'hidden': bookmarks[i].hidden
+    bookmarks = user.bookmarks.all()
+    tree_qs   = user.tree_structure.all()
+
+    ts_map = {
+        ts.bid_id: {
+            'parent_id':   ts.parent_id,
+            'children_id': ts.children_id,  # 假設是 ArrayField 或 JSONField
         }
-        treeStructure[bid] = {
-            'parent_id': tree_structure[i].parent_id,
-            'children_id': tree_structure[i].children_id
+        for ts in tree_qs
+    }
+
+    idToBookmark = {}
+    for bm in bookmarks:
+        bid = bm.bid
+        idToBookmark[bid] = {
+            'id':    bid,
+            'url':   sanitize_string(bm.url),
+            'img':   bm.img,
+            'name':  sanitize_string(bm.name),
+            'tags':  sanitize_data(bm.tags),
+            'starred': bm.starred,
+            'hidden':  bm.hidden,
         }
 
     response_data = {
         'databaseStatus': {
             'username': account,
-            'name': name,
-            'picture': picture,
-            'lastUpdated': lastUpdated
+            'name':     name,
+            'picture':  picture,
+            'lastUpdated': lastUpdated.isoformat(),
         },
         'idToBookmark': idToBookmark,
-        'treeStructure': treeStructure
+        'treeStructure': ts_map,
     }
-    return JsonResponse(response_data, safe=False)
+    return JsonResponse(response_data)
 
 def bookmarks_update_api(request, bid):
     '''
@@ -490,15 +493,16 @@ def bookmarks_update_api(request, bid):
             starred=starred,
             hidden=hidden
         )
+        bookmark.save()
+        
         tree_structure = TreeStructure(
             account=user,
             bid=bookmark,
             parent_id=parent_id,
             children_id=children_id
         )
-        user.lastUpdated = time
-        bookmark.save()
         tree_structure.save()
+        user.lastUpdated = time
         user.save()
         
     if parent_id is not None:
