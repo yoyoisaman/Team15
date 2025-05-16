@@ -45,7 +45,7 @@ path('reset-password/<str:token>/', reset_password, name='reset_password'),
 
 - `reset-password/<str:token>/`：密碼重設頁面，透過網址中的 token 識別目標帳號，頁面亦由 Template 產生。
 
-### 3. Session & POST/GET
+### 3. Session & Cookie & POST/GET
 
 Session 提供後端辨識使用者身分的能力。當使用者完成註冊或登入成功後，後端會建立 Session 並將 Session ID 以 **HTTP Cookie** 的形式傳送至前端，由瀏覽器儲存。
 
