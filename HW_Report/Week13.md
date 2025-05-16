@@ -97,17 +97,24 @@ request.session.set_expiry(60 * 60 * 24 * 7) # Session 期限設為 7 天，保�
 
 ### 1. Google OAuth 2.0 - 註冊帳號
 
-此次註冊系統要求使用者以 Google 帳號註冊，而 Google 提供帳號授權的機制便是 **Google OAuth 2.0**。
+本系統要求使用者以 Google 帳號註冊，並透過 Google 所提供的授權機制 **OAuth 2.0** 來完成身分驗證與資訊取得。
 
 ![register](report_imgs/Week13/register.gif)
 
-如註冊時序圖所示，一開始會先跳轉至 Google 所提供的登入頁面 `https://accounts.google.com/o/oauth2/v2/auth`，登入成功後會重新導向至先前 URL 網址派發的 `oauth2callback/`，同時也會將暫時授權碼以 GET 的方式傳遞給重新導向的網址。
+如註冊時序圖所示，使用者點擊註冊後，首先會被導向 Google 的登入授權頁面 `https://accounts.google.com/o/oauth2/v2/auth`。登入成功後，Google 會將使用者重新導向回我們系統的 `oauth2callback/`，並透過 GET 參數附上 **暫時授權碼（authorization code）**。
 
-接著後端再使用暫時授權碼與 `https://oauth2.googleapis.com/token` 交換 Access Token，所取得的 Access Token 讓我們能從 `https://openidconnect.googleapis.com/v1/userinfo` API 中獲取該 Google 帳號的資訊。當從 API 獲取完所需資訊及帳號創建的初始化過程結束後，會再重新導向至 URL 網址派發的 `password/` 讓使用者設定密碼。
+後端收到授權碼後，會呼叫 `https://oauth2.googleapis.com/token` API 交換取得 Access Token，再進一步透過 `https://openidconnect.googleapis.com/v1/userinfo` API 取得使用者的 Google 帳號資訊。
 
-### 2. 匯出匯入書籤
+取得必要資訊並完成帳號初始化後，系統便會將使用者導向至 `password/` 頁面，進行密碼設定以完成整個註冊流程。
 
-為了使用者便於備份與分享其書籤庫，我們提供匯出匯入書籤的功能。匯出時會先將書籤庫資料轉換為符合 JSON 格式的字串，接著透過 Blob (Binary Large Object) 封裝為 JSON 檔案形式，並以 `URL.createObjectURL(blob)` 建立該 Blob 的下載連結，以此匯出書籤庫，匯出完成後再以 `URL.revokeObjectURL(url)` 釋放占用的記憶體資源。
+### 2. 匯入/匯出書籤
+
+為了方便使用者備份或分享自己的書籤庫，我們設計了書籤的匯出與匯入功能。
+
+![import_export](report_imgs/Week13/import_export.gif)
+
+**匯出功能** 會將書籤資料轉換為符合 JSON 格式的字串，並透過 Blob（Binary Large Object）封裝成 JSON 檔案。接著使用 `URL.createObjectURL(blob)` 建立可供下載的連結，讓使用者將書籤儲存至本地。匯出完成後，系統會呼叫 `URL.revokeObjectURL(url)` 釋放記憶體資源。程式碼如下：
+
 ```javascript
 const handleExport = () => {
     const data = {
@@ -124,7 +131,8 @@ const handleExport = () => {
 };
 ```
 
-匯入書籤庫資料時則透過 Javascript FileReader 物件以文字形式讀入 `<input type="file">` 輸入的檔案，並嘗試將其解析為 JSON 物件，如果解析成功並符合書籤庫的格式，則將讀入的資訊覆蓋前後端資料庫儲存的書籤庫。
+匯入功能則是透過 JavaScript 的 `FileReader` 物件讀取使用者所上傳的 `.json` 檔案內容。若讀入內容能成功解析為 JSON，且其結構符合書籤格式，系統便會以該資料覆蓋前後端所儲存的書籤庫內容。程式碼如下：
+
 ```javascript
 const handleImport = (e) => {
     const file = e.target.files[0];
@@ -143,13 +151,11 @@ const handleImport = (e) => {
 };
 ```
 
-這些功能透過 React component 的方式建立操作頁面，並加入先前的主頁中，詳細內容可參考 `frontend\src\components\BookmarkImportExportModal\BookmarkImportExportModal.jsx`
-
-![import_export](report_imgs/Week13/import_export.gif)
+這些功能皆透過 React component [BookmarkImportExportModal](../frontend/src/components/BookmarkImportExportModal/BookmarkImportExportModal.jsx) 實作，程式碼可參考連結。
 
 ### 3. 跨裝置同步
 
-透過 Session，我們得以判斷不同使用者帳號，並令該帳號於不同裝置上的內容同步。
+我們透過 Session 辨識使用者身分，使系統能在不同裝置上判斷相同帳號，並同步該使用者的書籤資料。只要使用者使用相同 Google 帳號登入，系統便會載入其個人書籤庫，使操作無縫接軌、不中斷。
 
 ![sync](report_imgs/Week13/sync.gif)
 
