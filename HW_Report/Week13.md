@@ -4,9 +4,9 @@
 
 下圖分別為註冊、登錄與重設密碼的時序圖，也就是本次作業中的關鍵部分，其中運用了 **Session、POST/GET、API 串接、發送 Email** 等課內技術。
 
-![register_seq](report_imgs/Week13/register_seq.png)
+![register_seq](report_imgs\Week13\register_seq.png)
 
-![login_seq](report_imgs/Week13/login_seq.png)
+![login_seq](report_imgs\Week13\login_seq.png)
 
 此外為了使用者便利性，我們額外完成了數項功能，包含 **Google OAuth 2.0** 讓使用者直接以 Google 帳號註冊，以及 **匯出匯入書籤、跨裝置同步** 等功能。
 
@@ -73,7 +73,7 @@ tree_structure = TreeStructure.objects.filter(account=user.account, bid=bid)
 
 - `https://www.google.com/recaptcha/api/siteverify` : 登入時序圖中提供 reCAPTCHA 驗證的 API，於登入頁面中使用，當使用者於前端完成驗證後會取得一個封存驗證資訊的 Token，而後端在接收到該 Token 後會用於此 API 以查詢該驗證是否成功。
 
-![login](report_imgs\Week13\login.gif)
+![login](report_imgs/Week13/login.gif)
 
 ### 3. Email 發送
 
@@ -81,7 +81,7 @@ tree_structure = TreeStructure.objects.filter(account=user.account, bid=bid)
 
 我們透過 Gmail 的 SMTP 伺服器發送 Email，並於後端使用 Django 的 `django.core.mail` 模組來設定相關參數並完成寄送。
 
-![reset_password](report_imgs\Week13\reset_password.gif)
+![reset_password](report_imgs/Week13/reset_password.gif)
 
 ## 額外相關技術
 
@@ -89,7 +89,7 @@ tree_structure = TreeStructure.objects.filter(account=user.account, bid=bid)
 
 此次註冊系統要求使用者以 Google 帳號註冊，而 Google 提供帳號授權的機制便是 **Google OAuth**。
 
-![register](report_imgs\Week13\register.gif)
+![register](report_imgs/Week13/register.gif)
 
 如註冊時序圖所示，一開始會先跳轉至 Google 所提供的登入頁面 `https://accounts.google.com/o/oauth2/v2/auth`，登入成功後會重新導向至先前 URL 網址派發的 `oauth2callback/`，同時也會將暫時授權碼以 GET 的方式傳遞給重新導向的網址。
 
@@ -135,13 +135,13 @@ const handleImport = (e) => {
 
 這些功能透過 React component 的方式建立操作頁面，並加入先前的主頁中，詳細內容可參考 `frontend\src\components\BookmarkImportExportModal\BookmarkImportExportModal.jsx`
 
-![import_export](report_imgs\Week13\import_export.gif)
+![import_export](report_imgs/Week13/import_export.gif)
 
 ### 3. 跨裝置同步
 
 透過 Session，我們得以判斷不同使用者帳號，並令該帳號於不同裝置上的內容同步。
 
-![sync](report_imgs\Week13\sync.gif)
+![sync](report_imgs/Week13/sync.gif)
 
 ## 組員分工情形 - Team 15
 
