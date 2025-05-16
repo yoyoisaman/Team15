@@ -1,18 +1,30 @@
 # 進度報告 - Team 15, Week 11
 
-在本次作業中，我們基於課程中所學的多項與註冊、登入相關之技術，為使用者提供建立帳號的功能，保存各個使用者的書籤庫，並於不同裝置間同步，令使用者能隨時隨地存取其建立的書籤庫。
+在本次作業中，我們整合課程中所學的多項技術，實作出具備完整帳號系統的書籤管理平台。
 
-下圖分別為註冊、登錄與重設密碼的時序圖，也就是本次作業中的關鍵部分，其中運用了 **Session、POST/GET、API 串接、發送 Email** 等課內技術。
+使用者可 **透過 Google 帳號註冊** 建立個人帳號，系統同時支援 **自動保持登入狀態**、**忘記密碼（透過電子郵件重設）**、以及 **書籤匯入與匯出** 等功能，提供便利且安全的使用體驗。
+
+此外，我們也完成 **跨裝置同步** 功能，讓使用者能隨時隨地存取與管理個人書籤內容。
+
+## 課內技術練習
+
+### 1. 註冊與登入功能
+
+以下為 **使用 Google 帳號註冊** 與 **登入 / 忘記密碼（透過電子郵件重設）** 功能的時序圖。各項功能中所運用的技術將於後方詳細說明：
+
+- **以 Google 帳號註冊**：結合 **OAuth 2.0**、**POST/GET**、**Session**、**Cookie** 等技術實現。
 
 ![register_seq](report_imgs/Week13/register_seq.png)
 
+- **登入與忘記密碼**：使用 **reCAPTCHA**、**Email 發送**、**POST/GET**、**Session**、**Cookie** 技術。
+
 ![login_seq](report_imgs/Week13/login_seq.png)
 
-此外為了使用者便利性，我們額外完成了數項功能，包含 **Google OAuth 2.0** 讓使用者直接以 Google 帳號註冊，以及 **匯出匯入書籤、跨裝置同步** 等功能。
+### 2. URL 網址派發
 
-### URL 網址派發
+在前次作業中，我們已透過 Django 的 `urls.py` 建立登入頁面對應的 URL。本次作業進一步擴充註冊、登出與密碼重設等功能，並延續使用 Template 技術、繼承 `base.html` 產出相關頁面。
 
-在上次作業中，我們使用 Django 的 Template 建構登入頁面，並以 urls.py 派發登入頁面的網址，為了易於維護與功能一致性，此次實作的註冊、登出與重設密碼皆同樣透過 Django urls.py 派發網址，下面為對應的網址與實作對應功能的函數:
+以下為新增的 URL 及其對應的後端處理函式：
 
 ```python
 path('login/', login_view, name='login'),
@@ -23,47 +35,43 @@ path('forgot-password/', forgot_password, name='forgot_password'),
 path('reset-password/<str:token>/', reset_password, name='reset_password'),
 ```
 
-- `logout/` : 以 API 形式告知後端清除當前使用者的 Session 以完成登出。
+- `logout/`：以 API 方式通知後端清除使用者的 Session，完成登出操作。
 
-- `oauth2callback/` : 提供註冊相關邏輯的接口，詳細說明請參照 **額外相關技術 Google OAuth 2.0**。
+- `oauth2callback/`：處理 Google OAuth 2.0 授權完成後的註冊邏輯，詳見 **額外相關技術：Google OAuth 2.0**。
 
-- `password/` : 註冊時設置密碼的頁面，此頁面由 **Template 技術** 完整產出 HTML。
+- `password/`：使用者首次註冊後進行密碼設定的頁面，使用 Django Template 產生 HTML。
 
-- `forgot-password/` : 請求重設密碼的頁面，會寄送 Email 至註冊的 Google 信箱，在 Email 中提供重設密碼的網頁連結，此頁面由 **Template 技術** 完整產出 HTML。
+- `forgot-password/`：密碼重設請求頁面，系統會寄送重設連結至註冊信箱，頁面以 Template 呈現。
 
-- `reset-password/<str:token>/` : 重設密碼的頁面，利用 URL Parameter `<str:token>` 決定要重設密碼的帳號，此頁面由 **Template 技術** 完整產出 HTML。
+- `reset-password/<str:token>/`：密碼重設頁面，透過網址中的 token 識別目標帳號，頁面亦由 Template 產生。
 
+### 3. Session & POST/GET
 
-## 課內技術練習
+Session 提供後端辨識使用者身分的能力。當使用者完成註冊或登入成功後，後端會建立 Session 並將 Session ID 以 **HTTP Cookie** 的形式傳送至前端，由瀏覽器儲存。
 
-### 1. Session & POST/GET
+為了提升安全性，我們使用了 Django 預設的 Session Cookie 設定，並啟用 **HttpOnly** 屬性，確保該 Cookie 無法被 JavaScript 存取，避免 Session ID 遭受 XSS 攻擊而洩漏。
 
-Session 與 POST/GET 為此次實作功能的核心技術，我們接收來自於 Google OAuth 2.0 的 GET 請求以獲取暫時授權碼並完成使用者帳號註冊，詳細說明請參照 **額外相關技術**。而 POST 則廣泛用於前後端的資訊交流，以傳遞更大量的資訊，並提供基礎的資料外洩防範。
+此後，使用者發出的每一個請求都會自動附帶該 Session ID，後端即可根據此 ID 作為 key，查詢與該使用者相關的資訊，如姓名、Email、頭像等，如下方程式碼：
 
-Session 提供了後端識別使用者的能力，且能為不同使用者儲存專屬於其的資訊，在此次作業中登入帳號後會建立 Session 並儲存下列的資訊，同時設置該 Session 的使用期限 :
 ```python
 request.session['name'] = name
 request.session['username'] = email
 request.session['picture'] = picture
 request.session['is_authenticated'] = False
-request.session.set_expiry(60 * 60 * 24 * 7)
+request.session.set_expiry(60 * 60 * 24 * 7) # Session 期限設為 7 天，保持長久登入
 ```
 
-`username` 用於後端在使用者後續的請求中辨別其帳號，並從資料庫檢索對應資料 :
-```python
-# views.py bookmarks_update_api
-account = request.session.get('username', 'admin')
+為了實現「長久登入」，我們透過以下兩項設定來延長 Session 的有效期限：
 
-user = User.objects.get(account=account)
-bookmark = Bookmarks.objects.filter(account=user.account, bid=bid)
-tree_structure = TreeStructure.objects.filter(account=user.account, bid=bid)
-```
+1. 在後端使用 `request.session.set_expiry(60 * 60 * 24 * 7)`，將 Session 設定為 7 天後過期。
 
-`is_authenticated` 用於確保 Session 未逾期，且該帳號的註冊過程正常 (有成功設定密碼)。而其餘非敏感資訊會回傳給前端，用以顯示當前登入的帳號。
+2. 在 `settings.py` 中設定 `SESSION_EXPIRE_AT_BROWSER_CLOSE = False`，使 Session 不會關閉瀏覽器就失效。
 
-### 2. API 串接 & 防機器人驗證
+由於 Session ID 是透過 **瀏覽器儲存的 Cookie** 傳遞。只要該 Cookie 尚未過期，瀏覽器在重新整理頁面或關閉並重新開啟後，仍會自動附帶該 Cookie，因此使用者無需重新登入，即可維持登入狀態，從而達到「長久登入」的效果。
 
-在此專案中使用到了數個 API，如下所列:
+### 4. API 串接 & 防機器人驗證（reCAPTCHA）
+
+我們在此專案中使用到了數個 API，如下所列:
 
 - `https://www.google.com/s2/favicons?domain=${domain}` : 獲取網站分頁的小圖標。
 
@@ -75,7 +83,7 @@ tree_structure = TreeStructure.objects.filter(account=user.account, bid=bid)
 
 ![login](report_imgs/Week13/login.gif)
 
-### 3. Email 發送
+### 5. Email 發送
 
 當使用者要求重設密碼時，後端會以隨機方式產生並儲存一個 Token，將該 Token 與 `reset-password/<str:token>/` 結合才能導向重設該帳號密碼的頁面，為此我們會將導向此頁面的連結寄送到使用者的信箱。
 
@@ -87,7 +95,7 @@ tree_structure = TreeStructure.objects.filter(account=user.account, bid=bid)
 
 ### 1. Google OAuth 2.0 - 註冊帳號
 
-此次註冊系統要求使用者以 Google 帳號註冊，而 Google 提供帳號授權的機制便是 **Google OAuth**。
+此次註冊系統要求使用者以 Google 帳號註冊，而 Google 提供帳號授權的機制便是 **Google OAuth2.0**。
 
 ![register](report_imgs/Week13/register.gif)
 
