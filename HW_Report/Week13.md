@@ -4,9 +4,9 @@
 
 下圖分別為註冊、登錄與重設密碼的時序圖，也就是本次作業中的關鍵部分，其中運用了 **Session、POST/GET、API 串接、發送 Email** 等課內技術。
 
-![register_seq](report_imgs\Week13\register_seq.svg)
+![register_seq](report_imgs/Week13/register_seq.png)
 
-![login_seq](report_imgs\Week13\login_seq.svg)
+![login_seq](report_imgs/Week13/login_seq.png)
 
 此外為了使用者便利性，我們額外完成了數項功能，包含 **Google OAuth 2.0** 讓使用者直接以 Google 帳號註冊，以及 **匯出匯入書籤、跨裝置同步** 等功能。
 
