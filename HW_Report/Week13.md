@@ -45,7 +45,7 @@ path('reset-password/<str:token>/', reset_password, name='reset_password'),
 
 - `reset-password/<str:token>/`：密碼重設頁面，透過網址中的 token 識別目標帳號，頁面亦由 Template 產生。
 
-### 3. Session & Cookie & POST/GET
+### 3. Session、Cookie 與 POST/GET
 
 Session 提供後端辨識使用者身分的能力。當使用者完成註冊或登入成功後，後端會建立 Session 並將 Session ID 以 **HTTP Cookie** 的形式傳送至前端，由瀏覽器儲存。
 
@@ -69,25 +69,27 @@ request.session.set_expiry(60 * 60 * 24 * 7) # Session 期限設為 7 天，保�
 
 由於 Session ID 是透過 **瀏覽器儲存的 Cookie** 傳遞。只要該 Cookie 尚未過期，瀏覽器在重新整理頁面或關閉並重新開啟後，仍會自動附帶該 Cookie，因此使用者無需重新登入，即可維持登入狀態，從而達到「長久登入」的效果。
 
-### 4. API 串接 & 防機器人驗證（reCAPTCHA）
+### 4. API 串接與防機器人驗證（reCAPTCHA）
 
-我們在此專案中使用到了數個 API，如下所列:
+本專案串接數個外部 API，分別對應不同功能需求，說明如下：
 
-- `https://www.google.com/s2/favicons?domain=${domain}` : 獲取網站分頁的小圖標。
+- `https://www.google.com/s2/favicons?domain=${domain}`：用於取得網站的小圖示（favicon），並顯示於書籤列表中。
 
-- `https://oauth2.googleapis.com/token` : 註冊時序圖中「以暫時授權碼換取 Access Token」步驟所對應的 API，詳細說明請參照 **額外相關技術**。
+- `https://oauth2.googleapis.com/token`：對應註冊時序圖中「以暫時授權碼換取 Access Token」的步驟，為 Google OAuth 2.0 驗證流程的一環，詳見 **額外相關技術** 章節。
 
-- `https://openidconnect.googleapis.com/v1/userinfo` : 用於獲取使用者 Google 帳號的資訊，包含名稱與頭像，這些資訊用於前端顯示當前登入的帳號。
+- `https://openidconnect.googleapis.com/v1/userinfo`：用於取得使用者的 Google 帳號資訊（如名稱與頭像），以便於前端顯示登入使用者身分。
 
-- `https://www.google.com/recaptcha/api/siteverify` : 登入時序圖中提供 reCAPTCHA 驗證的 API，於登入頁面中使用，當使用者於前端完成驗證後會取得一個封存驗證資訊的 Token，而後端在接收到該 Token 後會用於此 API 以查詢該驗證是否成功。
+- `https://www.google.com/recaptcha/api/siteverify`：搭配 Google reCAPTCHA 使用，當使用者於登入頁面完成驗證後，前端會取得一組 token，後端再透過此 API 查詢該 token 是否有效，以防止自動化機器登入攻擊。
+
+以下動畫展示登入流程與驗證畫面：
 
 ![login](report_imgs/Week13/login.gif)
 
 ### 5. Email 發送
 
-當使用者要求重設密碼時，後端會以隨機方式產生並儲存一個 Token，將該 Token 與 `reset-password/<str:token>/` 結合才能導向重設該帳號密碼的頁面，為此我們會將導向此頁面的連結寄送到使用者的信箱。
+當使用者申請重設密碼時，後端會隨機產生一組 token 並儲存，接著將該 token 結合至 `reset-password/<str:token>/` 的網址中，作為重設密碼頁面的唯一識別連結。系統會自動將這個連結寄送至使用者註冊時填寫的 Google 信箱，使用者點擊後即可導向至對應的重設密碼頁面。
 
-我們透過 Gmail 的 SMTP 伺服器發送 Email，並於後端使用 Django 的 `django.core.mail` 模組來設定相關參數並完成寄送。
+我們使用 Gmail 的 SMTP 伺服器來發送這封重設密碼信，並透過 Django 的 `django.core.mail` 模組來設定寄件帳號、撰寫信件內容並完成寄送。
 
 ![reset_password](report_imgs/Week13/reset_password.gif)
 
@@ -95,7 +97,7 @@ request.session.set_expiry(60 * 60 * 24 * 7) # Session 期限設為 7 天，保�
 
 ### 1. Google OAuth 2.0 - 註冊帳號
 
-此次註冊系統要求使用者以 Google 帳號註冊，而 Google 提供帳號授權的機制便是 **Google OAuth2.0**。
+此次註冊系統要求使用者以 Google 帳號註冊，而 Google 提供帳號授權的機制便是 **Google OAuth 2.0**。
 
 ![register](report_imgs/Week13/register.gif)
 
