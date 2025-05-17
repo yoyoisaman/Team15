@@ -114,6 +114,7 @@ const Navbar = () => {
           <button
             className="btn d-flex align-items-center btn-outline-secondary"
             onClick={() => setShowImportExportModal(true)}
+            data-import-export-button // 新增此屬性 讓HotkeyHandler辨識此按鈕
           >
             <img src={imageMap["add.png"]} alt="Export Icon"/>
             <span>匯入/匯出</span>
@@ -121,12 +122,14 @@ const Navbar = () => {
           <button
             className="btn btn-outline-secondary d-flex align-items-center"
             onClick={handleAddBookmarkButtonClick}
+            data-add-bookmark-button // 新增此屬性 讓HotkeyHandler辨識此按鈕
           >
             <img src={imageMap["add.png"]} alt="Add Button" />
           </button>
           <button
             className="btn btn-outline-secondary d-flex align-items-center"
             onClick={handleAddFolderButtonClick}
+            data-add-folder-button // 新增此屬性 讓HotkeyHandler辨識此按鈕
           >
             <img src={imageMap["folder.png"]} alt="Add Folder Button" />
           </button>
