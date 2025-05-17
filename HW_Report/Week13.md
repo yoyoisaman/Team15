@@ -159,6 +159,75 @@ const handleImport = (e) => {
 
 ![sync](report_imgs/Week13/sync.gif)
 
+### 4. 快捷鍵啟動功能
+
+為方便使用者快速操作此書籤專案，新增快捷鍵啟動各項功能之設定。
+
+實際作法分別朝兩個方向(a. 開啟書籤或資料夾 b. 開啟書籤功能)進行操作
+
+a. ctrl + 數字 1 ~ 9 : 開啟書籤或資料夾
+
+```javascript
+if (e.ctrlKey && e.key >= '1' && e.key <= '9') {
+        e.preventDefault();  // 防止瀏覽器的預設行為
+        
+        const idx = parseInt(e.key, 10) - 1;
+        const visible = bookmarksTree.getCurrentChildren().filter(b => !b.hidden);
+        if (idx < visible.length) {
+          const item = visible[idx];
+          if (item.url === "#") {
+            bookmarksTree.moveToFolder(item.id);
+          } else {
+            window.open(item.url, "_blank");
+          }
+        }
+      }
+```
+
+這段程式碼透過檢查 `item.url` 的值判斷是書籤還是資料夾。
+
+如果 `item.url === "#"`, 那麼該項目被視為資料夾，表示它不是一個具體的 URL，而是用來指向一個資料夾或資料夾的路徑，並且會呼叫 `bookmarksTree.moveToFolder(item.id)` 來移動到該資料夾。
+
+如果 `item.url 不是 "#"`，則該項目被視為書籤，會有有效的 URL，通常是一個網頁地址，並且會透過 `window.open(item.url, "_blank")` 來打開該書籤的 URL。
+
+b. 開啟書籤功能
+
+本次共設計以下四種快捷鍵提供使用
+
+ctrl + b : 打開新增書籤視窗
+
+ctrl + f : 打開新增資料夾視窗
+
+ctrl + / : 聚焦搜尋欄
+
+ctrl + i : 打開匯入匯出
+
+
+以下我們以 `ctrl + f` (打開新增資料夾視窗) 來舉例:
+
+```javascript
+if (e.ctrlKey && e.key === 'f') { // 當 Ctrl + F 被按下
+    e.preventDefault();  // 防止瀏覽器的預設行為
+    const addFolderButton = document.querySelector('[data-add-folder-button]'); // 在Navbar中設定一個data屬性來識別按鈕
+    if (addFolderButton) {
+          addFolderButton.click();  // 模擬點擊新增資料夾按鈕
+    }
+}
+```
+
+使用快捷鍵執行功能的方式，是在其執行動作的 button 內設定屬性來識別按鈕。比如說 `ctrl + f (打開新增資料夾視窗)` 就是找到其存在的 button 內，新增 `data-add-folder-button` 此屬性，讓快捷鍵能夠找到其實際運作的方式，並且能夠模擬點擊資料夾按鈕。
+
+```javascript
+<button
+    className="btn btn-outline-secondary d-flex align-items-center"
+    onClick={handleAddFolderButtonClick}
+    data-add-folder-button // 新增此屬性 讓 HotkeyHandler 辨識此按鈕
+>
+```
+
+無論是 a 或 b ，當我們設定的 ctrl 加上其對應的按鍵，該功能就會執行。且為了預防該快捷鍵與瀏覽器原先就存在的快捷鍵有衝突，設置 `preventDefault` 以預防快捷鍵衝突；當衝突發生時，只會執行我們所設置的快捷鍵，而瀏覽器內建的快捷鍵則不會操作。
+
+
 ## 組員分工情形 - Team 15
 
 - 王凱右 - 25%：部分課內及額外技術
