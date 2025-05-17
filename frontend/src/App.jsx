@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Breadcrumb from "./components/Breadcrumb";
 import MainContent from "./components/MainContent";
 import "./styles.css";
+import HotkeyHandler from "./HotkeyHandler";
 
 function Layout({ children }) {
   return (
@@ -21,6 +22,7 @@ function Layout({ children }) {
 function App() {
   return (
     <BookmarksProvider>
+      <HotkeyHandler />
       <Layout>
         <MainContent />
       </Layout>
