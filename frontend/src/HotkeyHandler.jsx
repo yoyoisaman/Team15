@@ -20,6 +20,12 @@ export default function HotkeyHandler() {
           }
         }
       }
+
+      if (e.ctrlKey && e.key === '/') {
+        e.preventDefault();
+        document.querySelector('input[type="text"]').focus();
+      }
+      
     };
 
     window.addEventListener("keydown", handleHotkey);
