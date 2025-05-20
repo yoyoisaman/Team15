@@ -237,9 +237,23 @@ if (e.ctrlKey && e.key === 'f') { // 當 Ctrl + F 被按下
 
 ## Docker Image Pull 連結及啟動方式
 
-### 1. 安裝 Docker
+### 1. 下載.env
 
-### 2. 測試 Docker 是否安裝成功
+請先下載 [.env](https://drive.google.com/file/d/1493aD3bxC27gI3fc32HPnkBCwMdKmL89/view?usp=drive_link)，並放置於 Team15 的跟目錄 :
+
+```
+TEAM15
+├─ backend
+├─ frontend
+├─ docker
+├─ HW_Report
+├─ ...
+└─ .env <=== 將下載的 .env 檔案放置於此 
+```
+
+### 2. 安裝 Docker
+
+### 3. 測試 Docker 是否安裝成功
 
 打開終端機或命令提示字元，輸入以下指令檢查版本：
 
@@ -247,7 +261,7 @@ if (e.ctrlKey && e.key === 'f') { // 當 Ctrl + F 被按下
 docker -v
 ```
 
-### 3. 專案設定
+### 4. 專案設定
 
 從 GitHub 專案中取得 `docker-compose.yml` 的 Docker 的設定檔。
 
@@ -261,7 +275,7 @@ TEAM15
     └─ docker-compose.yml
 ```
 
-### 4. 移動至指定目錄
+### 5. 移動至指定目錄
 
 在終端機中切換至 `docker` 資料夾：
 
@@ -269,7 +283,7 @@ TEAM15
 cd TEAM15/docker
 ```
 
-### 4. 執行容器
+### 6. 執行容器
 
 當位於 `docker-compose.yml` 所在的資料夾時，執行以下指令啟動容器：
 
@@ -277,7 +291,7 @@ cd TEAM15/docker
 docker-compose -f ./docker-compose.yml up
 ```
 
-### 5. 訪問網站
+### 7. 訪問網站
 
 - 可透過 `localhost:5174` 訪問前端。
 
