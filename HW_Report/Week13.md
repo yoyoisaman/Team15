@@ -239,7 +239,7 @@ if (e.ctrlKey && e.key === 'f') { // 當 Ctrl + F 被按下
 
 ### 1. 下載.env
 
-請先下載 [.env](https://drive.google.com/file/d/1493aD3bxC27gI3fc32HPnkBCwMdKmL89/view?usp=drive_link)，並放置於 Team15 的跟目錄 :
+請先下載 [.env](https://drive.google.com/file/d/1493aD3bxC27gI3fc32HPnkBCwMdKmL89/view?usp=drive_link)，並放置於 Team15 的根目錄 :
 
 ```
 TEAM15
